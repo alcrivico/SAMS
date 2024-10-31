@@ -14,7 +14,7 @@ namespace SAMS.UI
         public void ApplicationStart(object sender, StartupEventArgs e)
         {
 
-            IniciarSesionView initialView = new();
+            PrincipalView initialView = new();
 
             initialView.Show();
 
