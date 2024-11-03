@@ -93,6 +93,8 @@
 
                             </Grid>
 
+                            <Grid Name="Contenido" Grid.Row="1" />
+
                         </Grid>
 
                     </Grid>
