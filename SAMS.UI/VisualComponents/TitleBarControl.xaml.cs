@@ -22,7 +22,7 @@ namespace SAMS.UI.VisualComponents
 
     public partial class TitleBarControl : UserControl
     {
-        private ObservableCollection<Object> _languageDTOs;
+
         public event EventHandler<WindowState>? WindowStateChangeRequested;
 
         public bool ChangeLanguage

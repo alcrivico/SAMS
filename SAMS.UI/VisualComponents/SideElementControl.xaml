@@ -46,7 +46,8 @@
                     FontWeight="Bold"
                     Foreground="{Binding ForegroundColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
                     Text="{Binding MenuName, ElementName=SideElement}"
-                    TextAlignment="Center" />
+                    TextAlignment="Center"
+                    TextWrapping="WrapWithOverflow" />
 
             </Grid>
 

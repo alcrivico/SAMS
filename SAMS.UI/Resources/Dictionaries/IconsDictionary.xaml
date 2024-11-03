@@ -311,7 +311,7 @@
                 </GeometryDrawing>
             </DrawingGroup>
             <DrawingGroup>
-                <GeometryDrawing Brush="#fffc6820">
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_PantoneOrange}">
                     <GeometryDrawing.Geometry>
                         <PathGeometry Figures="M 80 24.538 L 66.125 11.22 h -21.75 v 13.318 Z M 36.875 11.22 H 15.031 L 1.25 24.538 h 35.625 Z M 44.375 28.552 v 13.5 h -7.5 v -13.5 H 1.25 V 80 H 80 V 28.552 H 44.375 Z m 10.656 26.21 l 5.188 5.048 h -2.25 v 8.605 h -5.906 V 59.81 h -2.25 l 5.218 -5.048 Z M 74.625 74.77 H 49.844 v -3.922 h 24.781 v 3.922 Z m -2.219 -14.96 v 8.605 H 66.5 V 59.81 h -2.25 l 5.188 -5.048 l 5.187 5.048 h -2.219 Z" FillRule="Nonzero" />
                     </GeometryDrawing.Geometry>
@@ -321,6 +321,34 @@
     </DrawingGroup>
 
     <DrawingImage x:Key="Icon_ProveedoresInactivo" Drawing="{StaticResource Vector_ProveedoresInactivo}" />
+
+    <DrawingGroup x:Key="Vector_ProveedoresPaqueteriaInactivo">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0,0,80.0,80.0" />
+        </DrawingGroup.ClipGeometry>
+        <DrawingGroup>
+            <DrawingGroup.ClipGeometry>
+                <RectangleGeometry Rect="0.0,0.0,80.0,80.0" />
+            </DrawingGroup.ClipGeometry>
+            <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,80.0,80.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_PurplePizza}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M 80 24.538 L 66.125 11.22 h -21.75 v 13.318 Z M 36.875 11.22 H 15.031 L 1.25 24.538 h 35.625 Z M 44.375 28.552 v 13.5 h -7.5 v -13.5 H 1.25 V 80 H 80 V 28.552 H 44.375 Z m 10.656 26.21 l 5.188 5.048 h -2.25 v 8.605 h -5.906 V 59.81 h -2.25 l 5.218 -5.048 Z M 74.625 74.77 H 49.844 v -3.922 h 24.781 v 3.922 Z m -2.219 -14.96 v 8.605 H 66.5 V 59.81 h -2.25 l 5.188 -5.048 l 5.187 5.048 h -2.219 Z" FillRule="Nonzero" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingGroup>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_ProveedoresPaqueteriaInactivo" Drawing="{StaticResource Vector_ProveedoresPaqueteriaInactivo}" />
+
 
     <DrawingGroup x:Key="Vector_ProveedoresActivo">
         <DrawingGroup.ClipGeometry>
@@ -900,6 +928,205 @@
     </DrawingGroup>
 
     <DrawingImage x:Key="Icon_CerrarCajaActivo" Drawing="{StaticResource Vector_CerrarCajaActivo}" />
+
+    <DrawingGroup x:Key="Vector_CategoriasInactivo">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0,0,100.0,100.0" />
+        </DrawingGroup.ClipGeometry>
+        <DrawingGroup>
+            <DrawingGroup.ClipGeometry>
+                <RectangleGeometry Rect="0.0,0.0,100.0,100.0" />
+            </DrawingGroup.ClipGeometry>
+            <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,100.0,100.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_MediumSlateBlue}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M 15.453 47.65 a 9.371 9.371 0 0 0 -0.051 13.309 l 15.751 15.754 a 9.394 9.394 0 0 0 13.2 0.079 l 30.209 -29.486 a 4.683 4.683 0 0 0 1.415 -3.353 V 16.442 H 49.07 a 4.685 4.685 0 0 0 -3.289 1.347 C 40.992 22.505 24.77 38.475 15.453 47.65 Z m 54.274 -24.958 v 18.664 c 0 1.267 -0.515 2.48 -1.422 3.363 L 40.984 71.256 a 4.627 4.627 0 0 1 -6.495 -0.048 c -3.73 -3.728 -9.837 -9.838 -13.608 -13.608 a 4.647 4.647 0 0 1 -1.362 -3.312 a 4.641 4.641 0 0 1 1.393 -3.3 L 48.37 24.034 a 4.689 4.689 0 0 1 3.285 -1.342 h 18.072 Z m -12.355 3.847 c -2.736 0.024 -5.391 1.589 -6.666 3.989 c -1.106 2.08 -1.172 4.667 -0.184 6.806 c 1.306 2.832 4.455 4.721 7.628 4.389 c 3.191 -0.331 6.092 -2.867 6.725 -6.087 c 0.462 -2.349 -0.253 -4.9 -1.895 -6.642 c -1.405 -1.489 -3.407 -2.419 -5.461 -2.453 c -0.049 -0.002 -0.097 -0.002 -0.147 -0.002 Z m 0.012 3.936 c 1.727 0.011 3.347 1.327 3.661 3.064 a 3.51 3.51 0 0 1 -0.14 1.803 c -0.614 1.686 -2.532 2.83 -4.319 2.4 c -1.78 -0.428 -3.12 -2.326 -2.816 -4.172 c 0.277 -1.67 1.791 -3.067 3.614 -3.095 Z c -0.045 0 -0.022 0 0 0 Z" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_MediumSlateBlue}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M 75.977 20.527 v 6.251 h 5.253 v 18.664 c 0 1.267 -0.513 2.48 -1.421 3.363 l -27.32 26.536 a 4.628 4.628 0 0 1 -6.495 -0.047 l -0.053 -0.053 l -1.588 1.551 a 9.382 9.382 0 0 1 -3.53 2.171 l 1.835 1.834 c 3.636 3.636 9.52 3.672 13.198 0.08 l 30.211 -29.485 a 4.692 4.692 0 0 0 1.413 -3.354 V 20.527 H 75.977 Z" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingGroup>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_CategoriasInactivo" Drawing="{StaticResource Vector_CategoriasInactivo}" />
+
+    <DrawingGroup x:Key="Vector_CategoriasActivo">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0,0,100.0,100.0" />
+        </DrawingGroup.ClipGeometry>
+        <DrawingGroup>
+            <DrawingGroup.ClipGeometry>
+                <RectangleGeometry Rect="0.0,0.0,100.0,100.0" />
+            </DrawingGroup.ClipGeometry>
+            <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,100.0,100.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_White}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M 15.453 47.65 a 9.371 9.371 0 0 0 -0.051 13.309 l 15.751 15.754 a 9.394 9.394 0 0 0 13.2 0.079 l 30.209 -29.486 a 4.683 4.683 0 0 0 1.415 -3.353 V 16.442 H 49.07 a 4.685 4.685 0 0 0 -3.289 1.347 C 40.992 22.505 24.77 38.475 15.453 47.65 Z m 54.274 -24.958 v 18.664 c 0 1.267 -0.515 2.48 -1.422 3.363 L 40.984 71.256 a 4.627 4.627 0 0 1 -6.495 -0.048 c -3.73 -3.728 -9.837 -9.838 -13.608 -13.608 a 4.647 4.647 0 0 1 -1.362 -3.312 a 4.641 4.641 0 0 1 1.393 -3.3 L 48.37 24.034 a 4.689 4.689 0 0 1 3.285 -1.342 h 18.072 Z m -12.355 3.847 c -2.736 0.024 -5.391 1.589 -6.666 3.989 c -1.106 2.08 -1.172 4.667 -0.184 6.806 c 1.306 2.832 4.455 4.721 7.628 4.389 c 3.191 -0.331 6.092 -2.867 6.725 -6.087 c 0.462 -2.349 -0.253 -4.9 -1.895 -6.642 c -1.405 -1.489 -3.407 -2.419 -5.461 -2.453 c -0.049 -0.002 -0.097 -0.002 -0.147 -0.002 Z m 0.012 3.936 c 1.727 0.011 3.347 1.327 3.661 3.064 a 3.51 3.51 0 0 1 -0.14 1.803 c -0.614 1.686 -2.532 2.83 -4.319 2.4 c -1.78 -0.428 -3.12 -2.326 -2.816 -4.172 c 0.277 -1.67 1.791 -3.067 3.614 -3.095 Z c -0.045 0 -0.022 0 0 0 Z" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_White}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M 75.977 20.527 v 6.251 h 5.253 v 18.664 c 0 1.267 -0.513 2.48 -1.421 3.363 l -27.32 26.536 a 4.628 4.628 0 0 1 -6.495 -0.047 l -0.053 -0.053 l -1.588 1.551 a 9.382 9.382 0 0 1 -3.53 2.171 l 1.835 1.834 c 3.636 3.636 9.52 3.672 13.198 0.08 l 30.211 -29.485 a 4.692 4.692 0 0 0 1.413 -3.354 V 20.527 H 75.977 Z" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingGroup>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_CategoriasActivo" Drawing="{StaticResource Vector_CategoriasActivo}" />
+
+    <DrawingGroup x:Key="Vector_PedidosInactivo">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0,0,80.0,80.0" />
+        </DrawingGroup.ClipGeometry>
+        <DrawingGroup>
+            <DrawingGroup.ClipGeometry>
+                <RectangleGeometry Rect="0.0,0.0,80.0,80.0" />
+            </DrawingGroup.ClipGeometry>
+            <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,80.0,80.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_DodgerBlue}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M 17.6 17.6 C 7.838 17.6 0 25.438 0 35.2 c 0 3.681 1.119 7.2 3.2 10.081 V 67.2 C 3.2 69.763 5.438 72 8 72 h 3.35 c 0.769 4.525 4.719 8 9.45 8 c 4.731 0 8.681 -3.475 9.45 -8 h 14.706 c 2.563 0 4.488 -2.081 4.488 -4.481 V 28.644 C 49.6 26.081 47.519 24 45.119 24 H 31.2 c -3.2 -3.837 -8.162 -6.4 -13.6 -6.4 Z m 0 3.2 c 8 0 14.4 6.4 14.4 14.4 s -6.4 14.4 -14.4 14.4 S 3.2 43.2 3.2 35.2 s 6.4 -14.4 14.4 -14.4 Z m -0.025 1.575 A 1.608 1.608 0 0 0 16 24 v 9.2 a 2.593 2.593 0 0 0 -0.962 2 c 0.006 0.094 0.012 0.188 0.025 0.275 l -3.394 3.394 c -0.419 0.4 -0.588 1 -0.438 1.556 c 0.144 0.563 0.582 1 1.144 1.144 a 1.587 1.587 0 0 0 1.556 -0.438 l 3.388 -3.387 c 0.094 0.012 0.187 0.012 0.281 0.012 a 2.554 2.554 0 0 0 2.556 -2.556 c 0 -0.775 -0.35 -1.512 -0.956 -2 V 24 a 1.602 1.602 0 0 0 -1.625 -1.625 Z M 54.4 32 a 3.207 3.207 0 0 0 -3.2 3.2 v 33.6 c 0 1.344 0.844 2.5 2.025 2.969 C 53.9 76.406 57.906 80 62.719 80 c 4.731 0 8.687 -3.475 9.456 -8 H 75.2 c 2.719 0 4.8 -2.081 4.8 -4.8 V 51.844 c 0 -3.2 -2.237 -6.563 -2.556 -6.888 L 73.756 40 l -3.037 -4 c -1.6 -1.762 -4 -4 -6.719 -4 Z m 6.4 8 h 8.956 l 5.125 6.719 c 0.482 0.8 1.919 3.2 1.919 4.962 V 52.8 h -16 c -1.6 0 -3.2 -1.6 -3.2 -3.2 v -6.4 c 0 -1.762 1.6 -3.2 3.2 -3.2 Z m -40 24 c 3.519 0 6.4 2.881 6.4 6.4 c 0 3.519 -2.881 6.4 -6.4 6.4 c -3.519 0 -6.4 -2.881 -6.4 -6.4 c 0 -3.519 2.881 -6.4 6.4 -6.4 Z m 41.919 0 c 3.519 0 6.4 2.881 6.4 6.4 c 0 3.519 -2.881 6.4 -6.4 6.4 c -3.519 0 -6.4 -2.881 -6.4 -6.4 c 0 -3.519 2.881 -6.4 6.4 -6.4 Z" FillRule="Nonzero" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingGroup>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_PedidosInactivo" Drawing="{StaticResource Vector_PedidosInactivo}" />
+
+    <DrawingGroup x:Key="Vector_ReportePedidosInactivo">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0,0,80.0,80.0" />
+        </DrawingGroup.ClipGeometry>
+        <DrawingGroup>
+            <DrawingGroup.ClipGeometry>
+                <RectangleGeometry Rect="0.0,0.0,80.0,80.0" />
+            </DrawingGroup.ClipGeometry>
+            <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,80.0,80.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_PantoneOrange}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M 17.6 17.6 C 7.838 17.6 0 25.438 0 35.2 c 0 3.681 1.119 7.2 3.2 10.081 V 67.2 C 3.2 69.763 5.438 72 8 72 h 3.35 c 0.769 4.525 4.719 8 9.45 8 c 4.731 0 8.681 -3.475 9.45 -8 h 14.706 c 2.563 0 4.488 -2.081 4.488 -4.481 V 28.644 C 49.6 26.081 47.519 24 45.119 24 H 31.2 c -3.2 -3.837 -8.162 -6.4 -13.6 -6.4 Z m 0 3.2 c 8 0 14.4 6.4 14.4 14.4 s -6.4 14.4 -14.4 14.4 S 3.2 43.2 3.2 35.2 s 6.4 -14.4 14.4 -14.4 Z m -0.025 1.575 A 1.608 1.608 0 0 0 16 24 v 9.2 a 2.593 2.593 0 0 0 -0.962 2 c 0.006 0.094 0.012 0.188 0.025 0.275 l -3.394 3.394 c -0.419 0.4 -0.588 1 -0.438 1.556 c 0.144 0.563 0.582 1 1.144 1.144 a 1.587 1.587 0 0 0 1.556 -0.438 l 3.388 -3.387 c 0.094 0.012 0.187 0.012 0.281 0.012 a 2.554 2.554 0 0 0 2.556 -2.556 c 0 -0.775 -0.35 -1.512 -0.956 -2 V 24 a 1.602 1.602 0 0 0 -1.625 -1.625 Z M 54.4 32 a 3.207 3.207 0 0 0 -3.2 3.2 v 33.6 c 0 1.344 0.844 2.5 2.025 2.969 C 53.9 76.406 57.906 80 62.719 80 c 4.731 0 8.687 -3.475 9.456 -8 H 75.2 c 2.719 0 4.8 -2.081 4.8 -4.8 V 51.844 c 0 -3.2 -2.237 -6.563 -2.556 -6.888 L 73.756 40 l -3.037 -4 c -1.6 -1.762 -4 -4 -6.719 -4 Z m 6.4 8 h 8.956 l 5.125 6.719 c 0.482 0.8 1.919 3.2 1.919 4.962 V 52.8 h -16 c -1.6 0 -3.2 -1.6 -3.2 -3.2 v -6.4 c 0 -1.762 1.6 -3.2 3.2 -3.2 Z m -40 24 c 3.519 0 6.4 2.881 6.4 6.4 c 0 3.519 -2.881 6.4 -6.4 6.4 c -3.519 0 -6.4 -2.881 -6.4 -6.4 c 0 -3.519 2.881 -6.4 6.4 -6.4 Z m 41.919 0 c 3.519 0 6.4 2.881 6.4 6.4 c 0 3.519 -2.881 6.4 -6.4 6.4 c -3.519 0 -6.4 -2.881 -6.4 -6.4 c 0 -3.519 2.881 -6.4 6.4 -6.4 Z" FillRule="Nonzero" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingGroup>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_ReportePedidosInactivo" Drawing="{StaticResource Vector_ReportePedidosInactivo}" />
+
+    <DrawingGroup x:Key="Vector_PedidosActivo">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0,0,80.0,80.0" />
+        </DrawingGroup.ClipGeometry>
+        <DrawingGroup>
+            <DrawingGroup.ClipGeometry>
+                <RectangleGeometry Rect="0.0,0.0,80.0,80.0" />
+            </DrawingGroup.ClipGeometry>
+            <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,80.0,80.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_White}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M 17.6 17.6 C 7.838 17.6 0 25.438 0 35.2 c 0 3.681 1.119 7.2 3.2 10.081 V 67.2 C 3.2 69.763 5.438 72 8 72 h 3.35 c 0.769 4.525 4.719 8 9.45 8 c 4.731 0 8.681 -3.475 9.45 -8 h 14.706 c 2.563 0 4.488 -2.081 4.488 -4.481 V 28.644 C 49.6 26.081 47.519 24 45.119 24 H 31.2 c -3.2 -3.837 -8.162 -6.4 -13.6 -6.4 Z m 0 3.2 c 8 0 14.4 6.4 14.4 14.4 s -6.4 14.4 -14.4 14.4 S 3.2 43.2 3.2 35.2 s 6.4 -14.4 14.4 -14.4 Z m -0.025 1.575 A 1.608 1.608 0 0 0 16 24 v 9.2 a 2.593 2.593 0 0 0 -0.962 2 c 0.006 0.094 0.012 0.188 0.025 0.275 l -3.394 3.394 c -0.419 0.4 -0.588 1 -0.438 1.556 c 0.144 0.563 0.582 1 1.144 1.144 a 1.587 1.587 0 0 0 1.556 -0.438 l 3.388 -3.387 c 0.094 0.012 0.187 0.012 0.281 0.012 a 2.554 2.554 0 0 0 2.556 -2.556 c 0 -0.775 -0.35 -1.512 -0.956 -2 V 24 a 1.602 1.602 0 0 0 -1.625 -1.625 Z M 54.4 32 a 3.207 3.207 0 0 0 -3.2 3.2 v 33.6 c 0 1.344 0.844 2.5 2.025 2.969 C 53.9 76.406 57.906 80 62.719 80 c 4.731 0 8.687 -3.475 9.456 -8 H 75.2 c 2.719 0 4.8 -2.081 4.8 -4.8 V 51.844 c 0 -3.2 -2.237 -6.563 -2.556 -6.888 L 73.756 40 l -3.037 -4 c -1.6 -1.762 -4 -4 -6.719 -4 Z m 6.4 8 h 8.956 l 5.125 6.719 c 0.482 0.8 1.919 3.2 1.919 4.962 V 52.8 h -16 c -1.6 0 -3.2 -1.6 -3.2 -3.2 v -6.4 c 0 -1.762 1.6 -3.2 3.2 -3.2 Z m -40 24 c 3.519 0 6.4 2.881 6.4 6.4 c 0 3.519 -2.881 6.4 -6.4 6.4 c -3.519 0 -6.4 -2.881 -6.4 -6.4 c 0 -3.519 2.881 -6.4 6.4 -6.4 Z m 41.919 0 c 3.519 0 6.4 2.881 6.4 6.4 c 0 3.519 -2.881 6.4 -6.4 6.4 c -3.519 0 -6.4 -2.881 -6.4 -6.4 c 0 -3.519 2.881 -6.4 6.4 -6.4 Z" FillRule="Nonzero" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingGroup>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_PedidosActivo" Drawing="{StaticResource Vector_PedidosActivo}" />
+
+    <DrawingGroup x:Key="Vector_PromoInactivo">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0,0,100.0,100.0" />
+        </DrawingGroup.ClipGeometry>
+        <DrawingGroup>
+            <DrawingGroup.ClipGeometry>
+                <RectangleGeometry Rect="0.0,0.0,100.0,100.0" />
+            </DrawingGroup.ClipGeometry>
+            <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,100.0,100.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_PurplePizza}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="m 89.704 45.287 l -6.334 -6.333 c -1.083 -1.084 -1.958 -3.209 -1.958 -4.709 v -9 c 0 -3.666 -3 -6.666 -6.667 -6.666 h -8.958 c -1.5 0 -3.625 -0.875 -4.708 -1.959 l -6.334 -6.333 c -2.583 -2.583 -6.833 -2.583 -9.416 0 l -6.417 6.333 c -1.042 1.084 -3.167 1.959 -4.708 1.959 h -8.959 c -3.666 0 -6.666 3 -6.666 6.666 v 8.959 c 0 1.5 -0.875 3.625 -1.959 4.708 l -6.333 6.333 c -2.583 2.584 -2.583 6.834 0 9.417 l 6.333 6.333 c 1.084 1.084 1.959 3.209 1.959 4.709 v 8.958 c 0 3.667 3 6.667 6.666 6.667 h 8.959 c 1.5 0 3.625 0.875 4.708 1.958 l 6.333 6.333 c 2.584 2.584 6.834 2.584 9.417 0 l 6.333 -6.333 c 1.084 -1.083 3.209 -1.958 4.709 -1.958 h 8.958 c 3.667 0 6.667 -3 6.667 -6.667 v -8.958 c 0 -1.5 0.875 -3.625 1.958 -4.709 l 6.333 -6.333 c 2.709 -2.542 2.709 -6.792 0.084 -9.375 Z m -56.375 -7.792 a 4.179 4.179 0 0 1 4.166 -4.166 a 4.179 4.179 0 0 1 4.167 4.166 a 4.152 4.152 0 0 1 -4.167 4.167 a 4.179 4.179 0 0 1 -4.166 -4.167 Z m 6.375 27.209 a 3.09 3.09 0 0 1 -2.209 0.916 a 3.09 3.09 0 0 1 -2.208 -0.916 c -1.208 -1.209 -1.208 -3.209 0 -4.417 l 25 -25 c 1.208 -1.208 3.208 -1.208 4.417 0 c 1.208 1.208 1.208 3.208 0 4.417 l -25 25 Z m 22.791 1.958 c -2.333 0 -4.208 -1.875 -4.208 -4.167 a 4.179 4.179 0 0 1 4.167 -4.166 a 4.179 4.179 0 0 1 4.166 4.166 c 0 2.292 -1.833 4.167 -4.125 4.167 Z" FillRule="Nonzero" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingGroup>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_PromoInactivo" Drawing="{StaticResource Vector_PromoInactivo}" />
+
+    <DrawingGroup x:Key="Vector_PromoActivo">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0,0,100.0,100.0" />
+        </DrawingGroup.ClipGeometry>
+        <DrawingGroup>
+            <DrawingGroup.ClipGeometry>
+                <RectangleGeometry Rect="0.0,0.0,100.0,100.0" />
+            </DrawingGroup.ClipGeometry>
+            <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,100.0,100.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource SolidColorBrush_White}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="m 89.704 45.287 l -6.334 -6.333 c -1.083 -1.084 -1.958 -3.209 -1.958 -4.709 v -9 c 0 -3.666 -3 -6.666 -6.667 -6.666 h -8.958 c -1.5 0 -3.625 -0.875 -4.708 -1.959 l -6.334 -6.333 c -2.583 -2.583 -6.833 -2.583 -9.416 0 l -6.417 6.333 c -1.042 1.084 -3.167 1.959 -4.708 1.959 h -8.959 c -3.666 0 -6.666 3 -6.666 6.666 v 8.959 c 0 1.5 -0.875 3.625 -1.959 4.708 l -6.333 6.333 c -2.583 2.584 -2.583 6.834 0 9.417 l 6.333 6.333 c 1.084 1.084 1.959 3.209 1.959 4.709 v 8.958 c 0 3.667 3 6.667 6.666 6.667 h 8.959 c 1.5 0 3.625 0.875 4.708 1.958 l 6.333 6.333 c 2.584 2.584 6.834 2.584 9.417 0 l 6.333 -6.333 c 1.084 -1.083 3.209 -1.958 4.709 -1.958 h 8.958 c 3.667 0 6.667 -3 6.667 -6.667 v -8.958 c 0 -1.5 0.875 -3.625 1.958 -4.709 l 6.333 -6.333 c 2.709 -2.542 2.709 -6.792 0.084 -9.375 Z m -56.375 -7.792 a 4.179 4.179 0 0 1 4.166 -4.166 a 4.179 4.179 0 0 1 4.167 4.166 a 4.152 4.152 0 0 1 -4.167 4.167 a 4.179 4.179 0 0 1 -4.166 -4.167 Z m 6.375 27.209 a 3.09 3.09 0 0 1 -2.209 0.916 a 3.09 3.09 0 0 1 -2.208 -0.916 c -1.208 -1.209 -1.208 -3.209 0 -4.417 l 25 -25 c 1.208 -1.208 3.208 -1.208 4.417 0 c 1.208 1.208 1.208 3.208 0 4.417 l -25 25 Z m 22.791 1.958 c -2.333 0 -4.208 -1.875 -4.208 -4.167 a 4.179 4.179 0 0 1 4.167 -4.166 a 4.179 4.179 0 0 1 4.166 4.166 c 0 2.292 -1.833 4.167 -4.125 4.167 Z" FillRule="Nonzero" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingGroup>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_PromoActivo" Drawing="{StaticResource Vector_PromoActivo}" />
 
     <DrawingGroup x:Key="Vector_ArrowDown">
         <DrawingGroup.ClipGeometry>
