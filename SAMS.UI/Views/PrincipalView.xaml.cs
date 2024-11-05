@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAMS.UI.VisualComponents;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -69,6 +70,11 @@ namespace SAMS.UI.Views
             iniciarSesionView.Show();
             this.Close();
 
+        }
+
+        private void ButtonControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            InformationControl.Show("Información", "Mensaje de información", "Aceptar");
         }
 
     }

@@ -140,6 +140,7 @@
                                     ButtonHeight="50"
                                     ButtonWidth="200"
                                     FontSize="24"
+                                    MouseLeftButtonUp="ButtonControl_MouseLeftButtonUp"
                                     Text="Guardar" />
 
                             </Grid>
