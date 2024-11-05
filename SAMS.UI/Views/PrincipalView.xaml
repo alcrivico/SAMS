@@ -52,7 +52,7 @@
                         <!--  Employee debe ser una DependencyProperty que se pase por el constructor  -->
                         <!--  y que el actualiza en cuanto se cambia la propiedad y se asigna aquí  -->
                         <!--  como un binding  -->
-                        <components:SideBarControl Employee="Administrador" SideElementSelected="0" />
+                        <components:SideBarControl Employee="Contador" SideElementSelected="0" />
 
                         <Grid Grid.Column="1">
 
@@ -93,7 +93,56 @@
 
                             </Grid>
 
-                            <Grid Name="Contenido" Grid.Row="1" />
+                            <Grid Name="Contenido" Grid.Row="1">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <Viewbox Grid.Row="0" Margin="20">
+                                    <components:TextBoxControl FieldName="Nombre" />
+                                </Viewbox>
+
+                                <Viewbox Grid.Row="1" Margin="20">
+                                    <components:TextBoxControl FieldName="Nombre" />
+                                </Viewbox>
+
+                                <Viewbox Grid.Row="2" Margin="20">
+                                    <components:TextBoxControl FieldName="Nombre" />
+                                </Viewbox>
+
+                                <Viewbox Grid.Row="3" Margin="20">
+                                    <components:TextBoxControl FieldName="Nombre" />
+                                </Viewbox>
+
+                                <Viewbox Grid.Row="4" Margin="20">
+                                    <components:TextBoxControl FieldName="Nombre" />
+                                </Viewbox>
+
+                                <Viewbox Grid.Row="5" Margin="20">
+                                    <components:ComboBoxControl
+                                        Width="168"
+                                        Height="42"
+                                        FieldName="Lista" />
+                                </Viewbox>
+
+                                <components:ButtonControl
+                                    x:Name="ButtonControl"
+                                    Grid.Row="6"
+                                    Margin="20"
+                                    ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                    ButtonHeight="50"
+                                    ButtonWidth="200"
+                                    FontSize="24"
+                                    Text="Guardar" />
+
+                            </Grid>
 
                         </Grid>
 

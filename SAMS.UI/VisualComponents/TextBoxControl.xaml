@@ -6,7 +6,10 @@
     xmlns:local="clr-namespace:SAMS.UI.VisualComponents"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="TextBox"
+    Width="200"
     Height="50"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
     d:DesignWidth="{Binding TextBoxWidth, ElementName=TextBox}"
     mc:Ignorable="d">
 

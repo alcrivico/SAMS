@@ -215,7 +215,7 @@
             <Border
                 x:Name="Border"
                 Grid.ColumnSpan="2"
-                Background="{StaticResource SolidColorBrush_LavenderWeb}"
+                Background="{StaticResource SolidColorBrush_White}"
                 BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
                 BorderThickness="3"
                 CornerRadius="10" />
@@ -238,7 +238,7 @@
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="ToggleButton.IsMouseOver" Value="true">
-                <Setter TargetName="Border" Property="Background" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource SolidColorBrush_LavenderWeb}" />
                 <Setter TargetName="Border" Property="CornerRadius" Value="10" />
             </Trigger>
             <Trigger Property="ToggleButton.IsChecked" Value="true">
@@ -312,7 +312,7 @@
                             PopupAnimation="Slide">
                             <Border
                                 x:Name="OutsideDropDownBorder"
-                                Background="{StaticResource SolidColorBrush_LavenderWeb}"
+                                Background="{StaticResource SolidColorBrush_White}"
                                 BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
                                 BorderThickness="3"
                                 CornerRadius="10">
