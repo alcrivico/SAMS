@@ -5,29 +5,29 @@
         BlurRadius="4"
         Direction="315"
         Opacity="0.5"
-        Color="{StaticResource Color_Black}" />
+        Color="{StaticResource Color_EerieBlack}" />
 
     <DropShadowEffect
         x:Key="HangmanDropShadow"
         BlurRadius="4"
         Direction="400"
         Opacity="0.1"
-        Color="{StaticResource Color_Black}" />
+        Color="{StaticResource Color_EerieBlack}" />
 
     <Style x:Key="SelectedRowStyle" TargetType="DataGridRow">
-        <Setter Property="Background" Value="{StaticResource SolidColorBrush_Gold}" />
-        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_White}" />
+        <Setter Property="Background" Value="{StaticResource SolidColorBrush_LavenderWeb}" />
+        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_EerieBlack}" />
     </Style>
 
     <Style x:Key="SelectedCellStyle" TargetType="DataGridCell">
-        <Setter Property="Background" Value="{StaticResource SolidColorBrush_Gold}" />
-        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_White}" />
+        <Setter Property="Background" Value="{StaticResource SolidColorBrush_LavenderWeb}" />
+        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_EerieBlack}" />
     </Style>
 
     <Style x:Key="GeneralColumnHeader" TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_Gold}" />
-        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_Gold}" />
+        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_PantoneOrange}" />
+        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
         <Setter Property="BorderThickness" Value="3,0,0,3" />
         <Setter Property="FontFamily" Value="{StaticResource Font_Nunito}" />
         <Setter Property="FontSize" Value="14" />
@@ -38,8 +38,8 @@
 
     <Style x:Key="InitialColumnHeader" TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_Gold}" />
-        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_Gold}" />
+        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_PantoneOrange}" />
+        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
         <Setter Property="BorderThickness" Value="0,0,0,3" />
         <Setter Property="FontFamily" Value="{StaticResource Font_Nunito}" />
         <Setter Property="FontSize" Value="14" />
@@ -58,13 +58,13 @@
     <Style x:Key="GeneralRow" TargetType="DataGridRow">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_Gold}" />
+        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
         <Setter Property="BorderThickness" Value="0,0,0,3" />
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource SolidColorBrush_RoyalBlue}" />
-                <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_White}" />
-                <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_Gold}" />
+                <Setter Property="Background" Value="{StaticResource SolidColorBrush_LavenderWeb}" />
+                <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_EerieBlack}" />
+                <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -74,7 +74,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_White}" />
-        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_Gold}" />
+        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
         <Setter Property="BorderThickness" Value="3,0,0,0" />
         <Setter Property="FontFamily" Value="{StaticResource Font_Nunito}" />
         <Setter Property="FontSize" Value="14" />
@@ -94,9 +94,9 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource SolidColorBrush_RoyalBlue}" />
-                <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_White}" />
-                <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_Gold}" />
+                <Setter Property="Background" Value="{StaticResource SolidColorBrush_LavenderWeb}" />
+                <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_EerieBlack}" />
+                <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -105,8 +105,8 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_White}" />
-        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_Gold}" />
+        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_EerieBlack}" />
+        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontFamily" Value="{StaticResource Font_Nunito}" />
         <Setter Property="FontSize" Value="14" />
@@ -128,14 +128,14 @@
 
     <Style x:Key="ScrollBarButtonStyle" TargetType="RepeatButton">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_Gold}" />
+        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
     <Style x:Key="ScrollBarThumbStyle" TargetType="Thumb">
-        <Setter Property="Background" Value="{StaticResource SolidColorBrush_Gold}" />
-        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_Gold}" />
+        <Setter Property="Background" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
+        <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
         <Setter Property="BorderThickness" Value="3" />
         <Setter Property="Template">
             <Setter.Value>
@@ -181,7 +181,7 @@
                             <Track.Thumb>
                                 <Thumb
                                     Height="Auto"
-                                    Background="{StaticResource SolidColorBrush_Gold}"
+                                    Background="{StaticResource SolidColorBrush_DodgerBlue}"
                                     Style="{StaticResource ScrollBarThumbStyle}" />
                             </Track.Thumb>
                             <Track.IncreaseRepeatButton>
@@ -215,8 +215,8 @@
             <Border
                 x:Name="Border"
                 Grid.ColumnSpan="2"
-                Background="{StaticResource SolidColorBrush_MarianBlue}"
-                BorderBrush="{StaticResource SolidColorBrush_Gold}"
+                Background="{StaticResource SolidColorBrush_White}"
+                BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
                 BorderThickness="3"
                 CornerRadius="10" />
             <Border
@@ -233,20 +233,20 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
-                Fill="{StaticResource SolidColorBrush_White}"
+                Fill="{StaticResource SolidColorBrush_DavysGrey}"
                 Stretch="Uniform" />
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="ToggleButton.IsMouseOver" Value="true">
-                <Setter TargetName="Border" Property="Background" Value="{StaticResource SolidColorBrush_RoyalBlue}" />
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource SolidColorBrush_LavenderWeb}" />
                 <Setter TargetName="Border" Property="CornerRadius" Value="10" />
             </Trigger>
             <Trigger Property="ToggleButton.IsChecked" Value="true">
-                <Setter TargetName="Border" Property="Background" Value="{StaticResource SolidColorBrush_RoyalBlue}" />
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
 
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="Border" Property="Background" Value="{StaticResource SolidColorBrush_MarianBlue}" />
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource SolidColorBrush_LavenderWeb}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -269,7 +269,7 @@
         <Setter Property="FontFamily" Value="{StaticResource Font_Nunito}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_White}" />
+        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_EerieBlack}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
@@ -312,8 +312,8 @@
                             PopupAnimation="Slide">
                             <Border
                                 x:Name="OutsideDropDownBorder"
-                                Background="{StaticResource SolidColorBrush_MarianBlue}"
-                                BorderBrush="{StaticResource SolidColorBrush_Gold}"
+                                Background="{StaticResource SolidColorBrush_White}"
+                                BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
                                 BorderThickness="3"
                                 CornerRadius="10">
                                 <Grid
@@ -324,7 +324,7 @@
                                     <Border
                                         x:Name="DropDownBorder"
                                         Background="Transparent"
-                                        BorderBrush="{StaticResource SolidColorBrush_Gold}"
+                                        BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
                                         BorderThickness="0,0,0,2"
                                         CornerRadius="10" />
                                     <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
