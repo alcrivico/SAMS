@@ -1,7 +1,10 @@
 ﻿using SAMS.UI.VisualComponents;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,9 +23,48 @@ namespace SAMS.UI.Views
     /// </summary>
     public partial class PrincipalView : Window
     {
+
+        List<Game> _games;
+        ObservableCollection<Object> _gamesDTO;
+
         public PrincipalView()
         {
             InitializeComponent();
+
+            DefineGamesTable();
+
+            Game albhieri = new Game();
+            Game cristoff = new Game();
+
+            _games = new List<Game>();
+            _gamesDTO = new ObservableCollection<object>();
+
+            albhieri.GameCode = "123";
+            albhieri.CreatorName = "Albhieri";
+            albhieri.Language = "English";
+
+            cristoff.GameCode = "321";
+            cristoff.CreatorName = "Cristoff";
+            cristoff.Language = "Spanish";
+
+            _games.Add(albhieri);
+
+            _games.Add(cristoff);
+
+            foreach (var game in _games)
+            {
+                _gamesDTO.Add(game);
+            }
+
+            GamesTable.SetItemsSource(_gamesDTO);
+
+        }
+
+        public class Game
+        {
+            public string GameCode { get; set; }
+            public string CreatorName { get; set; }
+            public string Language { get; set; }
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -77,6 +119,44 @@ namespace SAMS.UI.Views
             InformationControl.Show("Información", "Mensaje de información", "Aceptar");
         }
 
+        private void DefineGamesTable()
+        {
+
+            Dictionary<string, string>[] columns =
+            {
+                new Dictionary<string, string> {
+
+                    { "Name", "Codigo" },
+                    { "Width", "*" },
+                    { "BindingName", "GameCode" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Name", "Creado por" },
+                    { "Width", "*" },
+                    { "BindingName", "CreatorName" },
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Name", "Idioma" },
+                    { "Width", "*" },
+                    { "BindingName", "Language" }
+
+                }
+
+
+            };
+
+            GamesTable.DefineColumns(columns);
+
+        }
+
+        private void GamesTable_SelectedItemChanged(object sender, RoutedEventArgs e)
+        {
+            ConfirmationControl.Show("Confirmación", "Seleccionaste otro elemento", "Aceptar", "Cancelar");
+        }
     }
 
 }

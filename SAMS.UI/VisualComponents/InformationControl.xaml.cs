@@ -62,8 +62,8 @@ namespace SAMS.UI.VisualComponents
             var window = new Window
             {
                 Content = messageBox,
-                Height = 292,
-                Width = 600,
+                Height = 150,
+                Width = 300,
                 ResizeMode = ResizeMode.NoResize,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 WindowStyle = WindowStyle.None,

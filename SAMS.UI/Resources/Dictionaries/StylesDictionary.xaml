@@ -73,7 +73,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_White}" />
+        <Setter Property="Foreground" Value="{StaticResource SolidColorBrush_EerieBlack}" />
         <Setter Property="BorderBrush" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
         <Setter Property="BorderThickness" Value="3,0,0,0" />
         <Setter Property="FontFamily" Value="{StaticResource Font_Nunito}" />

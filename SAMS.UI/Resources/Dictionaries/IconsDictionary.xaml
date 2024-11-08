@@ -1157,4 +1157,56 @@
     <DrawingImage x:Key="Icon_ArrowDown" Drawing="{StaticResource Vector_ArrowDown}" />
     <Geometry x:Key="Geometry_ArrowDown" x:Shared="False">M 0,0 L 80.755,0 80.755,45.255 0,45.255 Z</Geometry>
 
+    <DrawingGroup x:Key="Vector_Calendar">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0,0,24.0,24.0" />
+        </DrawingGroup.ClipGeometry>
+        <DrawingGroup>
+            <GeometryDrawing>
+                <GeometryDrawing.Geometry>
+                    <PathGeometry Figures="M 20 10 V 7 a 2 2 0 0 0 -2 -2 H 6 a 2 2 0 0 0 -2 2 v 3 m 16 0 v 9 a 2 2 0 0 1 -2 2 H 6 a 2 2 0 0 1 -2 -2 v -9 m 16 0 H 4 m 4 -7 v 4 m 8 -4 v 4" FillRule="Nonzero" />
+                </GeometryDrawing.Geometry>
+            </GeometryDrawing>
+            <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Pen>
+                        <Pen
+                            Brush="{StaticResource SolidColorBrush_DodgerBlue}"
+                            DashCap="Flat"
+                            Thickness="2.0" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M 20 10 V 7 a 2 2 0 0 0 -2 -2 H 6 a 2 2 0 0 0 -2 2 v 3 m 16 0 v 9 a 2 2 0 0 1 -2 2 H 6 a 2 2 0 0 1 -2 -2 v -9 m 16 0 H 4 m 4 -7 v 4 m 8 -4 v 4" FillRule="Nonzero" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+            <GeometryDrawing Brush="{StaticResource SolidColorBrush_DodgerBlue}">
+                <GeometryDrawing.Geometry>
+                    <RectangleGeometry
+                        RadiusX="0.5"
+                        RadiusY="0.5"
+                        Rect="6.0,12.0,3.0,3.0" />
+                </GeometryDrawing.Geometry>
+            </GeometryDrawing>
+            <GeometryDrawing Brush="{StaticResource SolidColorBrush_DodgerBlue}">
+                <GeometryDrawing.Geometry>
+                    <RectangleGeometry
+                        RadiusX="0.5"
+                        RadiusY="0.5"
+                        Rect="10.5,12.0,3.0,3.0" />
+                </GeometryDrawing.Geometry>
+            </GeometryDrawing>
+            <GeometryDrawing Brush="{StaticResource SolidColorBrush_DodgerBlue}">
+                <GeometryDrawing.Geometry>
+                    <RectangleGeometry
+                        RadiusX="0.5"
+                        RadiusY="0.5"
+                        Rect="15.0,12.0,3.0,3.0" />
+                </GeometryDrawing.Geometry>
+            </GeometryDrawing>
+        </DrawingGroup>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_Calendar" Drawing="{StaticResource Vector_Calendar}" />
+
 </ResourceDictionary>
