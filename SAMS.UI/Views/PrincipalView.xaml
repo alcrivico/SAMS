@@ -117,7 +117,10 @@
                                 </Viewbox>
 
                                 <Viewbox Grid.Row="3" Margin="20">
-                                    <components:TextBoxControl FieldName="Nombre" />
+                                    <components:CheckBoxControl
+                                        x:Name="CheckBoxEfectivo"
+                                        CheckedChanged="CheckBoxEfectivo_CheckedChanged"
+                                        FieldName="Campo" />
                                 </Viewbox>
 
                                 <Viewbox Grid.Row="4" Margin="20">

@@ -361,4 +361,57 @@
         <Style.Triggers />
     </Style>
 
+    <Style x:Key="CustomCheckBoxStyle" TargetType="CheckBox">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid
+                        Width="30"
+                        Height="30"
+                        Background="Transparent">
+
+                        <Border
+                            x:Name="Border"
+                            Width="30"
+                            Height="30"
+                            Background="Transparent"
+                            BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                            BorderThickness="3"
+                            CornerRadius="10">
+
+                            <Path
+                                x:Name="CheckMark"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M 2,10 L 7,15 L 14,5"
+                                Stroke="{StaticResource SolidColorBrush_DodgerBlue}"
+                                StrokeThickness="2"
+                                Visibility="Collapsed">
+                                <Path.RenderTransform>
+                                    <TranslateTransform X="-0.5" Y="-2" />
+                                </Path.RenderTransform>
+                            </Path>
+
+                        </Border>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource SolidColorBrush_DodgerBlue}" />
+                            <Setter TargetName="CheckMark" Property="Stroke" Value="White" />
+                        </Trigger>
+
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Border" Property="Background" Value="Transparent" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

@@ -157,6 +157,21 @@ namespace SAMS.UI.Views
         {
             ConfirmationControl.Show("Confirmación", "Seleccionaste otro elemento", "Aceptar", "Cancelar");
         }
+
+        private void CheckBoxEfectivo_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+
+            if (CheckBoxEfectivo.IsChecked)
+            {
+                InformationControl.Show("Información", "El checkbox se marcó", "Aceptar");
+            }
+            else
+            {
+                InformationControl.Show("Información", "El checkbox se desmarcó", "Aceptar");
+            }
+
+        }
+
     }
 
 }
