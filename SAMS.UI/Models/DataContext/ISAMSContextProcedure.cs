@@ -1,6 +1,8 @@
 ﻿using SAMS.UI.DTO;
+using SAMS.UI.Models.DataContext;
+using System.Data;
 
-namespace SAMS.UI.Models.DataContext
+namespace SAMS.Models.DataContext
 {
     public interface ISAMSContextProcedure
     {

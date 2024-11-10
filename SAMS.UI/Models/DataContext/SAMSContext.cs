@@ -2,11 +2,12 @@
 using SAMS.UI.DTO;
 using SAMS.UI.Models.Entities;
 
-namespace SAMS.UI.Models.DataContext;
+namespace SAMS.Models.DataContext;
 
 public class SAMSContext : DbContext
 {
-    public SAMSContext(DbContextOptions<SAMSContext> options) : base(options) { }
+    public SAMSContext(DbContextOptions<SAMSContext> options)
+            : base(options) { }
 
     public DbSet<Caja> Caja { get; set; }
     public DbSet<Categoria> Categoria { get; set; }
@@ -34,39 +35,5 @@ public class SAMSContext : DbContext
     public DbSet<V_ProductoInventario> V_ProductoInventario { get; set; }
     public DbSet<V_Promocion> V_Promocion { get; set; }
     public DbSet<V_Proveedores> V_Proveedores { get; set; }
-
-    // Configurar las vista como una entidad sin clave
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<SP_ReporteVentaResult>()
-            .HasNoKey()
-            .ToView("SP_ReporteVentaResult");
-
-        modelBuilder.Entity<V_EmpleadoDetalle>()
-            .HasNoKey()
-            .ToView("V_EmpleadoDetalle");
-
-        modelBuilder.Entity<V_Empleados>()
-            .HasNoKey()
-            .ToView("V_Empleados");
-
-        modelBuilder.Entity<V_Producto>()
-            .HasNoKey()
-            .ToView("V_Producto");
-
-        modelBuilder.Entity<V_ProductoInventario>()
-            .HasNoKey()
-            .ToView("V_ProductoInventario");
-
-        modelBuilder.Entity<V_Promocion>()
-            .HasNoKey()
-            .ToView("V_Promocion");
-
-        modelBuilder.Entity<V_Proveedores>()
-            .HasNoKey()
-            .ToView("V_Proveedores");
-
-        base.OnModelCreating(modelBuilder);
-    }
 
 }
