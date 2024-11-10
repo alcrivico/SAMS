@@ -7,7 +7,14 @@ public class Monedero
 
     public string codigoDeBarras { get; set; }
 
-    public decimal saldo { get; set; }
+    public decimal saldo { get; private set; } 
 
     public string telefono { get; set; }
+
+    public void SetSaldo(decimal nuevoSaldo)
+    {
+        if (nuevoSaldo < 0)
+            throw new ArgumentException("El saldo no puede ser negativo");
+        saldo = nuevoSaldo;
+    }
 }

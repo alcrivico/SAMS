@@ -9,7 +9,7 @@ public class Venta
 
     public DateTime fechaRegistro { get; set; }
 
-    public decimal iva { get; set; }
+    public decimal iva { get; private set; }
 
     public int cajaId { get; set; }
 
@@ -22,4 +22,11 @@ public class Venta
     public Monedero monedero { get; set; }
 
     public Empleado empleado { get; set; }
+
+    public void SetIva(decimal nuevoIva)
+    {
+        if (nuevoIva < 0)
+            throw new ArgumentException("El IVA no puede ser negativo");
+        iva = nuevoIva;
+    }
 }
