@@ -112,8 +112,7 @@
                                     <components:TableControl
                                         x:Name="GamesTable"
                                         Width="750"
-                                        Height="320"
-                                        SelectedItemChanged="GamesTable_SelectedItemChanged" />
+                                        Height="320" />
                                 </Viewbox>
 
                                 <Viewbox Grid.Row="3" Margin="20">
@@ -130,12 +129,10 @@
                                         FieldName="Fecha" />
                                 </Viewbox>
 
-                                <Viewbox Grid.Row="5" Margin="20">
-                                    <components:ComboBoxControl
-                                        Width="168"
-                                        Height="42"
-                                        FieldName="Lista" />
-                                </Viewbox>
+                                <Viewbox
+                                    x:Name="ViewBoxAcciones"
+                                    Grid.Row="5"
+                                    Margin="20" />
 
                                 <components:ButtonControl
                                     x:Name="ButtonControl"

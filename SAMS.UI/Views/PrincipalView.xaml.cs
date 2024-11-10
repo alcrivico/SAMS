@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Resources;
@@ -31,13 +32,19 @@ namespace SAMS.UI.Views
         {
             InitializeComponent();
 
+            ActionsControl BarraAccion = new ActionsControl();
+            BarraAccion.DetallesClicked += BarraAccion_DetallesClicked;
+            BarraAccion.EditarClicked += BarraAccion_EditarClicked;
+            BarraAccion.EliminarClicked += BarraAccion_EliminarClicked;
+
+            ViewBoxAcciones.Child = BarraAccion;
+
             DefineGamesTable();
 
             Game albhieri = new Game();
             Game cristoff = new Game();
 
             _games = new List<Game>();
-            _gamesDTO = new ObservableCollection<object>();
 
             albhieri.GameCode = "123";
             albhieri.CreatorName = "Albhieri";
@@ -51,10 +58,7 @@ namespace SAMS.UI.Views
 
             _games.Add(cristoff);
 
-            foreach (var game in _games)
-            {
-                _gamesDTO.Add(game);
-            }
+            _gamesDTO = new ObservableCollection<object>(_games);
 
             GamesTable.SetItemsSource(_gamesDTO);
 
@@ -65,6 +69,34 @@ namespace SAMS.UI.Views
             public string GameCode { get; set; }
             public string CreatorName { get; set; }
             public string Language { get; set; }
+            public ActionsControl Actions { get; set; }
+
+            public Game()
+            {
+                Actions = new ActionsControl();
+                Actions.DetallesClicked += ShowDetails;
+                Actions.EditarClicked += Edit;
+                Actions.EliminarClicked += Delete;
+            }
+
+            private void ShowDetails(object sender, RoutedEventArgs e)
+            {
+                Debug.WriteLine("ShowDetails");
+                MessageBox.Show("Detalles de " + CreatorName);
+            }
+
+            private void Edit(object sender, RoutedEventArgs e)
+            {
+                Debug.WriteLine("Edit");
+                MessageBox.Show("Editar " + CreatorName);
+            }
+
+            private void Delete(object sender, RoutedEventArgs e)
+            {
+                Debug.WriteLine("Delete");
+                MessageBox.Show("Eliminar " + CreatorName);
+            }
+
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -126,6 +158,7 @@ namespace SAMS.UI.Views
             {
                 new Dictionary<string, string> {
 
+                    { "Type", "Text" },
                     { "Name", "Codigo" },
                     { "Width", "*" },
                     { "BindingName", "GameCode" }
@@ -133,6 +166,7 @@ namespace SAMS.UI.Views
                 },
                 new Dictionary<string, string> {
 
+                    { "Type", "Text" },
                     { "Name", "Creado por" },
                     { "Width", "*" },
                     { "BindingName", "CreatorName" },
@@ -140,9 +174,17 @@ namespace SAMS.UI.Views
                 },
                 new Dictionary<string, string> {
 
+                    { "Type", "Text" },
                     { "Name", "Idioma" },
                     { "Width", "*" },
                     { "BindingName", "Language" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Actions" },
+                    { "Name", "Acciones" },
+                    { "Width", "*" },
 
                 }
 
@@ -151,11 +193,6 @@ namespace SAMS.UI.Views
 
             GamesTable.DefineColumns(columns);
 
-        }
-
-        private void GamesTable_SelectedItemChanged(object sender, RoutedEventArgs e)
-        {
-            ConfirmationControl.Show("Confirmación", "Seleccionaste otro elemento", "Aceptar", "Cancelar");
         }
 
         private void CheckBoxEfectivo_CheckedChanged(object sender, RoutedEventArgs e)
@@ -170,6 +207,22 @@ namespace SAMS.UI.Views
                 InformationControl.Show("Información", "El checkbox se desmarcó", "Aceptar");
             }
 
+        }
+
+        private void BarraAccion_DetallesClicked(object sender, RoutedEventArgs e)
+        {
+            InformationControl.Show("Información", "Detalles", "Aceptar");
+
+        }
+
+        private void BarraAccion_EditarClicked(object sender, RoutedEventArgs e)
+        {
+            InformationControl.Show("Información", "Editar", "Aceptar");
+        }
+
+        private void BarraAccion_EliminarClicked(object sender, RoutedEventArgs e)
+        {
+            InformationControl.Show("Información", "Eliminar", "Aceptar");
         }
 
     }

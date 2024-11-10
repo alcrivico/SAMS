@@ -40,6 +40,17 @@ namespace SAMS.UI.VisualComponents
             InitializeComponent();
         }
 
+        private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is FrameworkElement element &&
+                (element.Name == "BotonDetalle" ||
+                element.Name == "BotonEditar" ||
+                element.Name == "BotonEliminar"))
+            {
+                e.Handled = true;
+            }
+        }
+
         public void DefineColumns(Dictionary<string, string>[] columns)
         {
             DataGridStructure.Columns.Clear();
@@ -53,31 +64,64 @@ namespace SAMS.UI.VisualComponents
                 {
                     ColumnWidth = Convert.ToDouble(columns[i]["Width"]);
                 }
-                
-                DataGridTextColumn dataGridTextColumn = new DataGridTextColumn();
-                dataGridTextColumn.Header = columns[i]["Name"];
-                dataGridTextColumn.Binding = new Binding(columns[i]["BindingName"]);
-                dataGridTextColumn.IsReadOnly = true;
 
-                
-                if (i != 0)
+                if (columns[i]["Type"] == "Text")
                 {
 
-                    dataGridTextColumn.HeaderStyle = FindResource("GeneralColumnHeader") as Style;
-                    dataGridTextColumn.CellStyle = FindResource("GeneralCell") as Style;
-                
+                    DataGridTextColumn dataGridTextColumn = new DataGridTextColumn();
+                    dataGridTextColumn.Header = columns[i]["Name"];
+                    dataGridTextColumn.Binding = new Binding(columns[i]["BindingName"]);
+                    dataGridTextColumn.IsReadOnly = true;
+
+
+                    if (i != 0)
+                    {
+
+                        dataGridTextColumn.HeaderStyle = FindResource("GeneralColumnHeader") as Style;
+                        dataGridTextColumn.CellStyle = FindResource("GeneralCell") as Style;
+
+                    }
+
+                    if (ColumnWidth != -1)
+                    {
+                        dataGridTextColumn.Width = new DataGridLength(ColumnWidth, DataGridLengthUnitType.Pixel);
+                    }
+                    else
+                    {
+                        dataGridTextColumn.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                    }
+
+                    DataGridStructure.Columns.Add(dataGridTextColumn);
+
                 }
+                else if (columns[i]["Type"] == "Actions")
+                {
+                    DataGridTemplateColumn dataGridTemplateColumn = new DataGridTemplateColumn();
+                    dataGridTemplateColumn.Header = columns[i]["Name"];
+                    dataGridTemplateColumn.IsReadOnly = true;
 
-                if (ColumnWidth != -1)
-                {
-                    dataGridTextColumn.Width = new DataGridLength(ColumnWidth, DataGridLengthUnitType.Pixel);
-                } 
-                else
-                {
-                    dataGridTextColumn.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                    if (i != 0)
+                    {
+                        dataGridTemplateColumn.HeaderStyle = FindResource("GeneralColumnHeader") as Style;
+                        dataGridTemplateColumn.CellStyle = FindResource("GeneralCell") as Style;
+                    }
+                    if (ColumnWidth != -1) {
+                        dataGridTemplateColumn.Width = new DataGridLength(ColumnWidth, DataGridLengthUnitType.Pixel);
+                    }
+                    else
+                    {
+                        dataGridTemplateColumn.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                    }
+
+                    DataTemplate cellTemplate = new DataTemplate();
+                    FrameworkElementFactory factory = new FrameworkElementFactory(typeof(ActionsControl));
+
+                    cellTemplate.VisualTree = factory;
+                    dataGridTemplateColumn.CellTemplate = cellTemplate;
+
+                    DataGridStructure.Columns.Add(dataGridTemplateColumn);
+
                 }
-
-                DataGridStructure.Columns.Add(dataGridTextColumn);
 
             }
 

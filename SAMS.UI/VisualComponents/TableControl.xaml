@@ -30,6 +30,7 @@
             CellStyle="{StaticResource InitialCell}"
             ColumnHeaderStyle="{StaticResource InitialColumnHeader}"
             GridLinesVisibility="None"
+            PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"
             RowHeaderStyle="{StaticResource RowHeaderStyle}"
             RowStyle="{StaticResource GeneralRow}"
             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
