@@ -1,0 +1,32 @@
+name: Run xUnit Tests
+
+on:
+  push:
+    branches:
+      - feature_TestGithubActions 
+  pull_request:
+    branches:
+      - feature_TestGithubActions 
+
+jobs:
+  build:
+    runs-on: windows-latest  # Cambiar a un runner de Windows
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build the solution
+      run: dotnet build --configuration Release
+
+    - name: Run tests excluding DatabaseTests
+      run: |
+        dotnet test --configuration Release --filter "FullyQualifiedName!~SAMS.Tests.DatabaseTests"
