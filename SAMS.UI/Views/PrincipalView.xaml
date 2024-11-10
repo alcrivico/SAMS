@@ -1,0 +1,162 @@
+﻿<Window
+    x:Class="SAMS.UI.Views.PrincipalView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Bienvenid@"
+    Width="1280"
+    Height="720"
+    MinWidth="800"
+    MinHeight="600"
+    MaxWidth="1920"
+    MaxHeight="1080"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+
+    <Grid>
+
+        <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20, 20, 5, 20">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <components:TitleBarControl
+                    Grid.Row="0"
+                    MouseLeftButtonDown="TitleBarControl_MouseLeftButtonDown"
+                    WindowStateChangeRequested="TitleBarControl_WindowStateChangeRequested" />
+
+                <Border
+                    Grid.Row="1"
+                    Margin="40,15,40,40"
+                    Background="{StaticResource SolidColorBrush_AntiFlashWhite}"
+                    CornerRadius="40">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.20*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Employee debe ser una DependencyProperty que se pase por el constructor  -->
+                        <!--  y que el actualiza en cuanto se cambia la propiedad y se asigna aquí  -->
+                        <!--  como un binding  -->
+                        <components:SideBarControl Employee="Administrador" SideElementSelected="0" />
+
+                        <Grid Grid.Column="1">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.1*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="0.1*" />
+                                </Grid.ColumnDefinitions>
+                                <!--    -->
+                                <!--  Aqui se encontraría la barra de título de la ventana con el Grid.Column="0"  -->
+                                <!--    -->
+                                <Viewbox Grid.Column="1" Margin="0,2,5,0">
+                                    <Border
+                                        x:Name="CerrarSesionLogo"
+                                        Width="30"
+                                        Height="30"
+                                        Margin="10"
+                                        Cursor="Hand"
+                                        MouseEnter="CerrarSesionLogo_MouseEnter"
+                                        MouseLeave="CerrarSesionLogo_MouseLeave"
+                                        MouseLeftButtonUp="CerrarSesionLogo_MouseLeftButtonUp">
+                                        <Border.Background>
+                                            <ImageBrush
+                                                x:Name="ImageBrush_CerrarSesionLogo"
+                                                AlignmentX="Center"
+                                                AlignmentY="Center"
+                                                ImageSource="{StaticResource Icon_DoorClosed}"
+                                                Stretch="Uniform" />
+                                        </Border.Background>
+                                    </Border>
+                                </Viewbox>
+
+                            </Grid>
+
+                            <Grid Name="Contenido" Grid.Row="1">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <Viewbox
+                                    Grid.Row="0"
+                                    Grid.RowSpan="3"
+                                    Margin="20">
+                                    <components:TableControl
+                                        x:Name="GamesTable"
+                                        Width="750"
+                                        Height="320" />
+                                </Viewbox>
+
+                                <Viewbox Grid.Row="3" Margin="20">
+                                    <components:CheckBoxControl
+                                        x:Name="CheckBoxEfectivo"
+                                        CheckedChanged="CheckBoxEfectivo_CheckedChanged"
+                                        FieldName="Campo" />
+                                </Viewbox>
+
+                                <Viewbox Grid.Row="4" Margin="20">
+                                    <components:DatePickerControl
+                                        Width="200"
+                                        Height="50"
+                                        FieldName="Fecha" />
+                                </Viewbox>
+
+                                <Viewbox
+                                    x:Name="ViewBoxAcciones"
+                                    Grid.Row="5"
+                                    Margin="20" />
+
+                                <components:ButtonControl
+                                    x:Name="ButtonControl"
+                                    Grid.Row="6"
+                                    Margin="20"
+                                    ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                    ButtonHeight="50"
+                                    ButtonWidth="200"
+                                    FontSize="24"
+                                    MouseLeftButtonUp="ButtonControl_MouseLeftButtonUp"
+                                    Text="Guardar" />
+
+                            </Grid>
+
+                        </Grid>
+
+                    </Grid>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</Window>

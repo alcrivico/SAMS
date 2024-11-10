@@ -1,0 +1,53 @@
+﻿<UserControl
+    x:Class="SAMS.UI.VisualComponents.ComboBoxControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="ComboBox"
+    d:DesignHeight="{Binding ComboBoxHeight, ElementName=ComboBox}"
+    d:DesignWidth="{Binding ComboBoxWidth, ElementName=ComboBox}"
+    IsEnabled="{Binding ListEnabled, ElementName=ComboBox}"
+    Opacity="{Binding ListOpacity, ElementName=ComboBox}"
+    mc:Ignorable="d">
+    <Grid Height="40">
+
+        <TextBlock
+            x:Name="TextBox_FieldName"
+            Grid.Column="1"
+            Margin="15,0,0,0"
+            Padding="5,0,5,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Panel.ZIndex="1"
+            Background="{StaticResource SolidColorBrush_White}"
+            FontFamily="{StaticResource Font_Nunito}"
+            FontSize="10"
+            FontWeight="Bold"
+            Foreground="{StaticResource SolidColorBrush_DodgerBlue}"
+            Text="{Binding FieldName, ElementName=ComboBox}" />
+
+        <Rectangle
+            x:Name="TextBox_Highlight"
+            Panel.ZIndex="2"
+            Fill="{StaticResource SolidColorBrush_EerieBlack}"
+            Opacity="0.5"
+            RadiusX="10"
+            RadiusY="10"
+            Visibility="Hidden" />
+
+        <ComboBox
+            x:Name="ComboBoxControlType"
+            Height="30"
+            VerticalAlignment="Center"
+            Panel.ZIndex="0"
+            DisplayMemberPath="{Binding MemberPath, ElementName=ComboBox}"
+            Focusable="False"
+            Loaded="ComboBoxControl_Loaded"
+            SelectionChanged="ComboBoxControlType_SelectionChanged"
+            Style="{StaticResource ComboBoxControlStyle}" />
+
+    </Grid>
+
+</UserControl>

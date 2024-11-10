@@ -1,0 +1,88 @@
+﻿<UserControl
+    x:Class="SAMS.UI.VisualComponents.InformationControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="150"
+    d:DesignWidth="300"
+    Background="Transparent"
+    mc:Ignorable="d">
+
+    <Border
+        Background="{StaticResource SolidColorBrush_LavenderWeb}"
+        BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+        BorderThickness="4"
+        CornerRadius="20">
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    x:Name="Information_Header"
+                    Grid.Row="0"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource Font_Nunito}"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource SolidColorBrush_DavysGrey}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+
+                <TextBlock
+                    x:Name="Information_Content"
+                    Grid.Row="1"
+                    Padding="20,0,20,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource Font_Nunito}"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource SolidColorBrush_DavysGrey}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+
+            </Grid>
+
+            <Border
+                x:Name="Information_Button"
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="{StaticResource SolidColorBrush_LavenderWeb}"
+                BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                BorderThickness="0,4,0,0"
+                CornerRadius="0,0,20,20"
+                Cursor="Hand"
+                MouseEnter="Information_Button_MouseEnter"
+                MouseLeave="Information_Button_MouseLeave"
+                MouseLeftButtonUp="Information_Button_MouseLeftButtonUp">
+                <TextBlock
+                    x:Name="Information_Button_Text"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource Font_Nunito}"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource SolidColorBrush_DavysGrey}"
+                    TextAlignment="Center" />
+            </Border>
+
+        </Grid>
+
+    </Border>
+
+</UserControl>

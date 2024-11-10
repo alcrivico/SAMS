@@ -1,0 +1,50 @@
+﻿<UserControl
+    x:Class="SAMS.UI.VisualComponents.ButtonControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="Button"
+    d:DesignHeight="{Binding ButtonHeight, ElementName=Button}"
+    d:DesignWidth="{Binding ButtonWidth, ElementName=Button}"
+    Cursor="Hand"
+    IsEnabled="{Binding IsButtonEnabled, ElementName=Button}"
+    MouseEnter="Button_MouseEnter"
+    MouseLeave="Button_MouseLeave"
+    MouseLeftButtonDown="Button_MouseLeftButtonDown"
+    MouseLeftButtonUp="Button_Click"
+    mc:Ignorable="d">
+
+    <Viewbox>
+        <Grid>
+            <Border
+                x:Name="Button_Border"
+                Background="{Binding ButtonBackgroundColor, ElementName=Button}"
+                BorderThickness="2"
+                CornerRadius="10"
+                Effect="{StaticResource ButtonDropShadow}">
+                <TextBlock
+                    Margin="10,5,10,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource Font_Nunito}"
+                    FontSize="{Binding FontSize, ElementName=Button}"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource SolidColorBrush_White}"
+                    Text="{Binding Text, ElementName=Button}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+            </Border>
+
+            <Rectangle
+                x:Name="Button_Highlight"
+                Fill="{StaticResource SolidColorBrush_EerieBlack}"
+                Opacity="0"
+                RadiusX="10"
+                RadiusY="10" />
+        </Grid>
+    </Viewbox>
+
+
+</UserControl>

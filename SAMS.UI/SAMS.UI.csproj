@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="VisualComponents\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 
