@@ -40,11 +40,11 @@ El archivo `appsettings.json` debe estar presente en el directorio raíz de ambo
 
 ## 🛠️ Tecnologías Utilizadas
 
-- **.NET 8**: El proyecto está basado en la última versión de .NET, proporcionando mejoras en el rendimiento y nuevas características para el desarrollo.
-- **WPF (Windows Presentation Foundation)**: Framework para la creación de aplicaciones de escritorio con interfaz gráfica.
-- **Entity Framework**: ORM utilizado para interactuar con la base de datos de forma sencilla y eficiente.
-- **Microsoft SQL Server**: Base de datos relacional para almacenar la información del sistema.
-- **XUnit**: Framework de pruebas unitarias utilizado en el proyecto **SAMS.Test** para asegurar la calidad del código y realizar pruebas automatizadas.
+- **.NET 8**.
+- **WPF (Windows Presentation Foundation)**.
+- **Entity Framework**.
+- **Microsoft SQL Server**.
+- **XUnit**: Framework de pruebas unitarias utilizado en el proyecto **SAMS.Test**.
 
 ## 🧑‍💻 Contribuir
 
