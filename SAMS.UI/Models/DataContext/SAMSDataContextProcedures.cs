@@ -1,6 +1,7 @@
 ﻿#nullable disable
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using SAMS.UI.DAO;
 using SAMS.UI.DTO;
 namespace SAMS.UI.Models.DataContext;
 
@@ -33,7 +34,7 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
         return _;
     }
 
-    public async Task<int> T_CrearPromocionConVigenciaAsync(DTO_CrearPromocionVigencia crearPromocionVigencia, ProcedureParameter procedureParameter)
+    public async Task<int> T_CrearPromocionConVigenciaAsync(DAO_CrearPromocionVigencia crearPromocionVigencia, ProcedureParameter procedureParameter)
     {
         var parameterreturnValue = new SqlParameter
         {
@@ -96,7 +97,7 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
         return _;
     }
 
-    public virtual async Task<int> T_EditarPromocionAsync(DTO_EditarPromocion editarPromocion, ProcedureParameter procedureParameter)
+    public virtual async Task<int> T_EditarPromocionAsync(DAO_EditarPromocion editarPromocion, ProcedureParameter procedureParameter)
     {
         var parameterreturnValue = new SqlParameter
         {
