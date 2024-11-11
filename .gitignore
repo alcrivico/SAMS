@@ -399,3 +399,9 @@ FodyWeavers.xsd
 
 Hangman.Services/Utilities/DBConnection.cs
 /Hangman.Services/Utilities/DBConnection.cs
+
+# configuraciones y variables de entorno
+.env
+appsettings.json
+DBTest/*.cs
+Migrations/
