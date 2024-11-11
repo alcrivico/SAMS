@@ -404,3 +404,4 @@ Hangman.Services/Utilities/DBConnection.cs
 .env
 appsettings.json
 DBTest/*.cs
+Migrations/
