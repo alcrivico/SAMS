@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SAMS.UI.Models.DataContext.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class NOMBRE_MIGRACION : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,7 +40,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmpleadoPedido",
+                name: "EstadoPedido",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
@@ -49,11 +49,11 @@ namespace SAMS.UI.Models.DataContext.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmpleadoPedido", x => x.id);
+                    table.PrimaryKey("PK_EstadoPedido", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmpleadoProducto",
+                name: "EstadoProducto",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
@@ -62,7 +62,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmpleadoProducto", x => x.id);
+                    table.PrimaryKey("PK_EstadoProducto", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -154,9 +154,9 @@ namespace SAMS.UI.Models.DataContext.Migrations
                 {
                     table.PrimaryKey("PK_Pedido", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Pedido_EmpleadoPedido_estadoPedidoId",
+                        name: "FK_Pedido_EstadoPedido_estadoPedidoId",
                         column: x => x.estadoPedidoId,
-                        principalTable: "EmpleadoPedido",
+                        principalTable: "EstadoPedido",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -189,7 +189,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     rfc = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    noempleado = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    noEmpleado = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     apellidoPaterno = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     apellidoMaterno = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -255,7 +255,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
                     esPerecedero = table.Column<bool>(type: "bit", nullable: false),
                     esDevolvible = table.Column<bool>(type: "bit", nullable: false),
                     ubicacion = table.Column<bool>(type: "bit", nullable: false),
-                    unidadMermaId = table.Column<int>(type: "int", nullable: false),
+                    unidadDeMedidaId = table.Column<int>(type: "int", nullable: false),
                     categoriaId = table.Column<int>(type: "int", nullable: false),
                     estadoProductoId = table.Column<int>(type: "int", nullable: false),
                     promocionId = table.Column<int>(type: "int", nullable: true)
@@ -270,9 +270,9 @@ namespace SAMS.UI.Models.DataContext.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductoInventario_EmpleadoProducto_estadoProductoId",
+                        name: "FK_ProductoInventario_EstadoProducto_estadoProductoId",
                         column: x => x.estadoProductoId,
-                        principalTable: "EmpleadoProducto",
+                        principalTable: "EstadoProducto",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -281,8 +281,8 @@ namespace SAMS.UI.Models.DataContext.Migrations
                         principalTable: "Promocion",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_ProductoInventario_UnidadDeMedida_unidadMermaId",
-                        column: x => x.unidadMermaId,
+                        name: "FK_ProductoInventario_UnidadDeMedida_unidadDeMedidaId",
+                        column: x => x.unidadDeMedidaId,
                         principalTable: "UnidadDeMedida",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -362,14 +362,14 @@ namespace SAMS.UI.Models.DataContext.Migrations
                     cantidad = table.Column<int>(type: "int", nullable: false),
                     descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     fechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    productoInventarioID = table.Column<int>(type: "int", nullable: false)
+                    productoInventarioId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Merma", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Merma_ProductoInventario_productoInventarioID",
-                        column: x => x.productoInventarioID,
+                        name: "FK_Merma_ProductoInventario_productoInventarioId",
+                        column: x => x.productoInventarioId,
                         principalTable: "ProductoInventario",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -430,9 +430,9 @@ namespace SAMS.UI.Models.DataContext.Migrations
                 column: "puestoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Merma_productoInventarioID",
+                name: "IX_Merma_productoInventarioId",
                 table: "Merma",
-                column: "productoInventarioID");
+                column: "productoInventarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pedido_estadoPedidoId",
@@ -465,9 +465,9 @@ namespace SAMS.UI.Models.DataContext.Migrations
                 column: "promocionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductoInventario_unidadMermaId",
+                name: "IX_ProductoInventario_unidadDeMedidaId",
                 table: "ProductoInventario",
-                column: "unidadMermaId");
+                column: "unidadDeMedidaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PromocionVigencia_promocionId",
@@ -518,7 +518,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
                 name: "ProductoInventario");
 
             migrationBuilder.DropTable(
-                name: "EmpleadoPedido");
+                name: "EstadoPedido");
 
             migrationBuilder.DropTable(
                 name: "Proveedor");
@@ -536,7 +536,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
                 name: "Categoria");
 
             migrationBuilder.DropTable(
-                name: "EmpleadoProducto");
+                name: "EstadoProducto");
 
             migrationBuilder.DropTable(
                 name: "Promocion");

@@ -1,18 +1,4 @@
 -- 1. index
-CREATE INDEX I_ProductoInventario_Codigo ON ProductoInventario(codigo);
-GO
-
-CREATE INDEX I_Producto_Codigo ON
-Producto(codigo);
-GO
-
-CREATE INDEX I_Proveedor_rfc ON
-Proveedor(rfc);
-GO
-
-CREATE INDEX I_Empleado_rfc ON
-Empleado(rfc);
-GO
 
 -- 2. vistas
 CREATE VIEW V_ProductoInventario AS
@@ -38,11 +24,11 @@ FROM
 INNER JOIN
 	DetallePedido dp 
 	ON
-	p.id = dp.idPedido
+	p.id = dp.pedidoId
 INNER JOIN
 	Producto pr
 	ON
-	dp.idProductoProveedor = pr.id
+	dp.productoId = pr.id
 GO
 
 CREATE VIEW V_Promocion AS
@@ -56,7 +42,7 @@ FROM
 INNER JOIN
 	PromocionVigencia pv
 	ON
-	p.id = pv.idPromocion
+	p.id = pv.promocionId
 GO
 
 
@@ -88,7 +74,7 @@ FROM
 INNER JOIN
     Puesto p
     ON
-    e.idPuesto = p.id
+    e.puestoId = p.id
 GO
 
 CREATE VIEW V_EmpleadoDetalle AS
@@ -105,7 +91,7 @@ FROM
 INNER JOIN
     Puesto p
     ON
-    e.idPuesto = p.id
+    e.puestoId = p.id
 GO
 
 -- 3. procedimientos almacenados
@@ -123,7 +109,7 @@ BEGIN
 	FROM
 		DetalleVenta db
 	WHERE
-		idVenta = @idVenta;
+		ventaId = @idVenta;
 
 	RETURN ISNULL(@total, 0);
 END;
@@ -155,9 +141,9 @@ BEGIN
 	FROM 
 		Venta v
 	INNER JOIN 
-		Empleado e ON e.id = v.idEmpleado
+		Empleado e ON e.id = v.empleadoId
 	INNER JOIN 
-		Caja c ON c.id = v.idCaja;
+		Caja c ON c.id = v.cajaId;
 
 	--resultado
 	SELECT 
@@ -207,14 +193,14 @@ BEGIN
 
 		-- 2. Insertar en la tabla PromocionVigencia
 		INSERT INTO 
-			PromocionVigencia (fechaInicio, fechaFin, idPromocion)
+			PromocionVigencia (fechaInicio, fechaFin, promocionId)
 		VALUES 
 			(@fechaInicio, @fechaFin, @idPromocion);
 
 		-- 3. Actualizar la tabla ProductoInventario con el idPromocion
 		UPDATE 
 			ProductoInventario
-		SET idPromocion = @idPromocion
+		SET promocionId = @idPromocion
 		WHERE 
 			id = @idProductoInventario;
 
@@ -235,7 +221,7 @@ GO
 
 -- 1. Crear tipo de tabla para lista de IDs si no existe
 IF TYPE_ID('dbo.ProductoInventarioIDList') IS NULL
-    CREATE TYPE dbo.ProductoInventarioIDList AS TABLE (idProductoInventario INT);
+    CREATE TYPE dbo.ProductoInventarioIDList AS TABLE (productoInventarioId INT);
 GO
 
 -- 2. Procedimiento T_EditarPromocion con formato solicitado
@@ -273,7 +259,7 @@ BEGIN
             FROM 
                 PromocionVigencia 
             WHERE 
-                idPromocion = @idPromocion 
+                promocionId = @idPromocion 
             AND 
                 (fechaInicio <> @fechaInicio OR fechaFin <> @fechaFin))
         BEGIN
@@ -283,11 +269,11 @@ BEGIN
                 fechaInicio = @fechaInicio,
                 fechaFin = @fechaFin
             WHERE 
-                idPromocion = @idPromocion;
+                promocionId = @idPromocion;
         END
 
         -- 3. Obtener los productos que actualmente tienen la promoción
-        DECLARE @CurrentProductos TABLE (idProductoInventario INT);
+        DECLARE @CurrentProductos TABLE (productoInventarioId INT);
         INSERT INTO 
             @CurrentProductos
         SELECT 
@@ -295,25 +281,25 @@ BEGIN
         FROM 
             ProductoInventario 
         WHERE 
-            idPromocion = @idPromocion;
+            promocionId = @idPromocion;
 
         -- 4. Actualizar ProductoInventario según el arreglo proporcionado
 
         -- Agregar idPromocion a los productos en el arreglo pero no en la tabla
         UPDATE ProductoInventario
-        SET idPromocion = @idPromocion
+        SET promocionId = @idPromocion
         WHERE 
-            id IN (SELECT idProductoInventario FROM @idProductoInventarioList)
-        AND id NOT IN (SELECT idProductoInventario FROM @CurrentProductos);
+            id IN (SELECT productoInventarioId FROM @idProductoInventarioList)
+        AND id NOT IN (SELECT productoInventarioId FROM @CurrentProductos);
 
         -- Quitar idPromocion de los productos en la tabla pero no en el arreglo
         UPDATE 
             ProductoInventario
-        SET idPromocion = NULL
+        SET promocionId = NULL
         WHERE 
-            id IN (SELECT idProductoInventario FROM @CurrentProductos)
+            id IN (SELECT productoInventarioId FROM @CurrentProductos)
         AND 
-            id NOT IN (SELECT idProductoInventario FROM @idProductoInventarioList);
+            id NOT IN (SELECT productoInventarioId FROM @idProductoInventarioList);
 
         -- Confirmar la transacción
         COMMIT TRANSACTION;
@@ -341,13 +327,13 @@ BEGIN
     BEGIN TRY
         -- 1. Eliminar idPromocion de los productos asociados en ProductoInventario
         UPDATE ProductoInventario
-        SET idPromocion = NULL
-        WHERE idPromocion = @idPromocion;
+        SET promocionId = NULL
+        WHERE promocionId = @idPromocion;
 
         -- 2. Actualizar fechaFin en PromocionVigencia
         UPDATE PromocionVigencia
         SET fechaFin = DATEADD(DAY, -1, GETDATE())
-        WHERE idPromocion = @idPromocion;
+        WHERE promocionId = @idPromocion;
 
         -- Confirmar la transacción si todo es exitoso
         COMMIT TRANSACTION;
@@ -370,17 +356,17 @@ BEGIN
 
     BEGIN TRY
         -- Obtener todos los idPromocion cuya fechaFin ya pasó
-        DECLARE @PromocionesExpiradas TABLE (idPromocion INT);
+        DECLARE @PromocionesExpiradas TABLE (promocionId INT);
 
-        INSERT INTO @PromocionesExpiradas (idPromocion)
-        SELECT idPromocion
+        INSERT INTO @PromocionesExpiradas (promocionId)
+        SELECT promocionId
         FROM PromocionVigencia
         WHERE fechaFin < CAST(GETDATE() AS DATE);
 
         -- Actualizar ProductoInventario removiendo los idPromocion expirados
         UPDATE ProductoInventario
-        SET idPromocion = NULL
-        WHERE idPromocion IN (SELECT idPromocion FROM @PromocionesExpiradas);
+        SET promocionId = NULL
+        WHERE promocionId IN (SELECT promocionId FROM @PromocionesExpiradas);
 
         COMMIT TRANSACTION;
     END TRY

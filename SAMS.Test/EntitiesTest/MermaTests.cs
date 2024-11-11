@@ -13,7 +13,7 @@ public class MermaTests
         Assert.Equal(0, merma.cantidad);
         Assert.Null(merma.descripcion);
         Assert.Equal(default, merma.fechaRegistro);
-        Assert.Equal(0, merma.productoInventarioID);
+        Assert.Equal(0, merma.productoInventarioId);
         Assert.Null(merma.productoInventario);
     }
 
@@ -34,7 +34,7 @@ public class MermaTests
             cantidad = expectedCantidad,
             descripcion = expectedDescripcion,
             fechaRegistro = expectedFechaRegistro,
-            productoInventarioID = expectedProductoInventarioId,
+            productoInventarioId = expectedProductoInventarioId,
             productoInventario = productoInventario
         };
 
@@ -42,7 +42,7 @@ public class MermaTests
         Assert.Equal(expectedCantidad, merma.cantidad);
         Assert.Equal(expectedDescripcion, merma.descripcion);
         Assert.Equal(expectedFechaRegistro, merma.fechaRegistro);
-        Assert.Equal(expectedProductoInventarioId, merma.productoInventarioID);
+        Assert.Equal(expectedProductoInventarioId, merma.productoInventarioId);
         Assert.Equal(productoInventario, merma.productoInventario);
     }
 

@@ -19,7 +19,7 @@ public class ProductoInventarioTests
         Assert.False(productoInventario.esPerecedero);
         Assert.False(productoInventario.esDevolvible);
         Assert.False(productoInventario.ubicacion);
-        Assert.Equal(0, productoInventario.unidadMermaId);
+        Assert.Equal(0, productoInventario.unidadDeMedidaId);
         Assert.Equal(0, productoInventario.categoriaId);
         Assert.Equal(0, productoInventario.estadoProductoId);
         Assert.Null(productoInventario.promocionId);
@@ -39,17 +39,17 @@ public class ProductoInventarioTests
             codigo = "PI-001",
             nombre = "Producto A",
             descripcion = "Descripción del producto",
-            precioActual = 59.99m,
             esPerecedero = true,
             esDevolvible = false,
             ubicacion = true,
-            unidadMermaId = 2,
+            unidadDeMedidaId = 2,
             categoriaId = 3,
             estadoProductoId = 4,
             promocionId = 5
         };
         productoInventario.SetCantidadBodega(100);
         productoInventario.SetCantidadExhibicion(20);
+        productoInventario.SetPrecioActual(59.99m);
 
         Assert.Equal(1, productoInventario.id);
         Assert.Equal("PI-001", productoInventario.codigo);

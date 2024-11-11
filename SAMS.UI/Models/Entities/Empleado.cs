@@ -7,7 +7,7 @@ public class Empleado
 
     public string rfc { get; set; }
 
-    public string noempleado { get; set; }
+    public string noEmpleado { get; set; }
 
     public string nombre { get; set; }
 

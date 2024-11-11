@@ -12,8 +12,8 @@ using SAMS.UI.Models.DataContext;
 namespace SAMS.UI.Models.DataContext.Migrations
 {
     [DbContext(typeof(SAMSContext))]
-    [Migration("20241111071848_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241111105414_NOMBRE_MIGRACION")]
+    partial class NOMBRE_MIGRACION
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,7 +72,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
                     b.Property<bool>("ubicacion")
                         .HasColumnType("bit");
 
-                    b.Property<int>("unidadMermaId")
+                    b.Property<int>("unidadDeMedidaId")
                         .HasColumnType("int");
 
                     b.HasKey("id");
@@ -83,7 +83,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
 
                     b.HasIndex("promocionId");
 
-                    b.HasIndex("unidadMermaId");
+                    b.HasIndex("unidadDeMedidaId");
 
                     b.ToTable("ProductoInventario");
                 });
@@ -351,7 +351,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
                     b.Property<string>("correo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("noempleado")
+                    b.Property<string>("noEmpleado")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("nombre")
@@ -389,7 +389,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("EmpleadoPedido");
+                    b.ToTable("EstadoPedido");
                 });
 
             modelBuilder.Entity("SAMS.UI.Models.Entities.EstadoProducto", b =>
@@ -405,7 +405,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("EmpleadoProducto");
+                    b.ToTable("EstadoProducto");
                 });
 
             modelBuilder.Entity("SAMS.UI.Models.Entities.Merma", b =>
@@ -425,12 +425,12 @@ namespace SAMS.UI.Models.DataContext.Migrations
                     b.Property<DateTime>("fechaRegistro")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("productoInventarioID")
+                    b.Property<int>("productoInventarioId")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex("productoInventarioID");
+                    b.HasIndex("productoInventarioId");
 
                     b.ToTable("Merma");
                 });
@@ -688,7 +688,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
 
                     b.HasOne("SAMS.UI.Models.Entities.UnidadDeMedida", "unidadMerma")
                         .WithMany()
-                        .HasForeignKey("unidadMermaId")
+                        .HasForeignKey("unidadDeMedidaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -754,7 +754,7 @@ namespace SAMS.UI.Models.DataContext.Migrations
                 {
                     b.HasOne("ProductoInventario", "productoInventario")
                         .WithMany()
-                        .HasForeignKey("productoInventarioID")
+                        .HasForeignKey("productoInventarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

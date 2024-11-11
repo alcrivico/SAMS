@@ -11,7 +11,7 @@ public class Merma
 
     public DateTime fechaRegistro { get; set; }
 
-    public int productoInventarioID { get; set; }
+    public int productoInventarioId { get; set; }
 
     public  ProductoInventario productoInventario { get; set; }
 }

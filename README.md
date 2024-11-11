@@ -15,9 +15,9 @@ Este sistema tiene como objetivo automatizar las operaciones de la cadena de sup
 
 Automatizar las operaciones del supermercado, optimizando la gestión de inventarios, el procesamiento de pedidos, y la administración financiera, reduciendo tiempos de respuesta y errores humanos.
 
+## ⚙️ Configuración
+
 > [!IMPORTANT]  
-> ## ⚙️ Configuración
-> 
 > Para poder ejecutar el sistema correctamente, es necesario configurar la conexión a la base de datos. Para ello, debes crear un archivo `appsettings.json` en las carpetas raíz de los proyectos **SAMS.UI** y **SAMS.Test**.
 > 
 > ### Estructura de `appsettings.json`
@@ -67,8 +67,9 @@ Después de crear la migración, necesitas actualizar la base de datos para apli
 Update-Database -p SAMS.UI -s SAMS.UI
 ```
 
+### *⚠️ Notas Importantes*
+
 > [!IMPORTANT]  
->### *⚠️ Notas Importantes*
 >1. Asegúrate de que el archivo appsettings.json está correctamente configurado en la carpeta raíz de SAMS.UI antes de ejecutar los comandos de migración.
 >2. Ejecuta siempre Update-Database después de crear una migración para que los cambios se reflejen en la base de datos.
 >. Si necesitas revertir una migración, puedes usar:

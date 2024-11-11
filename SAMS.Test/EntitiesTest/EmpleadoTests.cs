@@ -11,7 +11,7 @@ public class EmpleadoTests
 
         Assert.Equal(0, empleado.id);
         Assert.Null(empleado.rfc);
-        Assert.Null(empleado.noempleado);
+        Assert.Null(empleado.noEmpleado);
         Assert.Null(empleado.nombre);
         Assert.Null(empleado.apellidoPaterno);
         Assert.Null(empleado.apellidoMaterno);
@@ -43,7 +43,7 @@ public class EmpleadoTests
         {
             id = expectedId,
             rfc = expectedRfc,
-            noempleado = expectedNoEmpleado,
+            noEmpleado = expectedNoEmpleado,
             nombre = expectedNombre,
             apellidoPaterno = expectedApellidoPaterno,
             apellidoMaterno = expectedApellidoMaterno,
@@ -56,7 +56,7 @@ public class EmpleadoTests
 
         Assert.Equal(expectedId, empleado.id);
         Assert.Equal(expectedRfc, empleado.rfc);
-        Assert.Equal(expectedNoEmpleado, empleado.noempleado);
+        Assert.Equal(expectedNoEmpleado, empleado.noEmpleado);
         Assert.Equal(expectedNombre, empleado.nombre);
         Assert.Equal(expectedApellidoPaterno, empleado.apellidoPaterno);
         Assert.Equal(expectedApellidoMaterno, empleado.apellidoMaterno);

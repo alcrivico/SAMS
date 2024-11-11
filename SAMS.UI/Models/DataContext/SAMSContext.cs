@@ -13,8 +13,8 @@ public class SAMSContext : DbContext
     public DbSet<DetallePedido> DetallePedido { get; set; }
     public DbSet<DetalleVenta> DetalleVenta { get; set; }
     public DbSet<Empleado> Empleado { get; set; }
-    public DbSet<EstadoPedido> EmpleadoPedido { get; set; }
-    public DbSet<EstadoProducto> EmpleadoProducto { get; set; }
+    public DbSet<EstadoPedido> EstadoPedido { get; set; }
+    public DbSet<EstadoProducto> EstadoProducto { get; set; }
     public DbSet<Merma> Merma { get; set; }
     public DbSet<Pedido> Pedido { get; set; }
     public DbSet<Producto> Producto { get; set; }
