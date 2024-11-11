@@ -403,3 +403,4 @@ Hangman.Services/Utilities/DBConnection.cs
 # configuraciones y variables de entorno
 .env
 appsettings.json
+SAMS.Test/DBTest/*.cs
