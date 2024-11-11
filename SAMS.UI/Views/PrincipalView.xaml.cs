@@ -44,6 +44,9 @@ namespace SAMS.UI.Views
             Game albhieri = new Game();
             Game cristoff = new Game();
 
+            Debug.WriteLine(albhieri.Actions);
+            Debug.WriteLine(cristoff.Actions);
+
             _games = new List<Game>();
 
             albhieri.GameCode = "123";
@@ -73,10 +76,10 @@ namespace SAMS.UI.Views
 
             public Game()
             {
-                Actions = new ActionsControl();
-                Actions.DetallesClicked += ShowDetails;
-                Actions.EditarClicked += Edit;
-                Actions.EliminarClicked += Delete;
+                //Actions = new ActionsControl();
+                //Actions.DetallesClicked += ShowDetails;
+                //Actions.EditarClicked += Edit;
+                //Actions.EliminarClicked += Delete;
             }
 
             private void ShowDetails(object sender, RoutedEventArgs e)

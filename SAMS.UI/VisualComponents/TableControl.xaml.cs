@@ -114,6 +114,7 @@ namespace SAMS.UI.VisualComponents
                     }
 
                     DataTemplate cellTemplate = new DataTemplate();
+
                     FrameworkElementFactory factory = new FrameworkElementFactory(typeof(ActionsControl));
 
                     cellTemplate.VisualTree = factory;
