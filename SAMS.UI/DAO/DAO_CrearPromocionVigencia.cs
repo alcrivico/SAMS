@@ -8,6 +8,6 @@
         public int? cantMinima { get; set; }
         public DateTime? fechaInicio { get; set; }
         public DateTime? fechaFin { get; set; }
-        public int? idProductoInventario { get; set; }
+        public int? productoInventarioId { get; set; }
     }
 }
