@@ -29,8 +29,9 @@ namespace SAMS.UI
             ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider();
 
-            PrincipalView initialView = new();
 
+
+            PrincipalView initialView = new();
             initialView.Show();
 
         }
