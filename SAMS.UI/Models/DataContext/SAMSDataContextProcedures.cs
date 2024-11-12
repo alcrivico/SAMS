@@ -84,8 +84,8 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
             },
             new SqlParameter
             {
-                ParameterName = "idProductoInventario",
-                Value = crearPromocionVigencia.idProductoInventario ?? Convert.DBNull,
+                ParameterName = "productoInventarioId",
+                Value = crearPromocionVigencia.productoInventarioId ?? Convert.DBNull,
                 SqlDbType = System.Data.SqlDbType.Int,
             },
             parameterreturnValue,
@@ -110,8 +110,8 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
         {
             new SqlParameter
             {
-                ParameterName = "idPromocion",
-                Value = editarPromocion.idPromocion ?? Convert.DBNull,
+                ParameterName = "promocionId",
+                Value = editarPromocion.promocionId ?? Convert.DBNull,
                 SqlDbType = System.Data.SqlDbType.Int,
             },
             new SqlParameter
