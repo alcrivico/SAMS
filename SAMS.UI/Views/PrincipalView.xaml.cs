@@ -225,6 +225,10 @@ namespace SAMS.UI.Views
             InformationControl.Show("Información", "Eliminar", "Aceptar");
         }
 
+        private void GamesTable_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 
 }
