@@ -103,7 +103,8 @@
                                     FontSize="26"
                                     FontWeight="Bold"
                                     Foreground="{StaticResource SolidColorBrush_DodgerBlue}"
-                                    TextAlignment="Center"><Run Text="Inicio de sesi" /><Run Language="es-mx" Text="ó" /><Run Text="n" /></TextBlock>
+                                    Text="Inicio de Sesión"
+                                    TextAlignment="Center" />
 
                                 <Grid Grid.Row="2">
 
