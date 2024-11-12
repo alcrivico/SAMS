@@ -93,59 +93,7 @@
 
                             </Grid>
 
-                            <Grid Name="Contenido" Grid.Row="1">
-
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-
-                                <Viewbox
-                                    Grid.Row="0"
-                                    Grid.RowSpan="3"
-                                    Margin="20">
-                                    <components:TableControl
-                                        x:Name="GamesTable"
-                                        Width="750"
-                                        Height="320" />
-                                </Viewbox>
-
-                                <Viewbox Grid.Row="3" Margin="20">
-                                    <components:CheckBoxControl
-                                        x:Name="CheckBoxEfectivo"
-                                        CheckedChanged="CheckBoxEfectivo_CheckedChanged"
-                                        FieldName="Campo" />
-                                </Viewbox>
-
-                                <Viewbox Grid.Row="4" Margin="20">
-                                    <components:DatePickerControl
-                                        Width="200"
-                                        Height="50"
-                                        FieldName="Fecha" />
-                                </Viewbox>
-
-                                <Viewbox
-                                    x:Name="ViewBoxAcciones"
-                                    Grid.Row="5"
-                                    Margin="20" />
-
-                                <components:ButtonControl
-                                    x:Name="ButtonControl"
-                                    Grid.Row="6"
-                                    Margin="20"
-                                    ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
-                                    ButtonHeight="50"
-                                    ButtonWidth="200"
-                                    FontSize="24"
-                                    MouseLeftButtonUp="ButtonControl_MouseLeftButtonUp"
-                                    Text="Guardar" />
-
-                            </Grid>
+                            <Grid Name="Contenido" Grid.Row="1" />
 
                         </Grid>
 

@@ -22,6 +22,11 @@ namespace SAMS.UI.VisualComponents
     public partial class TableControl : UserControl
     {
 
+        public Action<object, RoutedEventArgs> OnDetallesClickedHandler { get; set; }
+        public Action<object, RoutedEventArgs> OnEditarClickedHandler { get; set; }
+        public Action<object, RoutedEventArgs> OnEliminarClickedHandler { get; set; }
+
+
         public static readonly RoutedEvent SelectedItemChangedEvent =
             EventManager.RegisterRoutedEvent(
                 nameof(SelectedItemChanged), 
@@ -114,7 +119,12 @@ namespace SAMS.UI.VisualComponents
                     }
 
                     DataTemplate cellTemplate = new DataTemplate();
+
                     FrameworkElementFactory factory = new FrameworkElementFactory(typeof(ActionsControl));
+
+                    factory.AddHandler(ActionsControl.DetallesClickedEvent, new RoutedEventHandler((s, e) => OnDetallesClickedHandler?.Invoke(s, e)));
+                    factory.AddHandler(ActionsControl.EditarClickedEvent, new RoutedEventHandler((s, e) => OnEditarClickedHandler?.Invoke(s, e)));
+                    factory.AddHandler(ActionsControl.EliminarClickedEvent, new RoutedEventHandler((s, e) => OnEliminarClickedHandler?.Invoke(s, e)));
 
                     cellTemplate.VisualTree = factory;
                     dataGridTemplateColumn.CellTemplate = cellTemplate;
