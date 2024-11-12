@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,6 +24,9 @@ namespace SAMS.UI.Views
         public VerMonederosView()
         {
             InitializeComponent();
+
+            DefinirColumnas();
+
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -45,6 +50,49 @@ namespace SAMS.UI.Views
         private void TitleBarControl_WindowStateChangeRequested(object sender, WindowState e)
         {
             this.WindowState = e;
+        }
+
+        private void DefinirColumnas()
+        {
+
+            Dictionary<string, string>[] columnas =
+            {
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Código de Barras" },
+                    { "Width", "*" },
+                    { "BindingName", "codigoDeBarras" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Teléfono" },
+                    { "Width", "*" },
+                    { "BindingName", "telefono" },
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Nombre del Propietario" },
+                    { "Width", "*" },
+                    { "BindingName", "nombrePropietario" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Actions" },
+                    { "Name", "Acciones" },
+                    { "Width", "*" },
+
+                }
+
+            };
+
+            TablaMonederos.DefineColumns(columnas);
+
         }
 
     }
