@@ -145,7 +145,7 @@ namespace SAMS.UI.Views
             this.Close();
 
         }
-
+        
         private void ButtonControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             InformationControl.Show("Información", "Mensaje de información", "Aceptar");

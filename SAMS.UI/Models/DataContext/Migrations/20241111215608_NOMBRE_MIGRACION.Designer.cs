@@ -12,7 +12,7 @@ using SAMS.UI.Models.DataContext;
 namespace SAMS.UI.Models.DataContext.Migrations
 {
     [DbContext(typeof(SAMSContext))]
-    [Migration("20241111105414_NOMBRE_MIGRACION")]
+    [Migration("20241111215608_NOMBRE_MIGRACION")]
     partial class NOMBRE_MIGRACION
     {
         /// <inheritdoc />

@@ -31,7 +31,7 @@ namespace SAMS.UI
 
 
 
-            PrincipalView initialView = new();
+            IniciarSesionView initialView = new();
             initialView.Show();
 
         }
