@@ -68,18 +68,21 @@ namespace SAMS.UI.VisualComponents
         private void BotonDetalle_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
+            Debug.WriteLine("BotonDetalle_Click");
             RaiseEvent(new RoutedEventArgs(DetallesClickedEvent));
         }
 
         private void BotonEditar_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
+            Debug.WriteLine("BotonEditar_Click");
             RaiseEvent(new RoutedEventArgs(EditarClickedEvent));
         }
 
         private void BotonEliminar_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
+            Debug.WriteLine("BotonEliminar_Click");
             RaiseEvent(new RoutedEventArgs(EliminarClickedEvent));
         }
 
