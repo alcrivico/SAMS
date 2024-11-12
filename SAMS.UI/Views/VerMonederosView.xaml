@@ -67,7 +67,7 @@
                                     <Grid>
                                         <TextBlock
                                             x:Name="UseCaseTitle"
-                                            Margin="10,0,10,0"
+                                            Margin="12"
                                             HorizontalAlignment="Left"
                                             FontFamily="{StaticResource Font_Nunito}"
                                             FontSize="24"
