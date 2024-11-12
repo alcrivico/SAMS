@@ -31,7 +31,7 @@ namespace SAMS.UI
 
 
 
-            PrincipalView initialView = new();
+            VerMonederosView initialView = new();
             initialView.Show();
 
         }
