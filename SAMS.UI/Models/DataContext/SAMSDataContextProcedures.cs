@@ -97,6 +97,22 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
         return _;
     }
 
+    public async Task<bool> CrearPromocionConVigencia(
+        string nombre,
+        int porcentajeDescuento,
+        int cantMaxima,
+        int cantMinima,
+        DateTime fechaInicio,
+        DateTime fechaFin,
+        int productoInventarioId)
+    {
+
+        int result = await _context.Database.ExecuteSqlAsync($@"EXEC [dbo].[T_CrearPromocionConVigencia] @nombre = {nombre}, @porcentajeDescuento = {porcentajeDescuento}, @cantMaxima = {cantMaxima}, @cantMinima = {cantMinima}, @fechaInicio = {fechaInicio}, @fechaFin = {fechaFin}, @idProductoInventario = {productoInventarioId}");
+
+        return result > 0;
+
+    }
+
     public virtual async Task<int> T_EditarPromocionAsync(DAO_EditarPromocion editarPromocion, ProcedureParameter procedureParameter)
     {
         var parameterreturnValue = new SqlParameter

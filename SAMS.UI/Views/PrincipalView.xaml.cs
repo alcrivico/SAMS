@@ -16,6 +16,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SAMS.UI.Models.DataContext;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SAMS.UI.Views
 {
@@ -25,9 +27,29 @@ namespace SAMS.UI.Views
     public partial class PrincipalView : Window
     {
 
+        private readonly SAMSContext _sams;
+
         public PrincipalView()
         {
+
             InitializeComponent();
+
+            Debug.WriteLine("No hay inicializado la conexión");
+
+            _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
+
+            Debug.WriteLine("Ya inicializo la conexión");
+
+            SAMSContextProcedure DAO = new SAMSContextProcedure(_sams);
+
+            DateTime fechaInicio = DateTime.Now;
+
+            DateTime fechaFin = DateTime.Now.AddDays(11);
+
+            Task<bool> response = DAO.CrearPromocionConVigencia("Mal Fin", 90, 5, 1, fechaInicio, fechaFin, 2);
+
+            //InformationControl.Show("Base de Datos", response.Result.ToString(), "Aceptar");
+
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
