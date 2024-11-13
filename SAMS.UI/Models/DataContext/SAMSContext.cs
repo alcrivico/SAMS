@@ -27,7 +27,7 @@ public class SAMSContext : DbContext
     public DbSet<Venta> Venta { get; set; }
 
     //vistas
-    public DbSet<SP_ReporteVentaResult> SP_ReporteVentaResult { get; set; }
+    public DbSet<V_ReporteVentaResult> SP_ReporteVentaResult { get; set; }
     public DbSet<V_EmpleadoDetalle> V_EmpleadoDetalle { get; set; }
     public DbSet<V_Empleados> V_Empleados { get; set; }
     public DbSet<V_Producto> V_Producto { get; set; }
@@ -38,7 +38,7 @@ public class SAMSContext : DbContext
     // Configurar las vistas como una entidad sin clave
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<SP_ReporteVentaResult>()
+        modelBuilder.Entity<V_ReporteVentaResult>()
             .HasNoKey()
             .ToView("SP_ReporteVentaResult");
         modelBuilder.Entity<V_EmpleadoDetalle>()

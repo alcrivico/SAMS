@@ -1,6 +1,4 @@
-﻿using SAMS.UI.Models.DataContext;
-
-namespace SAMS.UI.DTO
+﻿namespace SAMS.UI.Models.DataContext
 {
     public class ProcedureParameter
     {

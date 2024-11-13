@@ -2,7 +2,7 @@
 
 namespace SAMS.UI.DAO
 {
-    public class DAO_EditarPromocion
+    public class EditarPromocionDTO
     {
         public int? promocionId { get; set; }
         public required string nombre { get; set; }

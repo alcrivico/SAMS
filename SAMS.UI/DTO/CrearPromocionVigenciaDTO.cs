@@ -1,6 +1,6 @@
 ﻿namespace SAMS.UI.DAO
 {
-    public class DAO_CrearPromocionVigencia
+    public class CrearPromocionVigenciaDTO
     {
         public required string nombre { get; set; }
         public int? porcentajeDescuento { get; set; }

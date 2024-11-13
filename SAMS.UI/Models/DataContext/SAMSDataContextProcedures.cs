@@ -14,7 +14,7 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
         _context = context;
     }
 
-    public async Task<List<SP_ReporteVentaResult>> SP_ReporteVentaAsync(ProcedureParameter procedureParameter)
+    public async Task<List<V_ReporteVentaResult>> SP_ReporteVentaAsync(ProcedureParameter procedureParameter)
     {
         var parameterreturnValue = new SqlParameter
         {
@@ -27,14 +27,14 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
         {
                 parameterreturnValue,
             };
-        var _ = await _context.SqlQueryAsync<SP_ReporteVentaResult>("EXEC @returnValue = [dbo].[SP_ReporteVenta]", sqlParameters, procedureParameter.cancellationToken);
+        var _ = await _context.SqlQueryAsync<V_ReporteVentaResult>("EXEC @returnValue = [dbo].[SP_ReporteVenta]", sqlParameters, procedureParameter.cancellationToken);
 
         procedureParameter.returnValue?.SetValue(parameterreturnValue.Value);
 
         return _;
     }
 
-    public async Task<int> T_CrearPromocionConVigenciaAsync(DAO_CrearPromocionVigencia crearPromocionVigencia, ProcedureParameter procedureParameter)
+    public async Task<int> T_CrearPromocionConVigenciaAsync(CrearPromocionVigenciaDTO crearPromocionVigencia, ProcedureParameter procedureParameter)
     {
         var parameterreturnValue = new SqlParameter
         {
@@ -48,7 +48,7 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
             new SqlParameter
             {
                 ParameterName = "nombre",
-                Size = 200,
+                Size = 100,
                 Value = crearPromocionVigencia.nombre ?? Convert.DBNull,
                 SqlDbType = System.Data.SqlDbType.NVarChar,
             },
@@ -90,14 +90,14 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
             },
             parameterreturnValue,
         };
-        var _ = await _context.Database.ExecuteSqlRawAsync("EXEC @returnValue = [dbo].[T_CrearPromocionConVigencia] @nombre = @nombre, @porcentajeDescuento = @porcentajeDescuento, @cantMaxima = @cantMaxima, @cantMinima = @cantMinima, @fechaInicio = @fechaInicio, @fechaFin = @fechaFin, @idProductoInventario = @idProductoInventario", sqlParameters, procedureParameter.cancellationToken);
+        var _ = await _context.Database.ExecuteSqlRawAsync("EXEC @returnValue = [dbo].[T_CrearPromocionConVigencia] @nombre = @nombre, @porcentajeDescuento = @porcentajeDescuento, @cantMaxima = @cantMaxima, @cantMinima = @cantMinima, @fechaInicio = @fechaInicio, @fechaFin = @fechaFin, @productoInventarioId = @productoInventarioId", sqlParameters, procedureParameter.cancellationToken);
 
         procedureParameter.returnValue?.SetValue(parameterreturnValue.Value);
 
         return _;
     }
 
-    public virtual async Task<int> T_EditarPromocionAsync(DAO_EditarPromocion editarPromocion, ProcedureParameter procedureParameter)
+    public virtual async Task<int> T_EditarPromocionAsync(EditarPromocionDTO editarPromocion, ProcedureParameter procedureParameter)
     {
         var parameterreturnValue = new SqlParameter
         {
