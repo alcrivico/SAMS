@@ -73,7 +73,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="2*" />
                                     <RowDefinition Height="2*" />
-                                    <RowDefinition Height="0.5*" />
+                                    <RowDefinition Height="0.7*" />
                                 </Grid.RowDefinitions>
                                 <Grid Grid.Row="0">
                                     <Grid.RowDefinitions>
@@ -110,7 +110,7 @@
                                     </Grid>
                                     <Viewbox
                                         Grid.Row="1"
-                                        Margin="0,0,0,5"
+                                        Margin="0,5,0,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Bottom">
                                         <TextBlock
@@ -182,13 +182,13 @@
                                         </Grid>
                                         <Viewbox
                                             Grid.Row="1"
-                                            Margin="0,0,0,5"
+                                            Margin="0,6,0,0"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Bottom">
                                             <TextBlock
                                                 x:Name="TextBlock_SubtituloProductos"
                                                 HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
+                                                VerticalAlignment="Bottom"
                                                 FontFamily="{StaticResource Font_Nunito}"
                                                 FontSize="24"
                                                 FontWeight="Bold"
@@ -211,7 +211,7 @@
                                     </Grid>
                                     <Border
                                         Grid.Column="1"
-                                        Margin="20,10,15,0"
+                                        Margin="20,10,30,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Stretch"
                                         Background="{StaticResource SolidColorBrush_White}"
@@ -288,6 +288,31 @@
                                             </Viewbox>
                                         </Grid>
                                     </Border>
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3.5*" />
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="1" Margin="20,20,30,20">
+                                        <components:ButtonControl
+                                            x:Name="Button_Entrar"
+                                            HorizontalAlignment="Right"
+                                            ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                            ButtonControlClick="Button_Registrar_ButtonControlClick"
+                                            FontSize="24"
+                                            Text="Registrar" />
+                                    </Grid>
+                                    <Grid Grid.Column="2" Margin="0,20,20,20">
+                                        <components:ButtonControl
+                                            x:Name="Button_Cancelar"
+                                            HorizontalAlignment="Left"
+                                            ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                                            ButtonControlClick="Button_Cancelar_ButtonControlClick"
+                                            FontSize="24"
+                                            Text="Cancelar" />
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>

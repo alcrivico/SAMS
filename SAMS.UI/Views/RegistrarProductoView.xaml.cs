@@ -47,5 +47,15 @@ namespace SAMS.UI.Views
         {
             this.WindowState = e;
         }
+
+        private void Button_Registrar_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Cancelar_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
