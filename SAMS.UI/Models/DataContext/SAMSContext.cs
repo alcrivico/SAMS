@@ -16,6 +16,7 @@ public class SAMSContext : DbContext
     public DbSet<EstadoPedido> EstadoPedido { get; set; }
     public DbSet<EstadoProducto> EstadoProducto { get; set; }
     public DbSet<Merma> Merma { get; set; }
+    public DbSet<Monedero> Monedero { get; set; }
     public DbSet<Pedido> Pedido { get; set; }
     public DbSet<Producto> Producto { get; set; }
     public DbSet<ProductoInventario> ProductoInventario { get; set; }
