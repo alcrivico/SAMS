@@ -141,20 +141,20 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
             },
             new SqlParameter
             {
-                ParameterName = "idProductoInventarioList",
+                ParameterName = "productoInventarioIdList",
                 Value = editarPromocion.idProductoInventarioList ?? Convert.DBNull,
                 SqlDbType = System.Data.SqlDbType.Structured,
-                TypeName = "[dbo].[ProductoInventarioIDList]",
+                TypeName = "[dbo].[productoInventarioIdList]",
             },
             parameterreturnValue,
         };
-        var _ = await _context.Database.ExecuteSqlRawAsync("EXEC @returnValue = [dbo].[T_EditarPromocion] @idPromocion = @idPromocion, @nombre = @nombre, @porcentajeDescuento = @porcentajeDescuento, @fechaInicio = @fechaInicio, @fechaFin = @fechaFin, @idProductoInventarioList = @idProductoInventarioList", sqlParameters, procedureParameter.cancellationToken);
+        var _ = await _context.Database.ExecuteSqlRawAsync("EXEC @returnValue = [dbo].[T_EditarPromocion] @promocionId = @pronocionId, @nombre = @nombre, @porcentajeDescuento = @porcentajeDescuento, @fechaInicio = @fechaInicio, @fechaFin = @fechaFin, @productoInventarioIdList = @productoInventarioIdList", sqlParameters, procedureParameter.cancellationToken);
 
         procedureParameter.returnValue?.SetValue(parameterreturnValue.Value);
 
         return _;
     }
-    public virtual async Task<int> T_FinalizarPromocionAsync(int? idPromocion, ProcedureParameter procedureParameter)
+    public virtual async Task<int> T_FinalizarPromocionAsync(int? promocionId, ProcedureParameter procedureParameter)
     {
         var parameterreturnValue = new SqlParameter
         {
@@ -167,13 +167,13 @@ public partial class SAMSContextProcedure : ISAMSContextProcedure
         {
             new SqlParameter
             {
-                ParameterName = "idPromocion",
-                Value = idPromocion ?? Convert.DBNull,
+                ParameterName = "promocionId",
+                Value = promocionId ?? Convert.DBNull,
                 SqlDbType = System.Data.SqlDbType.Int,
             },
             parameterreturnValue,
         };
-        var _ = await _context.Database.ExecuteSqlRawAsync("EXEC @returnValue = [dbo].[T_FinalizarPromocion] @idPromocion = @idPromocion", sqlParameters, procedureParameter.cancellationToken);
+        var _ = await _context.Database.ExecuteSqlRawAsync("EXEC @returnValue = [dbo].[T_FinalizarPromocion] @promocionId = @promocionId", sqlParameters, procedureParameter.cancellationToken);
 
         procedureParameter.returnValue?.SetValue(parameterreturnValue.Value);
 
