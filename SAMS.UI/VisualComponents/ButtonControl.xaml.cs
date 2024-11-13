@@ -87,6 +87,45 @@ namespace SAMS.UI.VisualComponents
                 typeof(ButtonControl),
                 new PropertyMetadata(null));
 
+        public Brush ButtonForegroundColor
+        {
+            get { return (Brush)GetValue(ButtonForegroundColorProperty); }
+            set { SetValue(ButtonForegroundColorProperty, value); }
+        }
+
+        public static readonly DependencyProperty ButtonForegroundColorProperty =
+            DependencyProperty.Register(
+                "ButtonForegroundColor",
+                typeof(Brush),
+                typeof(ButtonControl),
+                new PropertyMetadata(null));
+
+        public Brush ButtonBorderColor
+        {
+            get { return (Brush)GetValue(ButtonBorderColorProperty); }
+            set { SetValue(ButtonBorderColorProperty, value); }
+        }
+
+        public static readonly DependencyProperty ButtonBorderColorProperty =
+            DependencyProperty.Register(
+                "ButtonBorderColor",
+                typeof(Brush),
+                typeof(ButtonControl),
+                new PropertyMetadata(null));
+
+        public bool IsDropShadowEnabled
+        {
+            get { return (bool)GetValue(IsDropShadowEnabledProperty); }
+            set { SetValue(IsDropShadowEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsDropShadowEnabledProperty =
+            DependencyProperty.Register(
+                "IsDropShadowEnabled",
+                typeof(bool),
+                typeof(ButtonControl),
+                new PropertyMetadata(true));
+
         public ButtonControl()
         {
             InitializeComponent();
@@ -108,7 +147,10 @@ namespace SAMS.UI.VisualComponents
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            Button_Border.Effect = FindResource("ButtonDropShadow") as DropShadowEffect;
+            if (IsDropShadowEnabled)
+            {
+                Button_Border.Effect = FindResource("ButtonDropShadow") as DropShadowEffect;
+            }
 
             RaiseEvent(new RoutedEventArgs(ButtonControlClickEvent));
 
@@ -125,7 +167,11 @@ namespace SAMS.UI.VisualComponents
         {
 
             Button_Highlight.Opacity = 0;
-            Button_Border.Effect = FindResource("ButtonDropShadow") as DropShadowEffect;
+            
+            if (IsDropShadowEnabled)
+            {
+                Button_Border.Effect = FindResource("ButtonDropShadow") as DropShadowEffect;
+            }
 
         }
 
