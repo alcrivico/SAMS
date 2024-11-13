@@ -5,11 +5,11 @@ using SAMS.UI.Models.DataContext;
 
 namespace SAMS.Test.DBTest
 {
-    public class TestBase
+    public class SAMSContextTest
     {
         protected readonly IServiceProvider ServiceProvider;
 
-        public TestBase()
+        public SAMSContextTest()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)

@@ -1,112 +1,99 @@
 ﻿using SAMS.UI.DAO;
-using SAMS.UI.DTO;
-using SAMS.UI.Models.DataContext;
 using System.Data;
-using Xunit;
+namespace SAMS.Test.DBTest.DAO;
 
-namespace SAMS.Test.DBTest
+public class PromocionDAOTest : SAMSContextTest
 {
-    public class PromocionDAOTest : TestBase
+    [Fact]
+    public async Task CrearPromocionConVigencia_DeberiaCrearPromocion()
     {
-        [Fact]
-        public void TestDatabaseConnection()
+        using var context = GetContext();
+        var promocionDao = new PromocionDAO(context);
+
+        var nuevaPromocion = new CrearPromocionVigenciaDTO
         {
-            using var context = GetContext();
-            Assert.NotNull(context);
-            Assert.True(context.Database.CanConnect(), "No se pudo conectar a la base de datos.");
-        }
+            nombre = "Promocion Test",
+            porcentajeDescuento = 15,
+            cantMaxima = 100,
+            cantMinima = 10,
+            fechaInicio = DateTime.Now,
+            fechaFin = DateTime.Now.AddDays(30),
+            productoInventarioId = 1 // Asumiendo que este producto existe.
+        };
 
-        [Fact]
-        public async Task CrearPromocionConVigencia_DeberiaCrearPromocion()
+        var resultado = await promocionDao.CrearPromocionConVigencia(nuevaPromocion);
+        Assert.True(resultado, "La promoción no se pudo crear.");
+    }
+
+    [Fact]
+    public async Task EditarPromocion_DeberiaEditarPromocion()
+    {
+        using var context = GetContext();
+        var promocionDao = new PromocionDAO(context);
+
+        var promociones = promocionDao.VerPromociones();
+        Assert.True(promociones.Any(), "No hay promociones disponibles para editar.");
+
+        var ultimoId = promociones.Last().id;
+
+        var dataTable = new DataTable();
+        dataTable.Columns.Add("productoInventarioId", typeof(int));
+        dataTable.Rows.Add(1);
+        dataTable.Rows.Add(2);
+        dataTable.Rows.Add(3);
+
+        var editarPromocion = new EditarPromocionDTO
         {
-            using var context = GetContext();
-            var promocionDao = new PromocionDAO(context);
+            promocionId = ultimoId,
+            nombre = "Promoción Actualizada",
+            porcentajeDescuento = 25,
+            fechaInicio = DateTime.Now,
+            fechaFin = DateTime.Now.AddDays(10),
+            ProductoInventarioIdList = dataTable
+        };
 
-            var nuevaPromocion = new CrearPromocionVigenciaDTO
-            {
-                nombre = "Promocion Test",
-                porcentajeDescuento = 15,
-                cantMaxima = 100,
-                cantMinima = 10,
-                fechaInicio = DateTime.Now,
-                fechaFin = DateTime.Now.AddDays(30),
-                productoInventarioId = 1 // Asumiendo que este producto existe.
-            };
+        var resultado = await promocionDao.EditarPromocion(editarPromocion);
 
-            var resultado = await promocionDao.CrearPromocionConVigencia(nuevaPromocion);
-            Assert.True(resultado, "La promoción no se pudo crear.");
-        }
+        Assert.True(resultado, "La promoción no se pudo editar.");
 
-        [Fact]
-        public async Task EditarPromocion_DeberiaEditarPromocion()
-        {
-            using var context = GetContext();
-            var promocionDao = new PromocionDAO(context);
+        var promocionesActualizadas = promocionDao.VerPromociones();
+        var promocionEditada = promocionesActualizadas.FirstOrDefault(p => p.id == ultimoId);
 
-            var promociones = promocionDao.VerPromociones();
-            Assert.True(promociones.Any(), "No hay promociones disponibles para editar.");
+        Assert.NotNull(promocionEditada);
+        Assert.Equal("Promoción Actualizada", promocionEditada.nombre);
+        Assert.Equal(25, promocionEditada.porcentajeDescuento);
+    }
 
-            var ultimoId = promociones.Last().id;
+    [Fact]
+    public async Task FinalizarPromocion_DeberiaFinalizarPromocion()
+    {
+        using var context = GetContext();
+        var promocionDao = new PromocionDAO(context);
 
-            var dataTable = new DataTable();
-            dataTable.Columns.Add("productoInventarioId", typeof(int));
-            dataTable.Rows.Add(1);
-            dataTable.Rows.Add(2);
-            dataTable.Rows.Add(3);
+        var promociones = promocionDao.VerPromociones();
+        Assert.True(promociones.Any(), "No hay promociones disponibles para finalizar.");
 
-            var editarPromocion = new EditarPromocionDTO
-            {
-                promocionId = ultimoId,
-                nombre = "Promoción Actualizada",
-                porcentajeDescuento = 25,
-                fechaInicio = DateTime.Now,
-                fechaFin = DateTime.Now.AddDays(10),
-                ProductoInventarioIdList = dataTable
-            };
+        var ultimoId = promociones.Last().id;
 
-            var resultado = await promocionDao.EditarPromocion(editarPromocion);
+        var resultado = await promocionDao.FinalizarPromocion(ultimoId);
+        Assert.True(resultado, "La promoción no se pudo finalizar.");
 
-            Assert.True(resultado, "La promoción no se pudo editar.");
+        var promocionFinalizada = context.PromocionVigencia
+            .FirstOrDefault(p => p.promocionId == ultimoId);
 
-            var promocionesActualizadas = promocionDao.VerPromociones();
-            var promocionEditada = promocionesActualizadas.FirstOrDefault(p => p.id == ultimoId);
-
-            Assert.NotNull(promocionEditada);
-            Assert.Equal("Promoción Actualizada", promocionEditada.nombre);
-            Assert.Equal(25, promocionEditada.porcentajeDescuento);
-        }
-
-        [Fact]
-        public async Task FinalizarPromocion_DeberiaFinalizarPromocion()
-        {
-            using var context = GetContext();
-            var promocionDao = new PromocionDAO(context);
-
-            var promociones = promocionDao.VerPromociones();
-            Assert.True(promociones.Any(), "No hay promociones disponibles para finalizar.");
-
-            var ultimoId = promociones.Last().id;
-
-            var resultado = await promocionDao.FinalizarPromocion(ultimoId);
-            Assert.True(resultado, "La promoción no se pudo finalizar.");
-
-            var promocionFinalizada = context.PromocionVigencia
-                .FirstOrDefault(p => p.promocionId == ultimoId);
-
-            Assert.NotNull(promocionFinalizada);
-            Assert.True(promocionFinalizada.fechaFin < DateTime.Now, "La fecha de finalización no fue actualizada correctamente.");
-        }
+        Assert.NotNull(promocionFinalizada);
+        Assert.True(promocionFinalizada.fechaFin < DateTime.Now, "La fecha de finalización no fue actualizada correctamente.");
+    }
 
 
-        [Fact]
-        public void VerPromociones_DeberiaRetornarLista()
-        {
-            using var context = GetContext();
-            var promocionDao = new PromocionDAO(context);
+    [Fact]
+    public void VerPromociones_DeberiaRetornarLista()
+    {
+        using var context = GetContext();
+        var promocionDao = new PromocionDAO(context);
 
-            var promociones = promocionDao.VerPromociones();
-            Assert.NotNull(promociones);
-            Assert.True(promociones.Any(), "No se encontraron promociones.");
-        }
+        var promociones = promocionDao.VerPromociones();
+        Assert.NotNull(promociones);
+        Assert.True(promociones.Any(), "No se encontraron promociones.");
     }
 }

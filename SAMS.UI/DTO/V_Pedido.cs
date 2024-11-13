@@ -1,7 +1,7 @@
 ﻿#nullable disable
 namespace SAMS.UI.DTO;
 
-public class PedidoDTO
+public class V_Pedido
 {
     public string nombre { get; set; }
 

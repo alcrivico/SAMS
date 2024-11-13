@@ -27,9 +27,9 @@ public class SAMSContext : DbContext
     public DbSet<Venta> Venta { get; set; }
 
     //vistas
-    public DbSet<V_ReporteVentaResult> SP_ReporteVentaResult { get; set; }
     public DbSet<V_EmpleadoDetalle> V_EmpleadoDetalle { get; set; }
     public DbSet<V_Empleados> V_Empleados { get; set; }
+    public DbSet<V_Pedido> V_Pedido { get; set; }
     public DbSet<V_Producto> V_Producto { get; set; }
     public DbSet<V_ProductoInventario> V_ProductoInventario { get; set; }
     public DbSet<V_Promocion> V_Promocion { get; set; }
@@ -38,7 +38,7 @@ public class SAMSContext : DbContext
     // Configurar las vistas como una entidad sin clave
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<V_ReporteVentaResult>()
+        modelBuilder.Entity<V_ReporteVenta>()
             .HasNoKey()
             .ToView("SP_ReporteVentaResult");
         modelBuilder.Entity<V_EmpleadoDetalle>()
@@ -47,6 +47,9 @@ public class SAMSContext : DbContext
         modelBuilder.Entity<V_Empleados>()
             .HasNoKey()
             .ToView("V_Empleados");
+        modelBuilder.Entity<V_Pedido>()
+            .HasNoKey()
+            .ToView("V_Pedido");
         modelBuilder.Entity<V_Producto>()
             .HasNoKey()
             .ToView("V_Producto");
