@@ -3,6 +3,7 @@ namespace SAMS.UI.DTO;
 
 public class V_Promocion
 {
+    public int id { get; set; }
     public string nombre { get; set; }
 
     public int porcentajeDescuento { get; set; }

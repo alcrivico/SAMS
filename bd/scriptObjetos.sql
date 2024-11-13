@@ -33,6 +33,7 @@ GO
 
 CREATE VIEW V_Promocion AS
 SELECT
+    p.id,
 	p.nombre,
 	p.porcentajeDescuento,
 	pv.fechaInicio,
@@ -232,7 +233,7 @@ CREATE PROCEDURE [dbo].T_EditarPromocion
     @porcentajeDescuento INT,
     @fechaInicio DATE,
     @fechaFin DATE,
-    @productoInventarioIdList dbo.productoInventarioIdList READONLY
+    @productoInventarioIdList dbo.productoInventarioIdList READONLY -- Usar el tipo de tabla correcto
 )
 AS
 BEGIN
@@ -289,7 +290,7 @@ BEGIN
         UPDATE ProductoInventario
         SET promocionId = @promocionId
         WHERE 
-            id IN (SELECT productoInventarioId FROM @productoInventarioId)
+            id IN (SELECT productoInventarioId FROM @productoInventarioIdList) -- Usar la variable correcta
         AND id NOT IN (SELECT productoInventarioId FROM @CurrentProductos);
 
         -- Quitar promocionId de los productos en la tabla pero no en el arreglo
@@ -299,7 +300,7 @@ BEGIN
         WHERE 
             id IN (SELECT productoInventarioId FROM @CurrentProductos)
         AND 
-            id NOT IN (SELECT productoInventarioId FROM @productoInventarioIdList);
+            id NOT IN (SELECT productoInventarioId FROM @productoInventarioIdList); -- Usar la variable correcta
 
         -- Confirmar la transacción
         COMMIT TRANSACTION;
@@ -325,12 +326,12 @@ BEGIN
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- 1. Eliminar promocionId de los productos asociados en ProductoInventario
+        -- 1. Quitar el promocionId de los productos en ProductoInventario
         UPDATE ProductoInventario
         SET promocionId = NULL
         WHERE promocionId = @promocionId;
 
-        -- 2. Actualizar fechaFin en PromocionVigencia
+        -- 2. Actualizar la fecha de finalización en PromocionVigencia
         UPDATE PromocionVigencia
         SET fechaFin = DATEADD(DAY, -1, GETDATE())
         WHERE promocionId = @promocionId;
@@ -338,12 +339,9 @@ BEGIN
         -- Confirmar la transacción si todo es exitoso
         COMMIT TRANSACTION;
     END TRY
-
     BEGIN CATCH
         -- Si ocurre un error, deshacer la transacción
         ROLLBACK TRANSACTION;
-
-        -- Mostrar el error
         THROW;
     END CATCH;
 END;

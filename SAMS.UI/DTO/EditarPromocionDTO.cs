@@ -9,6 +9,6 @@ namespace SAMS.UI.DAO
         public int? porcentajeDescuento { get; set; }
         public DateTime? fechaInicio { get; set; }
         public DateTime? fechaFin { get; set; }
-        public required DataTable idProductoInventarioList { get; set; }
+        public required DataTable ProductoInventarioIdList { get; set; }
     }
 }

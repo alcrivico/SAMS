@@ -32,10 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DBTest\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SAMS.UI\SAMS.UI.csproj" />
   </ItemGroup>
 
