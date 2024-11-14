@@ -95,6 +95,10 @@ namespace SAMS.UI.Views
 
         }
 
+        private void TablaMonederos_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
     
 }

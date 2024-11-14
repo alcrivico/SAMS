@@ -31,7 +31,7 @@ namespace SAMS.UI
 
 
 
-            PrincipalView initialView = new();
+            ReporteInventarioView initialView = new();
             initialView.Show();
 
         }
