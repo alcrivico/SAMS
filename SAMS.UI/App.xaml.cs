@@ -31,7 +31,7 @@ namespace SAMS.UI
 
 
 
-            RegistrarProductoView initialView = new();
+            VerMonederosView initialView = new();
             initialView.Show();
 
         }
