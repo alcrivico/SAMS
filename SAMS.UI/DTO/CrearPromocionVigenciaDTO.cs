@@ -1,6 +1,6 @@
-﻿namespace SAMS.UI.DTO
+﻿namespace SAMS.UI.DAO
 {
-    public class DTO_CrearPromocionVigencia
+    public class CrearPromocionVigenciaDTO
     {
         public required string nombre { get; set; }
         public int? porcentajeDescuento { get; set; }
@@ -8,6 +8,6 @@
         public int? cantMinima { get; set; }
         public DateTime? fechaInicio { get; set; }
         public DateTime? fechaFin { get; set; }
-        public int? idProductoInventario { get; set; }
+        public int? productoInventarioId { get; set; }
     }
 }

@@ -78,6 +78,45 @@ Update-Database -p SAMS.UI -s SAMS.UI
 >Remove-Migration -p SAMS.UI -s SAMS.UI
 >```
 
+## 🚀 Configuración del Contenedor Docker
+Este proyecto utiliza Docker y Docker Compose para gestionar el entorno de base de datos SQL Server. Sigue los siguientes pasos para configurar y ejecutar el contenedor Docker para el sistema.
+
+### 🛠️ Requisitos Previos
+Antes de comenzar, asegúrate de tener las siguientes herramientas instaladas en tu máquina:
+
+Docker: Guía de instalación
+Docker Compose: Guía de instalación
+### 🧑‍💻 Comandos de Docker
+>### Levantar el Contenedor
+>Para construir y ejecutar el contenedor por primera vez o >después de realizar cambios en los archivos, ejecuta:
+
+```bash
+docker-compose up --build
+```
+
+>Este comando:
+> - Construye la imagen del contenedor, asegurándose de que todos los archivos, como los scripts SQL y la configuración, se copien correctamente.
+> - Levanta el contenedor y lo pone en funcionamiento con los scripts SQL necesarios para inicializar la base de datos.
+
+>### 2. Detener y Eliminar el Contenedor
+>Si necesitas detener y eliminar el contenedor, puedes usar:
+
+```bash
+docker-compose down
+```
+
+> Este comando:
+> - Detiene el contenedor en ejecución.
+> - Elimina los contenedores, redes y volúmenes definidos en el archivo docker-compose.yml.
+
+### 📝 Archivos y Estructura del Contenedor
+El contenedor utiliza un archivo Dockerfile que define la construcción de la imagen con SQL Server, incluyendo la instalación de dependencias y la ejecución de los scripts SQL al iniciar el contenedor. Asegúrate de tener los archivos SQL (dbo.sql, scriptDatos.sql, scriptTablas.sql, scriptObjetos.sql) en el directorio raíz de tu proyecto para que se copien correctamente al contenedor.
+Detiene el contenedor en ejecución.
+Elimina los contenedores, redes y volúmenes definidos en el archivo docker-compose.yml.
+
+> [!IMPORTANT]
+> Por defecto se crea un a contraseña en sa llamada StrongPassword123!, de preferencia crear otro usuario y cambiar la contraseña sa
+
 ## 🛠️ Tecnologías Utilizadas
 
 - **.NET 8**.

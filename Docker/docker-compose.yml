@@ -1,0 +1,13 @@
+services:
+  sqlserver:
+    build: .
+    container_name: sams_sqlserver
+    ports:
+      - "1434:1433"  # Mapea el puerto 1434 externo al puerto 1433 interno
+    environment:
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=StrongPassword123!
+        - MSSQL_PID=Express
+    volumes:
+      - ./:/usr/src/app
+    restart: always

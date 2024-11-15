@@ -11,6 +11,7 @@
   <ItemGroup>
     <None Remove="Resources\Images\LogoMensajesAyuda.png" />
     <None Remove="Resources\Images\Tienda.png" />
+    <None Remove="Resources\Fonts\Nunito\Nunito-VariableFont_wght.ttf" />
   </ItemGroup>
   
   <ItemGroup>

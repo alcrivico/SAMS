@@ -1,14 +1,14 @@
 ﻿using System.Data;
 
-namespace SAMS.UI.DTO
+namespace SAMS.UI.DAO
 {
-    public class DTO_EditarPromocion
+    public class EditarPromocionDTO
     {
-        public int? idPromocion { get; set; }
+        public int? promocionId { get; set; }
         public required string nombre { get; set; }
         public int? porcentajeDescuento { get; set; }
         public DateTime? fechaInicio { get; set; }
         public DateTime? fechaFin { get; set; }
-        public required DataTable idProductoInventarioList { get; set; }
+        public required DataTable ProductoInventarioIdList { get; set; }
     }
 }

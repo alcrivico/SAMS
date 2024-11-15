@@ -1,6 +1,6 @@
 ﻿namespace SAMS.UI.DTO;
 
-public class SP_ReporteVentaResult
+public class V_ReporteVenta
 {
     public int noVenta { get; set; }
     public DateTime fechaRegistro { get; set; }
