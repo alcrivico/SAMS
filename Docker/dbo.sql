@@ -4,6 +4,9 @@ GO
 USE [SAMS.Data];
 GO
 
+-- ----------------------------
+-- Table structure for __EFMigrationsHistory
+-- ----------------------------
 IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[dbo].[__EFMigrationsHistory]') AND type IN ('U'))
 	DROP TABLE [dbo].[__EFMigrationsHistory]
 GO
@@ -186,7 +189,10 @@ CREATE TABLE [dbo].[Monedero] (
   [id] int  IDENTITY(1,1) NOT NULL,
   [codigoDeBarras] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
   [saldo] decimal(18,2)  NOT NULL,
-  [telefono] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL
+  [telefono] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
+  [nombre] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
+  [apellidoPaterno] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
+  [apellidoMaterno] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL
 )
 GO
 
@@ -372,6 +378,9 @@ CREATE TABLE [dbo].[Venta] (
   [noVenta] int  NOT NULL,
   [fechaRegistro] datetime2(7)  NOT NULL,
   [iva] decimal(18,2)  NOT NULL,
+  [totalEfectivo] decimal(18,2)  NOT NULL,
+  [totalTarjeta] decimal(18,2)  NOT NULL,
+  [totalMonedero] decimal(18,2)  NOT NULL,
   [cajaId] int  NOT NULL,
   [monederoId] int  NOT NULL,
   [empleadoId] int  NOT NULL

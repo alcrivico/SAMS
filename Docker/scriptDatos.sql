@@ -36,12 +36,17 @@ INSERT INTO Promocion (nombre, porcentajeDescuento, cantMaxima, cantMinima) VALU
 GO
 
 -- 6. Monedero
-INSERT INTO Monedero (codigoDeBarras, saldo, telefono) VALUES
-('000000000001', 100.50, '5551234567'),
-('000000000002', 250.75, '5552345678'),
-('000000000003', 50.00, '5553456789'),
-('000000000004', 300.00, '5554567890'),
-('000000000005', 125.20, '5555678901');
+INSERT INTO Monedero (codigoDeBarras, saldo, telefono, nombre, apellidoPaterno, apellidoMaterno) VALUES
+('000000000001', 100.50, '5551234567', 'Lucas', 'Viveros', 'Gutierrez'),
+('000000000002', 250.75, '5552345678', 'Salma', 'Tinoco', 'Alarcón'),
+('000000000003', 50.00, '5553456789', 'Ramiro', 'Hernández', 'Quiróz'),
+('000000000004', 300.00, '5554567890', 'Viviana', 'Fernández', 'Linares'),
+('000000000005', 125.20, '5555678901', 'Ulises', 'Zamora', 'Aguilar'),
+('000000000006', 75.00, '5556789012', 'Yolanda', 'Villalobos', 'García'),
+('000000000007', 200.00, '5557890123', 'Zaira', 'Villanueva', 'González'),
+('000000000008', 150.00, '5558901234', 'Ximena', 'Villarreal', 'Guzmán'),
+('000000000009', 100.00, '5559012345', 'Wendy', 'Villegas', 'Guzmán'),
+('000000000010', 50.00, '5550123456', 'Víctor', 'Villaseñor', 'Guzmán');
 GO
 
 -- 7. EstadoPedido
@@ -110,10 +115,10 @@ INSERT INTO Merma (cantidad, descripcion, fechaRegistro, productoInventarioId) V
 GO
 
 -- 16. Venta
-INSERT INTO Venta (noVenta, fechaRegistro, iva, cajaId, monederoId, empleadoId) VALUES
-(1001, '2024-10-15 10:30:00', 16.00, 1, 1, 1),
-(1002, '2024-10-15 12:45:00', 20.00, 2, 2, 2),
-(1003, '2024-10-15 15:00:00', 18.50, 3, 3, 3);
+INSERT INTO Venta (noVenta, fechaRegistro, iva, totalEfectivo, totalTarjeta, totalMonedero, cajaId, monederoId, empleadoId) VALUES
+(1001, '2024-10-15 10:30:00', 0.50, 5.00, 0.00, 0.50, 1, 1, 1),
+(1002, '2024-10-15 12:45:00', 0.70, 6.00, 1.70, 0.00, 2, 2, 2),
+(1003, '2024-10-15 15:00:00', 1.00, 5.00, 6.00, 0.00, 3, 3, 3);
 GO
 
 -- 17. DetalleVenta
