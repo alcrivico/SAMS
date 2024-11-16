@@ -1,5 +1,14 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualBasic;
+using SAMS.UI.DAO;
+using SAMS.UI.DTO;
+using SAMS.UI.Models.DataContext;
+using SAMS.UI.Models.Entities;
+using SAMS.UI.VisualComponents;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Resources;
@@ -21,11 +30,26 @@ namespace SAMS.UI.Views
     /// </summary>
     public partial class VerMonederosView : Window
     {
+
+        Monedero _monedero;
+        List<MonederosDTO> listaMonederos;
+        ObservableCollection<Object> _monederos;
+
         public VerMonederosView()
         {
+
+            _monedero = new Monedero();
+            _monederos = new ObservableCollection<Object>();
+
             InitializeComponent();
 
             DefinirColumnas();
+
+            ObtenerMonederos();
+
+            TablaMonederos.OnDetallesClickedHandler += botonDetallesClick;
+            TablaMonederos.OnEditarClickedHandler += botonEditarClick;
+            TablaMonederos.OnEliminarClickedHandler += botonEliminarClick;
 
         }
 
@@ -86,6 +110,9 @@ namespace SAMS.UI.Views
                     { "Type", "Actions" },
                     { "Name", "Acciones" },
                     { "Width", "*" },
+                    { "Detalles", "True" },
+                    { "Editar", "True" },
+                    { "Eliminar", "False" }
 
                 }
 
@@ -95,6 +122,94 @@ namespace SAMS.UI.Views
 
         }
 
+        private void ObtenerMonederos()
+        {
+
+            try
+            {
+
+                listaMonederos = MonederoDAO.ObtenerMonederos();
+
+                _monederos.Clear();
+
+                _monederos = new ObservableCollection<Object>(listaMonederos);
+
+                TablaMonederos.SetItemsSource(_monederos);
+
+            }
+            catch (Exception ex)
+            {
+
+                InformationControl.Show("Error", "Ocurrió un error al obtener los monederos", "Aceptar");
+
+                this.Close();
+
+            }
+
+        }
+
+        private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
+        {
+            if (listaMonederos != null)
+            {
+
+                if (campoBuscar.Text.Length > 0)
+                {
+                    var monederosFiltrados = listaMonederos.Where(
+                        m =>
+                        m.codigoDeBarras.Contains(campoBuscar.Text) ||
+                        m.telefono.Contains(campoBuscar.Text) ||
+                        m.nombrePropietario.Contains(campoBuscar.Text)).ToList();
+
+                    _monederos.Clear();
+
+                    _monederos = new ObservableCollection<Object>(monederosFiltrados);
+
+                    TablaMonederos.SetItemsSource(_monederos);
+
+                }
+                else
+                {
+
+                    _monederos.Clear();
+
+                    _monederos = new ObservableCollection<Object>(listaMonederos);
+
+                    TablaMonederos.SetItemsSource(_monederos);
+
+                }
+
+            }
+
+        }
+
+        private void botonDetallesClick(object sender, RoutedEventArgs e)
+        {
+
+            ActionsControl actionBar = (ActionsControl) sender;
+            MonederosDTO monedero = (MonederosDTO) actionBar.DataContext;
+
+            ConsultarMonederoView consultarMonederoView = new ConsultarMonederoView(monedero);
+            consultarMonederoView.Show();
+
+        }
+
+        private void botonEditarClick(object sender, RoutedEventArgs e)
+        {
+
+            ActionsControl actionBar = (ActionsControl) sender;
+            MonederosDTO mondero = (MonederosDTO) actionBar.DataContext;
+
+        }
+
+        private void botonEliminarClick(object sender, RoutedEventArgs e)
+        {
+
+            ActionsControl actionBar = (ActionsControl) sender;
+            MonederosDTO monedero = (MonederosDTO) actionBar.DataContext;
+
+        }
+
     }
-    
+
 }

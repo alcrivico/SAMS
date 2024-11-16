@@ -85,30 +85,6 @@ namespace SAMS.UI.Models.DataContext.Migrations
                     b.ToTable("ProductoInventario");
                 });
 
-            modelBuilder.Entity("SAMS.UI.DTO.SP_ReporteVentaResult", b =>
-                {
-                    b.Property<DateTime>("fechaRegistro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("noCaja")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("noVenta")
-                        .HasColumnType("int");
-
-                    b.Property<string>("nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("SP_ReporteVentaResult", (string)null);
-                });
-
             modelBuilder.Entity("SAMS.UI.DTO.V_EmpleadoDetalle", b =>
                 {
                     b.Property<string>("apellidoMaterno")
@@ -151,6 +127,25 @@ namespace SAMS.UI.Models.DataContext.Migrations
                     b.ToTable((string)null);
 
                     b.ToView("V_Empleados", (string)null);
+                });
+
+            modelBuilder.Entity("SAMS.UI.DTO.V_Pedido", b =>
+                {
+                    b.Property<DateTime>("FechaEntrega")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaPedido")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NoPedido")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("V_Pedido", (string)null);
                 });
 
             modelBuilder.Entity("SAMS.UI.DTO.V_Producto", b =>
@@ -202,6 +197,9 @@ namespace SAMS.UI.Models.DataContext.Migrations
                     b.Property<DateTime>("fechaInicio")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("id")
+                        .HasColumnType("int");
+
                     b.Property<string>("nombre")
                         .HasColumnType("nvarchar(max)");
 
@@ -227,6 +225,30 @@ namespace SAMS.UI.Models.DataContext.Migrations
                     b.ToTable((string)null);
 
                     b.ToView("V_Proveedores", (string)null);
+                });
+
+            modelBuilder.Entity("SAMS.UI.DTO.V_ReporteVenta", b =>
+                {
+                    b.Property<DateTime>("fechaRegistro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("noCaja")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("noVenta")
+                        .HasColumnType("int");
+
+                    b.Property<string>("nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("SP_ReporteVentaResult", (string)null);
                 });
 
             modelBuilder.Entity("SAMS.UI.Models.Entities.Caja", b =>
@@ -440,7 +462,16 @@ namespace SAMS.UI.Models.DataContext.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("apellidoMaterno")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("apellidoPaterno")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("codigoDeBarras")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("nombre")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("saldo")
@@ -653,6 +684,15 @@ namespace SAMS.UI.Models.DataContext.Migrations
 
                     b.Property<int>("noVenta")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("totalEfectivo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("totalMonedero")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("totalTarjeta")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("id");
 

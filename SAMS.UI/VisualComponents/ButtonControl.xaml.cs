@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,18 +29,18 @@ namespace SAMS.UI.VisualComponents
             set { SetValue(TextProperty, value); }
         }
 
-        public static readonly DependencyProperty TextProperty = 
+        public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register(
-                "Text", 
-                typeof(string), 
-                typeof(ButtonControl), 
+                "Text",
+                typeof(string),
+                typeof(ButtonControl),
                 new PropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty IsButtonEnabledProperty =
             DependencyProperty.Register(
-                "IsButtonEnabled", 
-                typeof(bool), 
-                typeof(ButtonControl), 
+                "IsButtonEnabled",
+                typeof(bool),
+                typeof(ButtonControl),
                 new PropertyMetadata(true));
 
         public bool IsButtonEnabled
@@ -93,12 +94,14 @@ namespace SAMS.UI.VisualComponents
             set { SetValue(ButtonForegroundColorProperty, value); }
         }
 
+        private static Brush _defaultForegroundColor = Application.Current.FindResource("SolidColorBrush_White") as Brush;
+
         public static readonly DependencyProperty ButtonForegroundColorProperty =
             DependencyProperty.Register(
                 "ButtonForegroundColor",
                 typeof(Brush),
                 typeof(ButtonControl),
-                new PropertyMetadata(null));
+                new PropertyMetadata(_defaultForegroundColor));
 
         public Brush ButtonBorderColor
         {
