@@ -13,6 +13,136 @@ FROM
 	ProductoInventario
 GO
 
+CREATE VIEW V_Monederos AS
+SELECT
+    m.codigoDeBarras,
+    m.saldo,
+    m.telefono,
+    CONCAT(m.nombre, ' ', m.apellidoPaterno, ' ', m.apellidoMaterno) AS nombrePropietario
+FROM
+    Monedero m
+GO
+
+CREATE VIEW V_Monedero AS
+SELECT
+    m.nombre,
+    m.apellidoPaterno,
+    m.apellidoMaterno,
+    m.telefono,
+    m.saldo,
+    m.codigoDeBarras
+FROM
+    Monedero m
+GO
+
+CREATE VIEW V_BusquedaMonedero AS
+SELECT
+    m.codigoDeBarras,
+    m.saldo
+FROM
+    Monedero m
+GO
+
+CREATE VIEW V_ProductoInventarioVenta AS
+SELECT
+    pi.codigo,
+    pi.nombre,
+    pi.precioActual,
+    pi.cantidadExhibicion,
+    um.nombre AS unidadDeMedida,
+    p.nombre AS promocion,
+    p.porcentajeDescuento
+FROM
+    ProductoInventario pi
+LEFT JOIN
+    UnidadDeMedida um
+    ON
+    pi.unidadDeMedidaId = um.id
+LEFT JOIN
+    Promocion p
+    ON
+    pi.promocionId = p.id
+GO
+
+CREATE VIEW V_Ventas AS
+SELECT
+    dv.precioVenta,
+    dv.cantidad,
+    v.noVenta,
+    v.fechaRegistro,
+    c.noCaja,
+    CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombreEmpleado
+FROM
+    DetalleVenta dv
+INNER JOIN
+    Venta v
+    ON
+    dv.ventaId = v.id
+INNER JOIN
+    Caja c
+    ON
+    v.cajaId = c.id
+INNER JOIN
+    Empleado e
+    ON
+    v.empleadoId = e.id
+GO
+
+CREATE VIEW V_DetalleVentas AS
+SELECT
+    pi.nombre,
+    dv.cantidad,
+    dv.precioVenta,
+    dv.ganancia,
+    v.noVenta,
+    v.fechaRegistro,
+    c.noCaja,
+    p.nombre AS nombrePromocion
+FROM
+    DetalleVenta dv
+INNER JOIN
+    ProductoInventario pi
+    ON
+    dv.productoInventarioId = pi.id
+INNER JOIN
+    Venta v
+    ON
+    dv.ventaId = v.id
+INNER JOIN
+    Caja c
+    ON
+    v.cajaId = c.id
+LEFT JOIN
+    Promocion p
+    ON
+    pi.promocionId = p.id
+GO
+
+CREATE VIEW V_VentasCierreCaja AS
+SELECT
+    v.noVenta,
+    v.fechaRegistro,
+    dv.cantidad,
+    dv.precioVenta,
+    dv.ganancia,
+    c.noCaja,
+    CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombreEmpleado
+FROM
+    Venta v
+INNER JOIN
+    DetalleVenta dv
+    ON
+    v.id = dv.ventaId
+INNER JOIN
+    Caja c
+    ON
+    v.cajaId = c.id
+INNER JOIN
+    Empleado e
+    ON
+    v.empleadoId = e.id
+GO
+
 CREATE VIEW V_Pedido AS
 SELECT 
 	pr.nombre,
