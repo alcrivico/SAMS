@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAMS.UI.VisualComponents;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,11 +16,11 @@ using System.Windows.Shapes;
 namespace SAMS.UI.Views
 {
     /// <summary>
-    /// Interaction logic for IniciarSesionView.xaml
+    /// Lógica de interacción para RegistrarProductoView.xaml
     /// </summary>
-    public partial class IniciarSesionView : Window
+    public partial class RegistrarProductoView : Window
     {
-        public IniciarSesionView()
+        public RegistrarProductoView()
         {
             InitializeComponent();
         }
@@ -47,7 +48,12 @@ namespace SAMS.UI.Views
             this.WindowState = e;
         }
 
-        private void Button_Entrar_ButtonControlClick(object sender, RoutedEventArgs e)
+        private void Button_Registrar_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Cancelar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
 
         }

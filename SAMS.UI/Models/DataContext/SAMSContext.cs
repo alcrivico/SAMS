@@ -16,6 +16,7 @@ public class SAMSContext : DbContext
     public DbSet<EstadoPedido> EstadoPedido { get; set; }
     public DbSet<EstadoProducto> EstadoProducto { get; set; }
     public DbSet<Merma> Merma { get; set; }
+    public DbSet<Monedero> Monedero { get; set; }
     public DbSet<Pedido> Pedido { get; set; }
     public DbSet<Producto> Producto { get; set; }
     public DbSet<ProductoInventario> ProductoInventario { get; set; }
@@ -34,6 +35,13 @@ public class SAMSContext : DbContext
     public DbSet<V_ProductoInventario> V_ProductoInventario { get; set; }
     public DbSet<V_Promocion> V_Promocion { get; set; }
     public DbSet<V_Proveedores> V_Proveedores { get; set; }
+    public DbSet<VentasCierreCajaDTO> V_VentasCierreCaja { get; set; }
+    public DbSet<MonederosDTO> V_Monederos { get; set; }
+    public DbSet<MonederoDTO> V_Monedero { get; set; }
+    public DbSet<BusquedaMonederoDTO> V_BusquedaMonedero { get; set; }
+    public DbSet<ProductoInventarioVentaDTO> V_ProductoInventarioVenta { get; set; }
+    public DbSet<VentasDTO> V_Ventas { get; set; }
+    public DbSet<DetalleVentasDTO> V_DetalleVentas { get; set; }
 
     // Configurar las vistas como una entidad sin clave
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -62,6 +70,27 @@ public class SAMSContext : DbContext
         modelBuilder.Entity<V_Proveedores>()
             .HasNoKey()
             .ToView("V_Proveedores");
+        modelBuilder.Entity<VentasCierreCajaDTO>()
+            .HasNoKey()
+            .ToView("V_VentasCierreCaja");
+        modelBuilder.Entity<MonederosDTO>()
+            .HasNoKey()
+            .ToView("V_Monederos");
+        modelBuilder.Entity<MonederoDTO>()
+            .HasNoKey()
+            .ToView("V_Monedero");
+        modelBuilder.Entity<BusquedaMonederoDTO>()
+            .HasNoKey()
+            .ToView("V_BusquedaMonedero");
+        modelBuilder.Entity<ProductoInventarioVentaDTO>()
+            .HasNoKey()
+            .ToView("V_ProductoInventarioVenta");
+        modelBuilder.Entity<VentasDTO>()
+            .HasNoKey()
+            .ToView("V_Ventas");
+        modelBuilder.Entity<DetalleVentasDTO>()
+            .HasNoKey()
+            .ToView("V_DetalleVentas");
 
         base.OnModelCreating(modelBuilder);
     }
