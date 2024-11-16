@@ -9,9 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Fonts\Nunito\Nunito-Italic-VariableFont_wght.ttf" />
+    <None Remove="Resources\Fonts\Nunito\Nunito-VariableFont_wght.ttf" />
     <None Remove="Resources\Images\LogoMensajesAyuda.png" />
     <None Remove="Resources\Images\Tienda.png" />
-    <None Remove="Resources\Fonts\Nunito\Nunito-VariableFont_wght.ttf" />
   </ItemGroup>
   
   <ItemGroup>
@@ -21,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.13.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
@@ -29,9 +31,12 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="System.Formats.Asn1" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Fonts\Nunito\Nunito-Italic-VariableFont_wght.ttf" />
+    <Resource Include="Resources\Fonts\Nunito\Nunito-VariableFont_wght.ttf" />
     <Resource Include="Resources\Images\LogoMensajesAyuda.png" />
     <Resource Include="Resources\Images\Tienda.png" />
   </ItemGroup>

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SAMS.UI.DAO;
+using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
 using SAMS.UI.Models.Entities;
 using System;
@@ -27,13 +29,12 @@ namespace SAMS.UI.Views
     public partial class VerMonederosView : Window
     {
 
-        private readonly SAMSContext _sams;
         Monedero _monedero;
         ObservableCollection<Object> _monederos;
 
         public VerMonederosView()
         {
-            _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
+
             _monedero = new Monedero();
             _monederos = new ObservableCollection<Object>();
 
@@ -41,7 +42,7 @@ namespace SAMS.UI.Views
 
             DefinirColumnas();
 
-            MonederosDAO();
+            ObtenerMonederos();
 
         }
 
@@ -111,49 +112,16 @@ namespace SAMS.UI.Views
 
         }
 
-        private void MonederosDAO()
+        private void ObtenerMonederos()
         {
 
-            List<Monedero> listaMonederos = ObtenerMonederos();
+            List<MonederosDTO> listaMonederos = MonederoDAO.ObtenerMonederos();
 
             _monederos.Clear();
 
             _monederos = new ObservableCollection<Object>(listaMonederos);
 
             TablaMonederos.SetItemsSource(_monederos);
-
-        }
-
-        private List<Monedero> ObtenerMonederos()
-        {
-
-            List<Monedero> monederos = new List<Monedero>();
-
-            var monederosData = from m in _sams.Monedero
-                                select new
-                                {
-                                    m.codigoDeBarras,
-                                    m.telefono,
-                                    m.saldo
-                                };
-
-            foreach (var monederoData in monederosData)
-            {
-
-                Monedero monedero = new Monedero
-                {
-                    codigoDeBarras = monederoData.codigoDeBarras,
-                    telefono = monederoData.telefono
-                };
-
-                monedero.SetSaldo(monederoData.saldo);
-
-                monederos.Add(monedero);
-                monederos.Add(monedero);
-
-            }
-
-            return monederos;
 
         }
 
