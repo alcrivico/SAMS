@@ -32,6 +32,7 @@ namespace SAMS.UI.Views
     {
 
         Monedero _monedero;
+        List<MonederosDTO> listaMonederos;
         ObservableCollection<Object> _monederos;
 
         public VerMonederosView()
@@ -105,6 +106,9 @@ namespace SAMS.UI.Views
                     { "Type", "Actions" },
                     { "Name", "Acciones" },
                     { "Width", "*" },
+                    { "Detalles", "True" },
+                    { "Editar", "True" },
+                    { "Eliminar", "False" }
 
                 }
 
@@ -120,7 +124,7 @@ namespace SAMS.UI.Views
             try
             {
 
-                List<MonederosDTO> listaMonederos = MonederoDAO.ObtenerMonederos();
+                listaMonederos = MonederoDAO.ObtenerMonederos();
 
                 _monederos.Clear();
 
@@ -135,6 +139,41 @@ namespace SAMS.UI.Views
                 InformationControl.Show("Error", "Ocurrió un error al obtener los monederos", "Aceptar");
 
                 this.Close();
+
+            }
+
+        }
+
+        private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
+        {
+            if (listaMonederos != null)
+            {
+
+                if (campoBuscar.Text.Length > 0)
+                {
+                    var monederosFiltrados = listaMonederos.Where(
+                        m =>
+                        m.codigoDeBarras.Contains(campoBuscar.Text) ||
+                        m.telefono.Contains(campoBuscar.Text) ||
+                        m.nombrePropietario.Contains(campoBuscar.Text)).ToList();
+
+                    _monederos.Clear();
+
+                    _monederos = new ObservableCollection<Object>(monederosFiltrados);
+
+                    TablaMonederos.SetItemsSource(_monederos);
+
+                }
+                else
+                {
+
+                    _monederos.Clear();
+
+                    _monederos = new ObservableCollection<Object>(listaMonederos);
+
+                    TablaMonederos.SetItemsSource(_monederos);
+
+                }
 
             }
 

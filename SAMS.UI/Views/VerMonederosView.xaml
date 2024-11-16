@@ -101,7 +101,8 @@
                                             Width="450"
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Left"
-                                            FieldName="Buscar Monedero" />
+                                            FieldName="Buscar Monedero"
+                                            TextBoxControlTextChanged="campoBuscar_TextBoxControlTextChanged" />
                                     </Viewbox>
 
                                     <components:ButtonControl
