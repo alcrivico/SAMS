@@ -40,6 +40,19 @@ namespace SAMS.UI.VisualComponents
                 typeof(TextBoxControl),
                 new PropertyMetadata(string.Empty));
 
+        public static readonly DependencyProperty EnableTextBoxProperty =
+            DependencyProperty.Register(
+                "EnableTextBox",
+                typeof(bool),
+                typeof(TextBoxControl),
+                new PropertyMetadata(true, OnEnableTextBoxPropertyChanged));
+
+        public bool EnableTextBox
+        {
+            get { return (bool)GetValue(EnableTextBoxProperty); }
+            set { SetValue(EnableTextBoxProperty, value); }
+        }
+
         public string FieldName
         {
             get { return (string)GetValue(FieldNameProperty); }
@@ -84,16 +97,46 @@ namespace SAMS.UI.VisualComponents
             InitializeComponent();
         }
 
+        private static void OnEnableTextBoxPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            TextBoxControl control = (TextBoxControl)d;
+            control.EnableTextBox = (bool)e.NewValue;
+
+            if (control.EnableTextBox)
+            {
+                control.Enable();
+            }
+            else
+            {
+                control.Disable();
+            }
+
+        }
+
         public void Disable()
         {
-            TextBox.IsEnabled = false;
-            TextBox_Highlight.Visibility = Visibility.Visible;
+
+            //TextBox.IsEnabled = false;
+            TextBox_Border.Opacity = 0.5;
+            TextBox_Text.Foreground = (SolidColorBrush)FindResource("SolidColorBrush_EerieBlack");
+            TextBox_Text.Opacity = 1;
+            TextBox_Text.Focusable = false;
+            TextBox_Text.Cursor = Cursors.Arrow;
+            TextBox_FieldName.Background = (SolidColorBrush) FindResource("SolidColorBrush_GhostWhite");
+
         }
 
         public void Enable()
         {
-            TextBox.IsEnabled = true;
-            TextBox_Highlight.Visibility = Visibility.Hidden;
+
+            //TextBox.IsEnabled = true;
+            TextBox_Border.Opacity = 1;
+            TextBox_Text.Foreground = (SolidColorBrush)FindResource("SolidColorBrush_DavysGrey");
+            TextBox_Text.Opacity = 1;
+            TextBox_Text.Focusable = true;
+            TextBox_Text.Cursor = Cursors.Hand;
+            TextBox_FieldName.Background = (SolidColorBrush)FindResource("SolidColorBrush_White");
+
         }
 
         private static void OnTextPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

@@ -47,6 +47,10 @@ namespace SAMS.UI.Views
 
             ObtenerMonederos();
 
+            TablaMonederos.OnDetallesClickedHandler += botonDetallesClick;
+            TablaMonederos.OnEditarClickedHandler += botonEditarClick;
+            TablaMonederos.OnEliminarClickedHandler += botonEliminarClick;
+
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -179,6 +183,33 @@ namespace SAMS.UI.Views
 
         }
 
+        private void botonDetallesClick(object sender, RoutedEventArgs e)
+        {
+
+            ActionsControl actionBar = (ActionsControl) sender;
+            MonederosDTO monedero = (MonederosDTO) actionBar.DataContext;
+
+            ConsultarMonederoView consultarMonederoView = new ConsultarMonederoView(monedero);
+            consultarMonederoView.Show();
+
+        }
+
+        private void botonEditarClick(object sender, RoutedEventArgs e)
+        {
+
+            ActionsControl actionBar = (ActionsControl) sender;
+            MonederosDTO mondero = (MonederosDTO) actionBar.DataContext;
+
+        }
+
+        private void botonEliminarClick(object sender, RoutedEventArgs e)
+        {
+
+            ActionsControl actionBar = (ActionsControl) sender;
+            MonederosDTO monedero = (MonederosDTO) actionBar.DataContext;
+
+        }
+
     }
-    
+
 }

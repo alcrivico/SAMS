@@ -46,6 +46,35 @@ namespace SAMS.UI.DAO
 
         }
 
+        public static MonederoDTO ObtenerMonedero(string codigoDeBarras)
+        {
+
+            var monederoData = (from m in _sams.V_Monedero
+                                where m.codigoDeBarras == codigoDeBarras
+                                select new
+                                {
+                                    m.nombre,
+                                    m.apellidoPaterno,
+                                    m.apellidoMaterno,
+                                    m.telefono,
+                                    m.saldo,
+                                    m.codigoDeBarras
+                                }).FirstOrDefault();
+
+            MonederoDTO monedero = new MonederoDTO
+            {
+                nombre = monederoData.nombre,
+                apellidoPaterno = monederoData.apellidoPaterno,
+                apellidoMaterno = monederoData.apellidoMaterno,
+                telefono = monederoData.telefono,
+                saldo = monederoData.saldo,
+                codigoDeBarras = monederoData.codigoDeBarras,
+            };
+
+            return monedero;
+
+        }
+
     }
 
 }
