@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualBasic;
 using SAMS.UI.DAO;
 using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
 using SAMS.UI.Models.Entities;
+using SAMS.UI.VisualComponents;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -115,13 +117,26 @@ namespace SAMS.UI.Views
         private void ObtenerMonederos()
         {
 
-            List<MonederosDTO> listaMonederos = MonederoDAO.ObtenerMonederos();
+            try
+            {
 
-            _monederos.Clear();
+                List<MonederosDTO> listaMonederos = MonederoDAO.ObtenerMonederos();
 
-            _monederos = new ObservableCollection<Object>(listaMonederos);
+                _monederos.Clear();
 
-            TablaMonederos.SetItemsSource(_monederos);
+                _monederos = new ObservableCollection<Object>(listaMonederos);
+
+                TablaMonederos.SetItemsSource(_monederos);
+
+            }
+            catch (Exception ex)
+            {
+
+                InformationControl.Show("Error", "Ocurrió un error al obtener los monederos", "Aceptar");
+
+                this.Close();
+
+            }
 
         }
 

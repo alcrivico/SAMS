@@ -37,6 +37,11 @@ public class SAMSContext : DbContext
     public DbSet<V_Proveedores> V_Proveedores { get; set; }
     public DbSet<VentasCierreCajaDTO> V_VentasCierreCaja { get; set; }
     public DbSet<MonederosDTO> V_Monederos { get; set; }
+    public DbSet<MonederoDTO> V_Monedero { get; set; }
+    public DbSet<BusquedaMonederoDTO> V_BusquedaMonedero { get; set; }
+    public DbSet<ProductoInventarioVentaDTO> V_ProductoInventarioVenta { get; set; }
+    public DbSet<VentasDTO> V_Ventas { get; set; }
+    public DbSet<DetalleVentasDTO> V_DetalleVentas { get; set; }
 
     // Configurar las vistas como una entidad sin clave
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -71,6 +76,21 @@ public class SAMSContext : DbContext
         modelBuilder.Entity<MonederosDTO>()
             .HasNoKey()
             .ToView("V_Monederos");
+        modelBuilder.Entity<MonederoDTO>()
+            .HasNoKey()
+            .ToView("V_Monedero");
+        modelBuilder.Entity<BusquedaMonederoDTO>()
+            .HasNoKey()
+            .ToView("V_BusquedaMonedero");
+        modelBuilder.Entity<ProductoInventarioVentaDTO>()
+            .HasNoKey()
+            .ToView("V_ProductoInventarioVenta");
+        modelBuilder.Entity<VentasDTO>()
+            .HasNoKey()
+            .ToView("V_Ventas");
+        modelBuilder.Entity<DetalleVentasDTO>()
+            .HasNoKey()
+            .ToView("V_DetalleVentas");
 
         base.OnModelCreating(modelBuilder);
     }
