@@ -7,9 +7,9 @@ public class V_ProductoInventario
 
     public string nombre { get; set; }
 
-    public int cantidadBodega { get; set; }
+    public string cantidadBodega { get; set; }
 
-    public int cantidadExhibicion { get; set; }
+    public string cantidadExhibicion { get; set; }
 
     public decimal precioActual { get; set; }
     //eliminar ubicacion

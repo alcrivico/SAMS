@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using SAMS.UI.DAO;
+using SAMS.UI.DTO;
+using SAMS.UI.VisualComponents;
+using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SAMS.UI.Views;
@@ -8,9 +12,15 @@ namespace SAMS.UI.Views;
 /// </summary>
 public partial class ReporteInventarioView : Window
 {
+    List<V_ProductoInventario> listaReporteInventario;
+    ObservableCollection<Object> _reportes;
     public ReporteInventarioView()
     {
+        _reportes = new ObservableCollection<Object>();
+
         InitializeComponent();
+        DefinirColumnas();
+        ObtenerInventario();
     }
 
     private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -79,9 +89,44 @@ public partial class ReporteInventarioView : Window
 
     }
 
-    private void TablaReporte_Loaded(object sender, RoutedEventArgs e)
+    private void ObtenerInventario()
     {
+        try
+        {
+            listaReporteInventario = ReportesDAO.ReporteInventario();
+            _reportes.Clear();
+            _reportes = new ObservableCollection<Object>(listaReporteInventario);
+            TablaReporte.SetItemsSource(_reportes);
+        }
+        catch (Exception ex)
+        {
+            InformationControl.Show("Error", "Ocurrió un error al obtener Inventario de Producto", "Aceptar");
 
+            this.Close();
+        }
+    }
+
+    private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
+    {
+        if (listaReporteInventario != null)
+        {
+            var reporteFiltado = listaReporteInventario.Where(
+                x => x.nombre.ToLower().Contains(campoBuscar.Text.ToLower())).ToList();
+            
+            _reportes.Clear();
+
+            _reportes = new ObservableCollection<Object>(reporteFiltado);
+
+            TablaReporte.SetItemsSource(_reportes);
+        }
+        else
+        {
+            _reportes.Clear();
+
+            _reportes = new ObservableCollection<Object>(listaReporteInventario);
+
+            TablaReporte.SetItemsSource(_reportes);
+        }
     }
 
     private void Imprimir_ButtonControlClick(object sender, RoutedEventArgs e)

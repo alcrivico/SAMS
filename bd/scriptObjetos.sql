@@ -1,16 +1,18 @@
 -- 1. index
 
 -- 2. vistas
-CREATE VIEW V_ProductoInventario AS
+CREATE OR ALTER VIEW V_ProductoInventario AS
 SELECT
-	id,
-	nombre,
-	cantidadBodega, 
-	cantidadExhibicion,
-	precioActual,
-	ubicacion
+    pi.id,
+    pi.nombre,
+    CAST(pi.cantidadBodega AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidadBodega,
+    CAST(pi.cantidadExhibicion AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidadExhibicion,
+    pi.precioActual,
+    pi.ubicacion
 FROM 
-	ProductoInventario
+    ProductoInventario pi
+LEFT JOIN 
+    UnidadDeMedida um ON pi.unidadDeMedidaId = um.id;
 GO
 
 CREATE VIEW V_Monederos AS
