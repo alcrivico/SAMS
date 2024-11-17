@@ -54,9 +54,6 @@ public class SAMSContext : DbContext
         modelBuilder.Entity<V_Empleados>()
             .HasNoKey()
             .ToView("V_Empleados");
-        modelBuilder.Entity<ReportePedidoDTO>()
-            .HasNoKey()
-            .ToView("V_Pedido");
         modelBuilder.Entity<V_Producto>()
             .HasNoKey()
             .ToView("V_Producto");

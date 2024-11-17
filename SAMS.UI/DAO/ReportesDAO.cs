@@ -13,27 +13,32 @@ public class ReportesDAO
     public static List<ReporteVentaDTO> ReporteVentas() => _sams.Set<ReporteVentaDTO>()
             .FromSqlRaw("EXEC [dbo].[SP_ReporteVenta]").ToList();
 
-    public List<ReportePedidoDTO> ReportePedidos(DateTime? fechaInicio = null, DateTime? fechaFin = null)
+    public static List<ReportePedidoDTO> ReportePedidos(DateTime? fechaInicio = null, DateTime? fechaFin = null)
     {
-        //Se ejecuta el procedimiento almacenado sin parámetros
+        List<ReportePedidoDTO> resultado;
+
         if (fechaInicio == null && fechaFin == null)
         {
-            return _sams.Set<ReportePedidoDTO>()
+            resultado = _sams.Set<ReportePedidoDTO>()
                 .FromSqlRaw("EXEC [dbo].[SP_ReportePedido]")
                 .ToList();
         }
-
-        //Se ejecuta el procedimiento almacenado con parámetros
-        var parameters = new[]
+        else
         {
-        new SqlParameter("@fechaInicio", fechaInicio ?? DateTime.Now.AddMonths(-3)),
-        new SqlParameter("@fechaFin", fechaFin ?? DateTime.Now)
-    };
+            var parameters = new[]
+            {
+            new SqlParameter("@fechaInicio", fechaInicio ?? DateTime.Now.AddMonths(-3)),
+            new SqlParameter("@fechaFin", fechaFin ?? DateTime.Now)
+        };
 
-        return _sams.Set<ReportePedidoDTO>()
-            .FromSqlRaw("EXEC [dbo].[SP_ReportePedido] @fechaInicio, @fechaFin", parameters)
-            .ToList();
+            resultado = _sams.Set<ReportePedidoDTO>()
+                .FromSqlRaw("EXEC [dbo].[SP_ReportePedido] @fechaInicio, @fechaFin", parameters)
+                .ToList();
+        }
+
+        return resultado;
     }
+
 
     public static List<V_ProductoInventario> ReporteInventario() => 
             _sams.V_ProductoInventario.ToList();

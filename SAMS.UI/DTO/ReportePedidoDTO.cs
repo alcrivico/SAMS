@@ -2,9 +2,9 @@
 
 public class ReportePedidoDTO
 {
-    public int noPedido { get; set; }
+    public string noPedido { get; set; }
     public DateTime fechaPedido { get; set; }
     public DateTime fechaEntrega { get; set; }
     public string proveedor { get; set; }
-    public string costo { get; set; }
+    public decimal costoTotalPedido { get; set; }
 }

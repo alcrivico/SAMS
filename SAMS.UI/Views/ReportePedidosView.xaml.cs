@@ -8,19 +8,18 @@ using System.Windows.Input;
 namespace SAMS.UI.Views;
 
 /// <summary>
-/// Lógica de interacción para ReporteInventarioView.xaml
+/// Lógica de interacción para ReportePedidosView.xaml
 /// </summary>
-public partial class ReporteInventarioView : Window
+public partial class ReportePedidosView : Window
 {
-    List<V_ProductoInventario> listaReporteInventario;
+    List<ReportePedidoDTO> listaReportePedido;
     ObservableCollection<Object> _reportes;
-    public ReporteInventarioView()
+    public ReportePedidosView()
     {
         _reportes = new ObservableCollection<Object>();
-
         InitializeComponent();
         DefinirColumnas();
-        ObtenerInventario();
+        ObtenerPedidos();
     }
 
     private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -54,15 +53,15 @@ public partial class ReporteInventarioView : Window
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Producto" },
+                    { "Name", "noPedido" },
                     { "Width", "*" },
                     { "BindingName", "nombre" }
 
                 },
                 new Dictionary<string, string> {
 
-                    { "Type", "Text" },
-                    { "Name", "Bodega" },
+                    { "Type", "" },
+                    { "Name", "Fecha del pedido" },
                     { "Width", "*" },
                     { "BindingName", "cantidadBodega" },
 
@@ -70,7 +69,7 @@ public partial class ReporteInventarioView : Window
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Exhibicion" },
+                    { "Name", "Fecha de entrega" },
                     { "Width", "*" },
                     { "BindingName", "cantidadExhibicion" }
 
@@ -78,7 +77,15 @@ public partial class ReporteInventarioView : Window
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Precio" },
+                    { "Name", "Proveedor" },
+                    { "Width", "*" },
+                    { "BindingName", "precioActual" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Costo" },
                     { "Width", "*" },
                     { "BindingName", "precioActual" }
 
@@ -89,18 +96,18 @@ public partial class ReporteInventarioView : Window
 
     }
 
-    private void ObtenerInventario()
+    private void ObtenerPedidos()
     {
         try
         {
-            listaReporteInventario = ReportesDAO.ReporteInventario();
+            listaReportePedido = ReportesDAO.ReportePedidos();
             _reportes.Clear();
-            _reportes = new ObservableCollection<Object>(listaReporteInventario);
+            _reportes = new ObservableCollection<Object>(listaReportePedido);
             TablaReporte.SetItemsSource(_reportes);
         }
-        catch (Exception ex)
+        catch
         {
-            InformationControl.Show("Error", "Ocurrió un error al obtener Inventario de Producto", "Aceptar");
+            InformationControl.Show("Error", "Ocurrió un error al obtener Pedidos", "Aceptar");
 
             Close();
         }
@@ -108,12 +115,12 @@ public partial class ReporteInventarioView : Window
 
     private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
     {
-        if (listaReporteInventario != null)
+        if (listaReportePedido != null)
         {
-            var reporteFiltado = listaReporteInventario.Where(
-                x => x.nombre.ToLower().Contains(campoBuscar.Text.ToLower())).ToList();
-            
-            _reportes.Clear();
+            var reporteFiltado = listaReportePedido.Where(
+            x => x.proveedor.ToLower().Contains(campoBuscar.Text.ToLower()) ||
+                 x.noPedido.ToString().Contains(campoBuscar.Text))
+            .ToList();
 
             _reportes = new ObservableCollection<Object>(reporteFiltado);
 
@@ -123,7 +130,7 @@ public partial class ReporteInventarioView : Window
         {
             _reportes.Clear();
 
-            _reportes = new ObservableCollection<Object>(listaReporteInventario);
+            _reportes = new ObservableCollection<Object>(listaReportePedido);
 
             TablaReporte.SetItemsSource(_reportes);
         }
