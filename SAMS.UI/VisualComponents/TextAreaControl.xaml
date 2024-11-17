@@ -35,7 +35,7 @@
             FontSize="12"
             FontWeight="Bold"
             Foreground="{StaticResource SolidColorBrush_DodgerBlue}"
-            Text="{Binding FieldName, ElementName=TextBox}" />
+            Text="{Binding FieldName, ElementName=TextArea}" />
 
         <Rectangle
             x:Name="TextBox_Highlight"
@@ -60,7 +60,7 @@
 
             <TextBox
                 x:Name="TextBox_Text"
-                Height="{Binding TextHeight, ElementName=TextBox}"
+                Height="{Binding TextHeight, ElementName=TextArea}"
                 Padding="10,0,10,0"
                 AcceptsReturn="True"
                 Background="Transparent"
