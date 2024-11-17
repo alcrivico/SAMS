@@ -17,13 +17,25 @@
     mc:Ignorable="d">
 
     <Viewbox>
-        <Grid>
+        <Grid Width="{Binding ButtonWidth, ElementName=Button}">
             <Border
                 x:Name="Button_Border"
                 Background="{Binding ButtonBackgroundColor, ElementName=Button}"
+                BorderBrush="{Binding ButtonBorderColor, ElementName=Button}"
                 BorderThickness="2"
-                CornerRadius="10"
-                Effect="{StaticResource ButtonDropShadow}">
+                CornerRadius="10">
+
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Effect" Value="{StaticResource ButtonDropShadow}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsDropShadowEnabled, ElementName=Button}" Value="False">
+                                <Setter Property="Effect" Value="{x:Null}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
                 <TextBlock
                     Margin="10,5,10,5"
                     HorizontalAlignment="Center"
@@ -31,7 +43,7 @@
                     FontFamily="{StaticResource Font_Nunito}"
                     FontSize="{Binding FontSize, ElementName=Button}"
                     FontWeight="Bold"
-                    Foreground="{StaticResource SolidColorBrush_White}"
+                    Foreground="{Binding ButtonForegroundColor, ElementName=Button}"
                     Text="{Binding Text, ElementName=Button}"
                     TextAlignment="Center"
                     TextWrapping="Wrap" />

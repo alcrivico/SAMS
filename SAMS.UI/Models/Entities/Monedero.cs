@@ -11,6 +11,12 @@ public class Monedero
 
     public string telefono { get; set; }
 
+    public string nombre { get; set; }
+
+    public string apellidoPaterno { get; set; }
+
+    public string apellidoMaterno { get; set; }
+
     public void SetSaldo(decimal nuevoSaldo)
     {
         if (nuevoSaldo < 0)

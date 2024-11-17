@@ -19,7 +19,6 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-
     <Grid>
 
         <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20, 20, 5, 20">

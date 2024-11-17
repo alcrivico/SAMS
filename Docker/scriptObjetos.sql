@@ -1,38 +1,153 @@
 -- 1. index
 
 -- 2. vistas
-CREATE VIEW V_ProductoInventario AS
+CREATE OR ALTER VIEW V_ProductoInventario AS
 SELECT
-	id,
-	nombre,
-	cantidadBodega, 
-	cantidadExhibicion,
-	precioActual,
-	ubicacion
+    pi.id,
+    pi.nombre,
+    CAST(pi.cantidadBodega AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidadBodega,
+    CAST(pi.cantidadExhibicion AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidadExhibicion,
+    pi.precioActual,
+    pi.ubicacion
 FROM 
-	ProductoInventario
+    ProductoInventario pi
+LEFT JOIN 
+    UnidadDeMedida um ON pi.unidadDeMedidaId = um.id;
 GO
 
-CREATE VIEW V_Pedido AS
-SELECT 
-	pr.nombre,
-	p.NoPedido,
-	p.FechaPedido,
-	p.FechaEntrega
+CREATE VIEW V_Monederos AS
+SELECT
+    m.codigoDeBarras,
+    m.saldo,
+    m.telefono,
+    CONCAT(m.nombre, ' ', m.apellidoPaterno, ' ', m.apellidoMaterno) AS nombrePropietario
 FROM
-	Pedido p
+    Monedero m
+GO
+
+CREATE VIEW V_Monedero AS
+SELECT
+    m.nombre,
+    m.apellidoPaterno,
+    m.apellidoMaterno,    
+    m.telefono,
+    m.saldo,
+    m.codigoDeBarras
+FROM
+    Monedero m
+GO
+
+CREATE VIEW V_BusquedaMonedero AS
+SELECT
+    m.codigoDeBarras,
+    m.saldo
+FROM
+    Monedero m
+GO
+
+CREATE VIEW V_ProductoInventarioVenta AS
+SELECT
+    pi.codigo,
+    pi.nombre,
+    pi.precioActual,
+    pi.cantidadExhibicion,
+    um.nombre AS unidadDeMedida,
+    p.nombre AS promocion,
+    p.porcentajeDescuento
+FROM
+    ProductoInventario pi
+LEFT JOIN
+    UnidadDeMedida um
+    ON
+    pi.unidadDeMedidaId = um.id
+LEFT JOIN
+    Promocion p
+    ON
+    pi.promocionId = p.id
+GO
+
+CREATE VIEW V_Ventas AS
+SELECT
+    dv.precioVenta,
+    dv.cantidad,
+    v.noVenta,
+    v.fechaRegistro,
+    c.noCaja,
+    CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombreEmpleado
+FROM
+    DetalleVenta dv
 INNER JOIN
-	DetallePedido dp 
-	ON
-	p.id = dp.pedidoId
+    Venta v
+    ON
+    dv.ventaId = v.id
 INNER JOIN
-	Producto pr
-	ON
-	dp.productoId = pr.id
+    Caja c
+    ON
+    v.cajaId = c.id
+INNER JOIN
+    Empleado e
+    ON
+    v.empleadoId = e.id
+GO
+
+CREATE VIEW V_DetalleVentas AS
+SELECT
+    pi.nombre,
+    dv.cantidad,
+    dv.precioVenta,
+    dv.ganancia,
+    v.noVenta,
+    v.fechaRegistro,
+    c.noCaja,
+    p.nombre AS nombrePromocion
+FROM
+    DetalleVenta dv
+INNER JOIN
+    ProductoInventario pi
+    ON
+    dv.productoInventarioId = pi.id
+INNER JOIN
+    Venta v
+    ON
+    dv.ventaId = v.id
+INNER JOIN
+    Caja c
+    ON
+    v.cajaId = c.id
+LEFT JOIN
+    Promocion p
+    ON
+    pi.promocionId = p.id
+GO
+
+CREATE VIEW V_VentasCierreCaja AS
+SELECT
+    v.noVenta,
+    v.fechaRegistro,
+    dv.cantidad,
+    dv.precioVenta,
+    dv.ganancia,
+    c.noCaja,
+    CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombreEmpleado
+FROM
+    Venta v
+INNER JOIN
+    DetalleVenta dv
+    ON
+    v.id = dv.ventaId
+INNER JOIN
+    Caja c
+    ON
+    v.cajaId = c.id
+INNER JOIN
+    Empleado e
+    ON
+    v.empleadoId = e.id
 GO
 
 CREATE VIEW V_Promocion AS
 SELECT
+    p.id,
 	p.nombre,
 	p.porcentajeDescuento,
 	pv.fechaInicio,
@@ -94,74 +209,65 @@ INNER JOIN
     e.puestoId = p.id
 GO
 
+CREATE VIEW dbo.V_ReportePedido AS
+SELECT 
+    p.NoPedido AS noPedido,
+    p.FechaPedido AS fechaPedido,
+    p.FechaEntrega AS fechaEntrega,
+    pv.nombre AS proveedor,
+    SUM(dp.cantidad * dp.precioCompra) AS costoTotalPedido
+FROM
+    Pedido p
+INNER JOIN
+    DetallePedido dp 
+    ON p.id = dp.pedidoId
+INNER JOIN
+    Producto pr
+    ON dp.productoId = pr.id
+INNER JOIN
+    Proveedor pv
+    ON pr.proveedorId = pv.id
+GROUP BY 
+    p.NoPedido,
+    p.FechaPedido,
+    p.FechaEntrega,
+    pv.nombre;
+GO
+
+CREATE VIEW dbo.V_ReporteVenta AS
+SELECT 
+    v.noVenta,
+    v.fechaRegistro,
+    SUM(d.cantidad * d.precioVenta) AS total,
+    c.noCaja,
+    (e.nombre + ' ' + e.apellidoPaterno + ' ' + e.apellidoMaterno) AS nombre
+FROM 
+    Venta v
+INNER JOIN 
+    DetalleVenta d ON v.id = d.ventaId
+INNER JOIN 
+    Empleado e ON e.id = v.empleadoId
+INNER JOIN 
+    Caja c ON c.id = v.cajaId
+GROUP BY 
+    v.noVenta, 
+    v.fechaRegistro, 
+    c.noCaja, 
+    e.nombre, 
+    e.apellidoPaterno, 
+    e.apellidoMaterno
+HAVING 
+    SUM(d.cantidad * d.precioVenta) > 0;
+GO
 -- 3. procedimientos almacenados
 -- funciones listas
-CREATE FUNCTION [dbo].FL_TotalDetallesVenta (
-	@idVenta INT
-)
-RETURNS decimal(8,2)
-AS
-BEGIN
-	DECLARE @total decimal(8,2);
 
-	SELECT 
-		@total = SUM(cantidad * precioVenta)
-	FROM
-		DetalleVenta db
-	WHERE
-		ventaId = @idVenta;
-
-	RETURN ISNULL(@total, 0);
-END;
-GO
 
 -- funciones escalares
 
 -- procedimientos almacenados
-CREATE PROCEDURE [dbo].SP_ReporteVenta
-AS
-BEGIN
-	--Tabla temporal
-	CREATE TABLE #TempVentas (
-		noVenta INTEGER,
-		fechaRegistro DATETIME,
-		total DECIMAL(8, 2),
-		noCaja VARCHAR(255),
-		nombre NVARCHAR(100)
-	);
 
-	INSERT INTO 
-		#TempVentas (noVenta, fechaRegistro, total, noCaja, nombre)
-	SELECT
-		v.noVenta,
-		v.fechaRegistro,
-		dbo.FL_TotalDetallesVenta(v.id) AS total,
-		c.noCaja,
-		(e.nombre + ' ' + e.apellidoPaterno + ' ' + e.apellidoMaterno) AS nombre
-	FROM 
-		Venta v
-	INNER JOIN 
-		Empleado e ON e.id = v.empleadoId
-	INNER JOIN 
-		Caja c ON c.id = v.cajaId;
 
-	--resultado
-	SELECT 
-		noVenta,
-		fechaRegistro,
-		total,
-		noCaja,
-		nombre
-	FROM 
-		#TempVentas
-	WHERE 
-		total > 0
-	ORDER BY
-		noCaja;
-
-	DROP TABLE #TempVentas;
-END;
-GO
 
 -- procedimiento transaccional
 CREATE PROCEDURE [dbo].T_CrearPromocionConVigencia
@@ -172,7 +278,7 @@ CREATE PROCEDURE [dbo].T_CrearPromocionConVigencia
 	@cantMinima INT,
 	@fechaInicio DATE,
 	@fechaFin DATE,
-	@idProductoInventario INT
+	@roductoInventarioId INT
 )
 AS
 BEGIN
@@ -181,7 +287,7 @@ BEGIN
 
 	BEGIN TRY
 		-- 1. Insertar en la tabla Promocion
-		DECLARE @idPromocion INT;
+		DECLARE @promocionId INT;
 
 		INSERT INTO 
 			Promocion (nombre, porcentajeDescuento, cantMaxima, cantMinima)
@@ -189,20 +295,20 @@ BEGIN
 			(@nombre, @porcentajeDescuento, @cantMaxima, @cantMinima);
 
 		-- Obtener el ID de la promoción insertada
-		SET @idPromocion = SCOPE_IDENTITY();
+		SET @promocionId = SCOPE_IDENTITY();
 
 		-- 2. Insertar en la tabla PromocionVigencia
 		INSERT INTO 
 			PromocionVigencia (fechaInicio, fechaFin, promocionId)
 		VALUES 
-			(@fechaInicio, @fechaFin, @idPromocion);
+			(@fechaInicio, @fechaFin, @promocionId);
 
 		-- 3. Actualizar la tabla ProductoInventario con el idPromocion
 		UPDATE 
 			ProductoInventario
-		SET promocionId = @idPromocion
+		SET promocionId = @promocionId
 		WHERE 
-			id = @idProductoInventario;
+			id = @roductoInventarioId;
 
 		-- Confirmar la transacción
 		COMMIT TRANSACTION;
@@ -220,19 +326,19 @@ GO
 
 
 -- 1. Crear tipo de tabla para lista de IDs si no existe
-IF TYPE_ID('dbo.ProductoInventarioIDList') IS NULL
-    CREATE TYPE dbo.ProductoInventarioIDList AS TABLE (productoInventarioId INT);
+IF TYPE_ID('dbo.productoInventarioIdList') IS NULL
+    CREATE TYPE dbo.productoInventarioIdList AS TABLE (productoInventarioId INT);
 GO
 
 -- 2. Procedimiento T_EditarPromocion con formato solicitado
 CREATE PROCEDURE [dbo].T_EditarPromocion
 (
-    @idPromocion INT,
+    @promocionId INT,
     @nombre NVARCHAR(100),
     @porcentajeDescuento INT,
     @fechaInicio DATE,
     @fechaFin DATE,
-    @idProductoInventarioList dbo.ProductoInventarioIDList READONLY
+    @productoInventarioIdList dbo.productoInventarioIdList READONLY -- Usar el tipo de tabla correcto
 )
 AS
 BEGIN
@@ -241,7 +347,7 @@ BEGIN
 
     BEGIN TRY
         -- 1. Comparar y actualizar Promocion
-        IF EXISTS (SELECT 1 FROM Promocion WHERE id = @idPromocion AND (nombre <> @nombre OR porcentajeDescuento <> @porcentajeDescuento))
+        IF EXISTS (SELECT 1 FROM Promocion WHERE id = @promocionId AND (nombre <> @nombre OR porcentajeDescuento <> @porcentajeDescuento))
         BEGIN
             UPDATE 
                 Promocion
@@ -249,7 +355,7 @@ BEGIN
                 nombre = @nombre,
                 porcentajeDescuento = @porcentajeDescuento
             WHERE 
-                id = @idPromocion;
+                id = @promocionId;
         END
 
         -- 2. Comparar y actualizar PromocionVigencia
@@ -259,7 +365,7 @@ BEGIN
             FROM 
                 PromocionVigencia 
             WHERE 
-                promocionId = @idPromocion 
+                promocionId = @promocionId 
             AND 
                 (fechaInicio <> @fechaInicio OR fechaFin <> @fechaFin))
         BEGIN
@@ -269,7 +375,7 @@ BEGIN
                 fechaInicio = @fechaInicio,
                 fechaFin = @fechaFin
             WHERE 
-                promocionId = @idPromocion;
+                promocionId = @promocionId;
         END
 
         -- 3. Obtener los productos que actualmente tienen la promoción
@@ -281,25 +387,25 @@ BEGIN
         FROM 
             ProductoInventario 
         WHERE 
-            promocionId = @idPromocion;
+            promocionId = @promocionId;
 
         -- 4. Actualizar ProductoInventario según el arreglo proporcionado
 
-        -- Agregar idPromocion a los productos en el arreglo pero no en la tabla
+        -- Agregar promocionId a los productos en el arreglo pero no en la tabla
         UPDATE ProductoInventario
-        SET promocionId = @idPromocion
+        SET promocionId = @promocionId
         WHERE 
-            id IN (SELECT productoInventarioId FROM @idProductoInventarioList)
+            id IN (SELECT productoInventarioId FROM @productoInventarioIdList) -- Usar la variable correcta
         AND id NOT IN (SELECT productoInventarioId FROM @CurrentProductos);
 
-        -- Quitar idPromocion de los productos en la tabla pero no en el arreglo
+        -- Quitar promocionId de los productos en la tabla pero no en el arreglo
         UPDATE 
             ProductoInventario
         SET promocionId = NULL
         WHERE 
             id IN (SELECT productoInventarioId FROM @CurrentProductos)
         AND 
-            id NOT IN (SELECT productoInventarioId FROM @idProductoInventarioList);
+            id NOT IN (SELECT productoInventarioId FROM @productoInventarioIdList); -- Usar la variable correcta
 
         -- Confirmar la transacción
         COMMIT TRANSACTION;
@@ -317,7 +423,7 @@ GO
 
 CREATE PROCEDURE [dbo].T_FinalizarPromocion
 (
-    @idPromocion INT
+    @promocionId INT
 )
 AS
 BEGIN
@@ -325,25 +431,22 @@ BEGIN
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- 1. Eliminar idPromocion de los productos asociados en ProductoInventario
+        -- 1. Quitar el promocionId de los productos en ProductoInventario
         UPDATE ProductoInventario
         SET promocionId = NULL
-        WHERE promocionId = @idPromocion;
+        WHERE promocionId = @promocionId;
 
-        -- 2. Actualizar fechaFin en PromocionVigencia
+        -- 2. Actualizar la fecha de finalización en PromocionVigencia
         UPDATE PromocionVigencia
         SET fechaFin = DATEADD(DAY, -1, GETDATE())
-        WHERE promocionId = @idPromocion;
+        WHERE promocionId = @promocionId;
 
         -- Confirmar la transacción si todo es exitoso
         COMMIT TRANSACTION;
     END TRY
-
     BEGIN CATCH
         -- Si ocurre un error, deshacer la transacción
         ROLLBACK TRANSACTION;
-
-        -- Mostrar el error
         THROW;
     END CATCH;
 END;
@@ -355,7 +458,7 @@ BEGIN
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- Obtener todos los idPromocion cuya fechaFin ya pasó
+        -- Obtener todos los promocionId cuya fechaFin ya pasó
         DECLARE @PromocionesExpiradas TABLE (promocionId INT);
 
         INSERT INTO @PromocionesExpiradas (promocionId)
@@ -363,7 +466,7 @@ BEGIN
         FROM PromocionVigencia
         WHERE fechaFin < CAST(GETDATE() AS DATE);
 
-        -- Actualizar ProductoInventario removiendo los idPromocion expirados
+        -- Actualizar ProductoInventario removiendo los promocionId expirados
         UPDATE ProductoInventario
         SET promocionId = NULL
         WHERE promocionId IN (SELECT promocionId FROM @PromocionesExpiradas);

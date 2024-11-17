@@ -405,3 +405,4 @@ Hangman.Services/Utilities/DBConnection.cs
 appsettings.json
 DBTest/*.cs
 Migrations/
+SAMSContextModelSnapshot.cs

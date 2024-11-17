@@ -11,6 +11,12 @@ public class Venta
 
     public decimal iva { get; private set; }
 
+    public decimal totalEfectivo { get; set; }
+
+    public decimal totalTarjeta { get; set; }
+
+    public decimal totalMonedero { get; set; }
+
     public int cajaId { get; set; }
 
     public int monederoId { get; set; }
