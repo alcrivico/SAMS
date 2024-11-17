@@ -12,6 +12,6 @@ public class V_ProductoInventario
     public int cantidadExhibicion { get; set; }
 
     public decimal precioActual { get; set; }
-
+    //eliminar ubicacion
     public bool ubicacion { get; set; }
 }

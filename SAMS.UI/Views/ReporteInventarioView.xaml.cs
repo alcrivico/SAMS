@@ -44,35 +44,35 @@ public partial class ReporteInventarioView : Window
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Código de Barras" },
+                    { "Name", "Producto" },
                     { "Width", "*" },
-                    { "BindingName", "codigoDeBarras" }
+                    { "BindingName", "nombre" }
 
                 },
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Teléfono" },
+                    { "Name", "Bodega" },
                     { "Width", "*" },
-                    { "BindingName", "telefono" },
+                    { "BindingName", "cantidadBodega" },
 
                 },
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Nombre del Propietario" },
+                    { "Name", "Exhibicion" },
                     { "Width", "*" },
-                    { "BindingName", "nombrePropietario" }
+                    { "BindingName", "cantidadExhibicion" }
 
                 },
                 new Dictionary<string, string> {
 
-                    { "Type", "Actions" },
-                    { "Name", "Acciones" },
+                    { "Type", "Text" },
+                    { "Name", "Precio" },
                     { "Width", "*" },
+                    { "BindingName", "precioActual" }
 
                 }
-
             };
 
         TablaReporte.DefineColumns(columnas);
@@ -80,6 +80,11 @@ public partial class ReporteInventarioView : Window
     }
 
     private void TablaReporte_Loaded(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void Imprimir_ButtonControlClick(object sender, RoutedEventArgs e)
     {
 
     }
