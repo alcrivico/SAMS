@@ -8,18 +8,18 @@ using System.Windows.Input;
 namespace SAMS.UI.Views;
 
 /// <summary>
-/// Lógica de interacción para ReportePedidosView.xaml
+/// Lógica de interacción para ReporteVentasView.xaml
 /// </summary>
-public partial class ReportePedidosView : Window
+public partial class ReporteVentasView : Window
 {
-    List<ReportePedidoDTO> listaReportePedido;
+    List<ReporteVentaDTO> listaReporteVenta;
     ObservableCollection<Object> _reportes;
-    public ReportePedidosView()
+    public ReporteVentasView()
     {
         _reportes = new ObservableCollection<Object>();
         InitializeComponent();
         DefinirColumnas();
-        ObtenerPedidos();
+        ObtenerReporte();
     }
 
     private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -53,41 +53,41 @@ public partial class ReportePedidosView : Window
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "noPedido" },
+                    { "Name", "NoVenta" },
                     { "Width", "*" },
-                    { "BindingName", "noPedido" }
+                    { "BindingName", "noVenta" }
 
                 },
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Fecha del pedido" },
+                    { "Name", "Fecha" },
                     { "Width", "*" },
-                    { "BindingName", "fechaPedido" },
+                    { "BindingName", "fechaRegistro" },
 
                 },
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Fecha de entrega" },
+                    { "Name", "Total" },
                     { "Width", "*" },
-                    { "BindingName", "fechaEntrega" }
+                    { "BindingName", "total" }
 
                 },
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Proveedor" },
+                    { "Name", "Caja" },
                     { "Width", "*" },
-                    { "BindingName", "proveedor" }
+                    { "BindingName", "noCaja" }
 
                 },
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Costo" },
+                    { "Name", "Cajero" },
                     { "Width", "*" },
-                    { "BindingName", "costoTotalPedido" }
+                    { "BindingName", "nombre" }
 
                 }
             };
@@ -96,18 +96,18 @@ public partial class ReportePedidosView : Window
 
     }
 
-    private void ObtenerPedidos()
+    private void ObtenerReporte()
     {
         try
         {
-            listaReportePedido =ReportesDAO.ReportePedidos();
+            listaReporteVenta = ReportesDAO.ReporteVentas();
             _reportes.Clear();
-            _reportes = new ObservableCollection<Object>(listaReportePedido);
+            _reportes = new ObservableCollection<Object>(listaReporteVenta);
             TablaReporte.SetItemsSource(_reportes);
         }
         catch
         {
-            InformationControl.Show("Error", "Ocurrió un error al obtener Pedidos", "Aceptar");
+            InformationControl.Show("Error", "Ocurrió un error al obtener las ventas", "Aceptar");
 
             Close();
         }
@@ -115,26 +115,28 @@ public partial class ReportePedidosView : Window
 
     private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
     {
-        if (listaReportePedido != null)
-        {
-            var reporteFiltado = listaReportePedido.Where(
-            x => x.proveedor.ToLower().Contains(campoBuscar.Text.ToLower()) ||
-                 x.noPedido.ToString().Contains(campoBuscar.Text))
-            .ToList();
+            if (listaReporteVenta != null)
+            {
+                var reporteFiltado = listaReporteVenta.Where(
+                    x => 
+                    x.noCaja.ToLower().Contains(campoBuscar.Text.ToLower()) ||
+                    x.nombre.ToLower().Contains(campoBuscar.Text.ToLower()) ||
+                    x.noVenta.ToString().Contains(campoBuscar.Text))
+                    .ToList();
 
-            _reportes = new ObservableCollection<Object>(reporteFiltado);
+                _reportes = new ObservableCollection<Object>(reporteFiltado);
 
-            TablaReporte.SetItemsSource(_reportes);
+                TablaReporte.SetItemsSource(_reportes);
+            }
+            else
+            {
+                _reportes.Clear();
+
+                _reportes = new ObservableCollection<Object>(listaReporteVenta);
+
+                TablaReporte.SetItemsSource(_reportes);
+            }
         }
-        else
-        {
-            _reportes.Clear();
-
-            _reportes = new ObservableCollection<Object>(listaReportePedido);
-
-            TablaReporte.SetItemsSource(_reportes);
-        }
-    }
 
     private void Imprimir_ButtonControlClick(object sender, RoutedEventArgs e)
     {

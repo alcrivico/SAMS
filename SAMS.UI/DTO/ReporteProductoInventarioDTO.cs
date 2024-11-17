@@ -1,7 +1,7 @@
 ﻿#nullable disable
 namespace SAMS.UI.DTO;
 
-public class V_ProductoInventario
+public class ReporteProductoInventarioDTO
 {
     public int id { get; set; }
 

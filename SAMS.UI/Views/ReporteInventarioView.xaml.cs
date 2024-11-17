@@ -12,7 +12,7 @@ namespace SAMS.UI.Views;
 /// </summary>
 public partial class ReporteInventarioView : Window
 {
-    List<V_ProductoInventario> listaReporteInventario;
+    List<ReporteProductoInventarioDTO> listaReporteInventario;
     ObservableCollection<Object> _reportes;
     public ReporteInventarioView()
     {
