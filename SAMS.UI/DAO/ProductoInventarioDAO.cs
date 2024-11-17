@@ -12,5 +12,5 @@ public class ProductoInventarioDAO
 
     public ProductoInventarioDAO(SAMSContext context) => this.context = context;
 
-    public IEnumerable<V_ProductoInventario> VerProductoInventario() => context.V_ProductoInventario.ToList();
+    public IEnumerable<ReporteProductoInventarioDTO> VerProductoInventario() => context.V_ProductoInventario.ToList();
 }

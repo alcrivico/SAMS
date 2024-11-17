@@ -159,7 +159,7 @@ namespace SAMS.UI.Views
                         m =>
                         m.codigoDeBarras.Contains(campoBuscar.Text) ||
                         m.telefono.Contains(campoBuscar.Text) ||
-                        m.nombrePropietario.Contains(campoBuscar.Text)).ToList();
+                        m.nombrePropietario.ToUpper().Contains(campoBuscar.Text.ToUpper())).ToList();//ToUpper() para que no sea case sensitive
 
                     _monederos.Clear();
 
