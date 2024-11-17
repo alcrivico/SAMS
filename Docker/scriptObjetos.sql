@@ -29,7 +29,7 @@ CREATE VIEW V_Monedero AS
 SELECT
     m.nombre,
     m.apellidoPaterno,
-    m.apellidoMaterno,
+    m.apellidoMaterno,    
     m.telefono,
     m.saldo,
     m.codigoDeBarras
@@ -143,24 +143,6 @@ INNER JOIN
     Empleado e
     ON
     v.empleadoId = e.id
-GO
-
-CREATE VIEW V_Pedido AS
-SELECT 
-	pr.nombre,
-	p.NoPedido,
-	p.FechaPedido,
-	p.FechaEntrega
-FROM
-	Pedido p
-INNER JOIN
-	DetallePedido dp 
-	ON
-	p.id = dp.pedidoId
-INNER JOIN
-	Producto pr
-	ON
-	dp.productoId = pr.id
 GO
 
 CREATE VIEW V_Promocion AS
@@ -293,6 +275,47 @@ BEGIN
 		noCaja;
 
 	DROP TABLE #TempVentas;
+END;
+GO
+
+CREATE PROCEDURE [dbo].SP_ReportePedido
+    @fechaInicio DATE = NULL,
+    @fechaFin DATE = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Si no se especifican fechas, usar el rango de los últimos 3 meses
+    IF @fechaInicio IS NULL
+        SET @fechaInicio = DATEADD(MONTH, -3, GETDATE());
+
+    IF @fechaFin IS NULL
+        SET @fechaFin = GETDATE();
+
+    SELECT 
+        p.NoPedido,
+        p.FechaPedido,
+        p.FechaEntrega,
+        pv.nombre AS proveedor,
+        SUM(dp.cantidad * dp.precioCompra) AS costoTotalPedido
+    FROM
+        Pedido p
+    INNER JOIN
+        DetallePedido dp 
+        ON p.id = dp.pedidoId
+    INNER JOIN
+        Producto pr
+        ON dp.productoId = pr.id
+    INNER JOIN
+        Proveedor pv
+        ON pr.proveedorId = pv.id
+    WHERE 
+        p.FechaPedido BETWEEN @fechaInicio AND @fechaFin
+    GROUP BY 
+        p.NoPedido,
+        p.FechaPedido,
+        p.FechaEntrega,
+        pv.nombre;
 END;
 GO
 
