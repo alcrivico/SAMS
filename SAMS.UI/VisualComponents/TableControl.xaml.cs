@@ -126,6 +126,21 @@ namespace SAMS.UI.VisualComponents
                     factory.AddHandler(ActionsControl.EditarClickedEvent, new RoutedEventHandler((s, e) => OnEditarClickedHandler?.Invoke(s, e)));
                     factory.AddHandler(ActionsControl.EliminarClickedEvent, new RoutedEventHandler((s, e) => OnEliminarClickedHandler?.Invoke(s, e)));
 
+                    if (columns[i]["Detalles"] == "False")
+                    {
+                        factory.SetValue(ActionsControl.DetallesActivoProperty, false);
+                    }
+
+                    if (columns[i]["Editar"] == "False")
+                    {
+                        factory.SetValue(ActionsControl.EditarActivoProperty, false);
+                    }
+
+                    if (columns[i]["Eliminar"] == "False")
+                    {
+                        factory.SetValue(ActionsControl.EliminarActivoProperty, false);
+                    }
+
                     cellTemplate.VisualTree = factory;
                     dataGridTemplateColumn.CellTemplate = cellTemplate;
 

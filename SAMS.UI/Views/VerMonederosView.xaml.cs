@@ -1,7 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualBasic;
+using SAMS.UI.DAO;
+using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
 using SAMS.UI.Models.Entities;
+using SAMS.UI.VisualComponents;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,13 +31,13 @@ namespace SAMS.UI.Views
     public partial class VerMonederosView : Window
     {
 
-        private readonly SAMSContext _sams;
         Monedero _monedero;
+        List<MonederosDTO> listaMonederos;
         ObservableCollection<Object> _monederos;
 
         public VerMonederosView()
         {
-            _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
+
             _monedero = new Monedero();
             _monederos = new ObservableCollection<Object>();
 
@@ -41,7 +45,11 @@ namespace SAMS.UI.Views
 
             DefinirColumnas();
 
-            MonederosDAO();
+            ObtenerMonederos();
+
+            TablaMonederos.OnDetallesClickedHandler += botonDetallesClick;
+            TablaMonederos.OnEditarClickedHandler += botonEditarClick;
+            TablaMonederos.OnEliminarClickedHandler += botonEliminarClick;
 
         }
 
@@ -102,6 +110,9 @@ namespace SAMS.UI.Views
                     { "Type", "Actions" },
                     { "Name", "Acciones" },
                     { "Width", "*" },
+                    { "Detalles", "True" },
+                    { "Editar", "True" },
+                    { "Eliminar", "False" }
 
                 }
 
@@ -111,52 +122,94 @@ namespace SAMS.UI.Views
 
         }
 
-        private void MonederosDAO()
+        private void ObtenerMonederos()
         {
 
-            List<Monedero> listaMonederos = ObtenerMonederos();
-
-            _monederos.Clear();
-
-            _monederos = new ObservableCollection<Object>(listaMonederos);
-
-            TablaMonederos.SetItemsSource(_monederos);
-
-        }
-
-        private List<Monedero> ObtenerMonederos()
-        {
-
-            List<Monedero> monederos = new List<Monedero>();
-
-            var monederosData = from m in _sams.Monedero
-                                select new
-                                {
-                                    m.codigoDeBarras,
-                                    m.telefono,
-                                    m.saldo
-                                };
-
-            foreach (var monederoData in monederosData)
+            try
             {
 
-                Monedero monedero = new Monedero
-                {
-                    codigoDeBarras = monederoData.codigoDeBarras,
-                    telefono = monederoData.telefono
-                };
+                listaMonederos = MonederoDAO.ObtenerMonederos();
 
-                monedero.SetSaldo(monederoData.saldo);
+                _monederos.Clear();
 
-                monederos.Add(monedero);
-                monederos.Add(monedero);
+                _monederos = new ObservableCollection<Object>(listaMonederos);
+
+                TablaMonederos.SetItemsSource(_monederos);
+
+            }
+            catch (Exception ex)
+            {
+
+                InformationControl.Show("Error", "Ocurrió un error al obtener los monederos", "Aceptar");
+
+                this.Close();
 
             }
 
-            return monederos;
+        }
+
+        private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
+        {
+            if (listaMonederos != null)
+            {
+
+                if (campoBuscar.Text.Length > 0)
+                {
+                    var monederosFiltrados = listaMonederos.Where(
+                        m =>
+                        m.codigoDeBarras.Contains(campoBuscar.Text) ||
+                        m.telefono.Contains(campoBuscar.Text) ||
+                        m.nombrePropietario.ToUpper().Contains(campoBuscar.Text.ToUpper())).ToList();//ToUpper() para que no sea case sensitive
+
+                    _monederos.Clear();
+
+                    _monederos = new ObservableCollection<Object>(monederosFiltrados);
+
+                    TablaMonederos.SetItemsSource(_monederos);
+
+                }
+                else
+                {
+
+                    _monederos.Clear();
+
+                    _monederos = new ObservableCollection<Object>(listaMonederos);
+
+                    TablaMonederos.SetItemsSource(_monederos);
+
+                }
+
+            }
+
+        }
+
+        private void botonDetallesClick(object sender, RoutedEventArgs e)
+        {
+
+            ActionsControl actionBar = (ActionsControl) sender;
+            MonederosDTO monedero = (MonederosDTO) actionBar.DataContext;
+
+            ConsultarMonederoView consultarMonederoView = new ConsultarMonederoView(monedero);
+            consultarMonederoView.Show();
+
+        }
+
+        private void botonEditarClick(object sender, RoutedEventArgs e)
+        {
+
+            ActionsControl actionBar = (ActionsControl) sender;
+            MonederosDTO mondero = (MonederosDTO) actionBar.DataContext;
+
+        }
+
+        private void botonEliminarClick(object sender, RoutedEventArgs e)
+        {
+
+            ActionsControl actionBar = (ActionsControl) sender;
+            MonederosDTO monedero = (MonederosDTO) actionBar.DataContext;
 
         }
 
     }
-    
+
 }

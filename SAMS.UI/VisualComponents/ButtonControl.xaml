@@ -17,7 +17,7 @@
     mc:Ignorable="d">
 
     <Viewbox>
-        <Grid>
+        <Grid Width="{Binding ButtonWidth, ElementName=Button}">
             <Border
                 x:Name="Button_Border"
                 Background="{Binding ButtonBackgroundColor, ElementName=Button}"

@@ -59,8 +59,8 @@ public class PromocionDAO
 
         int result = await context.Database.ExecuteSqlRawAsync(
             @"EXEC [dbo].[T_EditarPromocion] 
-        @promocionId, @nombre, @porcentajeDescuento, 
-        @fechaInicio, @fechaFin, @productoInventarioIdList",
+            @promocionId, @nombre, @porcentajeDescuento, 
+            @fechaInicio, @fechaFin, @productoInventarioIdList",
             parameters);
 
         return result > 0;

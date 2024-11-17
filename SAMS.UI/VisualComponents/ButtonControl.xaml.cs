@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
