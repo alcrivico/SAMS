@@ -1,18 +1,23 @@
-﻿using SAMS.UI.DAO;
+﻿using Microsoft.EntityFrameworkCore;
+using SAMS.UI.DTO;
+using SAMS.UI.Models.DataContext;
+using System.Linq;
+using Xunit;
 
-namespace SAMS.Test.DBTest.DAO;
-
-public class ProductoInventarioDAOTest : SAMSContextTest
+namespace SAMS.Test.DBTest.DAO
 {
-    [Fact]
-    public void ConsultarProductoInventario()
+    public class ProductoInventarioDAOTest : SAMSContextTest
     {
-        using var context = GetContext();
-        var productoInventarioDao = new ProductoInventarioDAO(context);
+        [Fact]
+        public void OptenerProductosSinPromocion_DeberiaRetornarProductos()
+        {
+            using var context = GetContext();
 
-        var productoInventario = productoInventarioDao.VerProductoInventario();
+            var productos = context.V_ProductoInventarioPromocion.ToList();
 
-        Assert.NotNull(productoInventario);
-        Assert.True(productoInventario.Any(), "No se encontro inventario");
+            // Verificamos que no sea nulo y que haya productos
+            Assert.NotNull(productos);
+            Assert.True(productos.Any(), "No se encontraron productos sin promoción.");
+        }
     }
 }

@@ -31,6 +31,7 @@ public class SAMSContext : DbContext
     public DbSet<V_EmpleadoDetalle> V_EmpleadoDetalle { get; set; }
     public DbSet<V_Empleados> V_Empleados { get; set; }
     public DbSet<V_Producto> V_Producto { get; set; }
+    public DbSet<ProductoInventarioPromocionDTO> V_ProductoInventarioPromocion { get; set; }
     public DbSet<ReporteProductoInventarioDTO> V_ProductoInventario { get; set; }
     public DbSet<ReportePedidoDTO> V_ReportePedido { get; set; }
     public DbSet<ReporteVentaDTO> V_ReporteVenta { get; set; }
@@ -64,6 +65,9 @@ public class SAMSContext : DbContext
         modelBuilder.Entity<ReporteProductoInventarioDTO>()
             .HasNoKey()
             .ToView("V_ProductoInventario");
+        modelBuilder.Entity<ProductoInventarioPromocionDTO>()
+            .HasNoKey()
+            .ToView("V_ProductoInventarioPromocion");
         modelBuilder.Entity<ReportePedidoDTO>()
             .HasNoKey()
             .ToView("V_ReportePedido");

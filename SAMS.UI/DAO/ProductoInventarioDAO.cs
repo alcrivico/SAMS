@@ -1,16 +1,15 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
-using System.Data;
 
 namespace SAMS.UI.DAO;
 
 public class ProductoInventarioDAO
 {
-    private readonly SAMSContext context;
+    private static SAMSContext _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
 
-    public ProductoInventarioDAO(SAMSContext context) => this.context = context;
+    public static List<ProductoInventarioPromocionDTO> OptenerProductosSinPromocion() =>
+            _sams.V_ProductoInventarioPromocion.ToList();
 
-    public IEnumerable<ReporteProductoInventarioDTO> VerProductoInventario() => context.V_ProductoInventario.ToList();
 }

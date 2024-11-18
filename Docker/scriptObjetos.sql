@@ -1,14 +1,13 @@
 -- 1. index
 
 -- 2. vistas
-CREATE OR ALTER VIEW V_ProductoInventario AS
+CREATE VIEW V_ProductoInventario AS
 SELECT
     pi.id,
     pi.nombre,
     CAST(pi.cantidadBodega AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidadBodega,
     CAST(pi.cantidadExhibicion AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidadExhibicion,
-    pi.precioActual,
-    pi.ubicacion
+    pi.precioActual
 FROM 
     ProductoInventario pi
 LEFT JOIN 
