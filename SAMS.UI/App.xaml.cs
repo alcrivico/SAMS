@@ -29,9 +29,7 @@ namespace SAMS.UI
             ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider();
 
-
-
-            ReporteVentasView initialView = new();
+            VerProveedoresView initialView = new();
             initialView.Show();
 
         }

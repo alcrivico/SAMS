@@ -51,9 +51,9 @@
                         <!--  Employee debe ser una DependencyProperty que se pase por el constructor  -->
                         <!--  y que el actualiza en cuanto se cambia la propiedad y se asigna aquí  -->
                         <!--  como un binding  -->
-                        <components:SideBarControl Employee="Administrador" SideElementSelected="0" />
+                        <components:SideBarControl Grid.Column="0" Employee="Administrador" SideElementSelected="2" />
 
-                        <Grid Grid.Column="1">
+                        <Grid Grid.Column="1" Margin="30 0 30 0">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.1*" />
@@ -66,23 +66,73 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="0.1*" />
                                 </Grid.ColumnDefinitions>
-                                <!--    -->
-                                <!--  Aqui se encontraría la barra de título de la ventana con el Grid.Column="0"  -->
-                                <!--    -->
-                                <TextBlock Text="Proveedores" FontSize="24" FontFamily="{StaticResource Font_Nunito}" FontWeight="Bold" VerticalAlignment="Center" Margin="20 0 0 0"/>
+
+                                <Viewbox Grid.Column="0" HorizontalAlignment="Left">
+                                    <Grid>
+                                        <TextBlock
+                                            x:Name="UseCaseTitle"
+                                            Margin="0,12,12,12"
+                                            HorizontalAlignment="Left"
+                                            FontFamily="{StaticResource Font_Nunito}"
+                                            FontSize="24"
+                                            FontWeight="Bold"
+                                            Text="Proveedores" />
+                                    </Grid>
+                                </Viewbox>
 
                             </Grid>
-
-                            <Grid Grid.Row="1">
-                                
-                            </Grid>
-
-                            <Grid Grid.Row="2">
-                                
-                            </Grid>
-
                             
+                            <!--Grid para el espacio del contenido-->
+                            <Grid Name="Contenido" Grid.Row="1">
 
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.1*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!--Grid para boton Agregar y Buscar-->
+                                <Grid Grid.Row="0">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.75*" />
+                                        <ColumnDefinition Width="0.25*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Viewbox Grid.Column="0" HorizontalAlignment="Left">
+                                        <components:TextBoxControl
+                                            x:Name="campoBuscar"
+                                            Width="450"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            FieldName="Buscar proveedor:"
+                                            TextBoxControlTextChanged="campoBuscar_TextBoxControlTextChanged" />
+                                    </Viewbox>
+
+                                    <components:ButtonControl
+                                        Grid.Column="1"
+                                        Margin="0,6,0,6"
+                                        HorizontalAlignment="Right"
+                                        BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                                        ButtonBackgroundColor="Transparent"
+                                        ButtonBorderColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                        ButtonForegroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                        IsDropShadowEnabled="False"
+                                        Text="Agregar proveedor +" />
+
+                                </Grid>
+
+                                <!--Grid para la tabla-->
+                                <Grid Grid.Row="1">
+                                    <Viewbox>
+                                        <components:TableControl
+                                            x:Name="TablaProveedores"
+                                            Width="935"
+                                            Height="450" />
+                                    </Viewbox>
+                                </Grid>
+                                
+                            </Grid>
+                            
                         </Grid>
 
                     </Grid>
