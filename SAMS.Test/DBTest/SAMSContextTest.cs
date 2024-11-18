@@ -20,18 +20,18 @@ namespace SAMS.Test.DBTest
             services.AddDbContext<SAMSContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("SAMSDatabase"), sqlOptions =>
                     sqlOptions.EnableRetryOnFailure(
-                        maxRetryCount: 5, // Número máximo de reintentos
-                        maxRetryDelay: TimeSpan.FromSeconds(10), // Tiempo de espera entre reintentos
-                        errorNumbersToAdd: null) // Si se desean agregar errores específicos para reintentos
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorNumbersToAdd: null)
                 ));
 
             ServiceProvider = services.BuildServiceProvider();
         }
 
+        // Método para obtener un contexto
         protected SAMSContext GetContext()
         {
             return ServiceProvider.GetRequiredService<SAMSContext>();
         }
-
     }
 }

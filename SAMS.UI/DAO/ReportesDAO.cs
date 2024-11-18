@@ -17,7 +17,7 @@ public class ReportesDAO
 
         // Obtener el inicio y fin del día para la fecha proporcionada
         DateTime inicioDelDia = fechaRegistro.Value.Date;
-        DateTime finDelDia = fechaRegistro.Value.Date.AddDays(1).AddMilliseconds(-1);  // 23:59:59.9999999
+        DateTime finDelDia = fechaRegistro.Value.Date.AddDays(1).AddMilliseconds(-1);
 
         // Ejecutar la consulta sobre la vista con la fecha de ingreso proporcionada
         return _sams.Set<ReporteVentaDTO>()
