@@ -304,7 +304,7 @@
                                             FontSize="24"
                                             Text="Registrar" />
                                     </Grid>
-                                    <Grid Grid.Column="2" Margin="0,20,20,20">
+                                    <Grid Grid.Column="2" Margin="20,20,20,20">
                                         <components:ButtonControl
                                             x:Name="Button_Cancelar"
                                             HorizontalAlignment="Left"
