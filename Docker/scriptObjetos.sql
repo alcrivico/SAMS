@@ -259,6 +259,19 @@ HAVING
     SUM(d.cantidad * d.precioVenta) > 0;
 GO
 
+CREATE VIEW V_ProductoInventarioPromocion AS
+SELECT
+    pi.id,
+    pi.nombre,
+    CAST(pi.cantidadBodega + pi.cantidadExhibicion AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidad,
+    pi.esPerecedero,
+    pi.promocionId
+FROM
+    ProductoInventario pi
+LEFT JOIN
+    UnidadDeMedida um ON pi.unidadDeMedidaId = um.id;
+GO
+
 -- CU-01 iniciar Sesión
 CREATE VIEW V_EmpleadoLogin
 AS
