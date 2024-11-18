@@ -63,7 +63,7 @@ public partial class ReporteVentasView : Window
                     { "Type", "Text" },
                     { "Name", "Fecha" },
                     { "Width", "*" },
-                    { "BindingName", "fechaRegistro" },
+                    { "BindingName", "FechaRegistroFormateada" },
 
                 },
                 new Dictionary<string, string> {

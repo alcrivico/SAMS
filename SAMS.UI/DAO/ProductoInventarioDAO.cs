@@ -1,16 +1,30 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
-using System.Data;
 
 namespace SAMS.UI.DAO;
 
 public class ProductoInventarioDAO
 {
-    private readonly SAMSContext context;
+    private static SAMSContext _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
 
-    public ProductoInventarioDAO(SAMSContext context) => this.context = context;
+    public static List<ProductoInventarioPromocionDTO> OptenerProductosSinPromocion()
+    {
+        try
+        {
+            // Intenta obtener la lista de productos
+            return _sams.V_ProductoInventarioPromocion.ToList();
+        }
+        catch (Exception ex)
+        {
+            // Captura la excepción y escribe el error en la consola o en un log
+            Console.WriteLine("Error al obtener productos sin promoción: " + ex.Message);
+            Console.WriteLine("StackTrace: " + ex.StackTrace);
 
-    public IEnumerable<ReporteProductoInventarioDTO> VerProductoInventario() => context.V_ProductoInventario.ToList();
+            // Retorna una lista vacía en caso de error
+            return new List<ProductoInventarioPromocionDTO>();
+        }
+    }
+
 }

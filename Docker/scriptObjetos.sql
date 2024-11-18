@@ -1,14 +1,13 @@
 -- 1. index
 
 -- 2. vistas
-CREATE OR ALTER VIEW V_ProductoInventario AS
+CREATE VIEW V_ProductoInventario AS
 SELECT
     pi.id,
     pi.nombre,
     CAST(pi.cantidadBodega AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidadBodega,
     CAST(pi.cantidadExhibicion AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidadExhibicion,
-    pi.precioActual,
-    pi.ubicacion
+    pi.precioActual
 FROM 
     ProductoInventario pi
 LEFT JOIN 
@@ -259,6 +258,20 @@ GROUP BY
 HAVING 
     SUM(d.cantidad * d.precioVenta) > 0;
 GO
+
+CREATE VIEW V_ProductoInventarioPromocion AS
+SELECT
+    pi.id,
+    pi.nombre,
+    CAST(pi.cantidadBodega + pi.cantidadExhibicion AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidad,
+    pi.esPerecedero,
+    pi.promocionId
+FROM
+    ProductoInventario pi
+LEFT JOIN
+    UnidadDeMedida um ON pi.unidadDeMedidaId = um.id;
+GO
+
 -- 3. procedimientos almacenados
 -- funciones listas
 

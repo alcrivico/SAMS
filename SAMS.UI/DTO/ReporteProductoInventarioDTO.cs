@@ -12,6 +12,4 @@ public class ReporteProductoInventarioDTO
     public string cantidadExhibicion { get; set; }
 
     public decimal precioActual { get; set; }
-    //eliminar ubicacion
-    public bool ubicacion { get; set; }
 }
