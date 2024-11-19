@@ -59,35 +59,41 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <components:TextBoxControl 
-                                x:Name="campoRFC"
-                                Grid.Row="0"
-                                Width="400" 
-                                HorizontalAlignment="Left"
-                                FieldName="RFC"/>
-                            <components:TextBoxControl
-                                x:Name="campoNombre"
-                                Grid.Row="1"
-                                Width="440"
-                                HorizontalAlignment="Left"
-                                FieldName="Nombre"/>
-                            <components:TextBoxControl
-                                x:Name="campoCorreo"
-                                Grid.Row="2"
-                                Width="440"
-                                HorizontalAlignment="Left"
-                                FieldName="Correo electrónico"/>
-                            <components:TextBoxControl
-                                x:Name="campoTelefono"
-                                Grid.Row="3"
-                                HorizontalAlignment="Left"
-                                FieldName="Teléfono"/>
-                            <components:TextBoxControl
-                                x:Name="campoEstado"
-                                Grid.Row="4"
-                                Width="150"
-                                HorizontalAlignment="Left"
-                                FieldName="Estado"/>
+                            <Viewbox Grid.Row="0" Width="350" HorizontalAlignment="Left">
+                                <components:TextBoxControl 
+                                    x:Name="campoRFC"
+                                    Grid.Row="0"
+                                    Width="350" 
+                                    FieldName="RFC"/>
+                            </Viewbox>
+                            <Viewbox Grid.Row="1" Width="440" HorizontalAlignment="Left">
+                                <components:TextBoxControl
+                                    x:Name="campoNombre"
+                                    Grid.Row="1"
+                                    Width="440"
+                                    FieldName="Nombre"/>
+                            </Viewbox>
+                            <Viewbox Grid.Row="2" Width="440" HorizontalAlignment="Left">
+                                <components:TextBoxControl
+                                    x:Name="campoCorreo"
+                                    Grid.Row="2"
+                                    Width="440"
+                                    FieldName="Correo electrónico"/>
+                            </Viewbox>
+                            <Viewbox Grid.Row="3" Width="200" HorizontalAlignment="Left">
+                                <components:TextBoxControl
+                                    x:Name="campoTelefono"
+                                    Grid.Row="3"
+                                    Width="200"
+                                    FieldName="Teléfono"/>
+                            </Viewbox>
+                            <Viewbox Grid.Row="4" Width="150" HorizontalAlignment="Left">
+                                <components:TextBoxControl
+                                    x:Name="campoEstado"
+                                    Grid.Row="4"
+                                    Width="150"
+                                    FieldName="Estado"/>
+                            </Viewbox>
                         </Grid>
 
                         <!--Tabla de productos del proveedor-->
