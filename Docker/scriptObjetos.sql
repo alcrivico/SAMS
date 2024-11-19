@@ -165,10 +165,14 @@ CREATE VIEW V_Proveedores AS
 SELECT
     p.nombre,
     p.rfc,
-    p.estadoProveedor
+    CASE 
+        WHEN p.estadoProveedor = 1 THEN 'Activo'  -- Si es TRUE
+        ELSE 'Inactivo'                          -- Si es FALSE
+    END AS estadoProveedor
 FROM
-    Proveedor p
+    Proveedor p;
 GO
+
 
 CREATE VIEW V_Producto AS
 SELECT
