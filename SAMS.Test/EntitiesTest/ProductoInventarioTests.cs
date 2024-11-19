@@ -1,5 +1,4 @@
-﻿using SAMS.UI.Models.Entities;
-namespace SAMS.Test.EntitiesTest;
+﻿namespace SAMS.Test.EntitiesTest;
 
 public class ProductoInventarioTests
 {

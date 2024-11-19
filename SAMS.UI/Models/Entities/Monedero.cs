@@ -7,7 +7,7 @@ public class Monedero
 
     public string codigoDeBarras { get; set; }
 
-    public decimal saldo { get; private set; } 
+    public decimal saldo { get; private set; }
 
     public string telefono { get; set; }
 

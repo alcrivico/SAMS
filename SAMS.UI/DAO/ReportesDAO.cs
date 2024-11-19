@@ -42,10 +42,10 @@ public class ReportesDAO
             .FromSqlRaw("SELECT * FROM dbo.V_ReportePedido WHERE fechaPedido BETWEEN @fechaInicio AND @fechaFin",
                 new SqlParameter("@fechaInicio", fechaInicio ?? DateTime.Now.AddMonths(-3)),
                 new SqlParameter("@fechaFin", fechaFin ?? DateTime.Now))
-            .AsNoTracking() 
+            .AsNoTracking()
             .ToList();
     }
 
-    public static List<ReporteProductoInventarioDTO> ReporteInventario() => 
+    public static List<ReporteProductoInventarioDTO> ReporteInventario() =>
             _sams.V_ProductoInventario.ToList();
 }

@@ -1,21 +1,10 @@
 ﻿using SAMS.UI.DAO;
 using SAMS.UI.DTO;
 using SAMS.UI.VisualComponents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.TextFormatting;
-using System.Windows.Shapes;
 
 namespace SAMS.UI.Views
 {
@@ -100,8 +89,8 @@ namespace SAMS.UI.Views
             string password = PasswordBoxControl.PasswordText;
 
             // Validar correo
-            if (string.IsNullOrEmpty(email) 
-                    || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$") 
+            if (string.IsNullOrEmpty(email)
+                    || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$")
                     || email.Length < 5)
                 return false;
 
@@ -122,7 +111,8 @@ namespace SAMS.UI.Views
                 if (empleadoAutenticado == null)
                 {
                     MostrarMensajeErrorDatosInvalidos();
-                }else
+                }
+                else
                 {
                     PrincipalView principalView = new PrincipalView(empleadoAutenticado);
                     principalView.Show();

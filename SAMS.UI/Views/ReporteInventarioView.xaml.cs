@@ -112,7 +112,7 @@ public partial class ReporteInventarioView : Window
         {
             var reporteFiltado = listaReporteInventario.Where(
                 x => x.nombre.ToLower().Contains(campoBuscar.Text.ToLower())).ToList();
-            
+
             _reportes.Clear();
 
             _reportes = new ObservableCollection<Object>(reporteFiltado);

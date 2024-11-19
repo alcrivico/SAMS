@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SAMS.UI.DTO
+﻿namespace SAMS.UI.DTO
 {
     public class ProductoInventarioVentaDTO
     {
@@ -16,7 +10,7 @@ namespace SAMS.UI.DTO
         public decimal precio { get; set; }
 
         public int cantidadExhibicion { get; set; }
-        
+
         public string unidadDeMedida { get; set; }
 
         public string promocion { get; set; }

@@ -3,11 +3,6 @@ using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
 using SAMS.UI.Models.Entities;
 using SAMS.UI.VisualComponents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAMS.UI.DAO
 {

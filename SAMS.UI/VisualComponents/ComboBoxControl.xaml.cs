@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SAMS.UI.VisualComponents
 {
@@ -36,7 +25,7 @@ namespace SAMS.UI.VisualComponents
                                typeof(ComboBoxControl),
                                new PropertyMetadata(string.Empty));
 
-        public bool ListEnabled         
+        public bool ListEnabled
         {
             get { return (bool)GetValue(ListEnabledProperty); }
             set { SetValue(ListEnabledProperty, value); }
@@ -48,7 +37,7 @@ namespace SAMS.UI.VisualComponents
                 typeof(bool),
                 typeof(ComboBoxControl),
                 new PropertyMetadata(true));
-        
+
         public double ListOpacity
         {
             get { return (double)GetValue(ListOpacityProperty); }
@@ -119,9 +108,9 @@ namespace SAMS.UI.VisualComponents
 
         public static readonly RoutedEvent SelectedItemChangedEvent =
             EventManager.RegisterRoutedEvent(
-                nameof(SelectedItemChanged), 
-                RoutingStrategy.Bubble,                
-                typeof(RoutedEventHandler), 
+                nameof(SelectedItemChanged),
+                RoutingStrategy.Bubble,
+                typeof(RoutedEventHandler),
                 typeof(ComboBoxControl));
 
         public event RoutedEventHandler SelectedItemChanged

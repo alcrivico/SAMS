@@ -100,7 +100,7 @@ public partial class ReportePedidosView : Window
     {
         try
         {
-            listaReportePedido =ReportesDAO.ReportePedidos();
+            listaReportePedido = ReportesDAO.ReportePedidos();
             _reportes.Clear();
             _reportes = new ObservableCollection<Object>(listaReportePedido);
             TablaReporte.SetItemsSource(_reportes);

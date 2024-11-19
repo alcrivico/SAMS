@@ -13,5 +13,5 @@ public class Merma
 
     public int productoInventarioId { get; set; }
 
-    public  ProductoInventario productoInventario { get; set; }
+    public ProductoInventario productoInventario { get; set; }
 }

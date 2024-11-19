@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SAMS.UI.DTO;
-using SAMS.UI.Models.DataContext;
-using System.Linq;
-using Xunit;
-
-namespace SAMS.Test.DBTest.DAO
+﻿namespace SAMS.Test.DBTest.DAO
 {
     public class ProductoInventarioDAOTest : SAMSContextTest
     {

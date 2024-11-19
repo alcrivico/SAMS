@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SAMS.UI.VisualComponents
 {
@@ -23,9 +11,9 @@ namespace SAMS.UI.VisualComponents
     {
 
         public static readonly DependencyProperty DetallesActivoProperty = DependencyProperty.Register(
-            nameof(DetallesActivo), 
-            typeof(bool), 
-            typeof(ActionsControl), 
+            nameof(DetallesActivo),
+            typeof(bool),
+            typeof(ActionsControl),
             new PropertyMetadata(true, OnDetallesActivoChanged));
 
         public static readonly DependencyProperty EditarActivoProperty = DependencyProperty.Register(
@@ -83,7 +71,7 @@ namespace SAMS.UI.VisualComponents
 
         private void OnDetallesActivoChanged(bool newValue)
         {
-            
+
             BotonDetalle.IsEnabled = newValue;
             BotonDetalle.Opacity = newValue ? 1 : 0.5;
             TextDetalle.Opacity = newValue ? 1 : 0.5;
@@ -92,7 +80,7 @@ namespace SAMS.UI.VisualComponents
 
         private void OnEditarActivoChanged(bool newValue)
         {
-            
+
             BotonDetalle.IsEnabled = newValue;
             BotonDetalle.Opacity = newValue ? 1 : 0.5;
             TextDetalle.Opacity = newValue ? 1 : 0.5;
@@ -101,7 +89,7 @@ namespace SAMS.UI.VisualComponents
 
         private void OnEliminarActivoChanged(bool newValue)
         {
-            
+
             BotonEliminar.IsEnabled = newValue;
             BotonEliminar.Opacity = newValue ? 1 : 0.5;
             TextEliminar.Opacity = newValue ? 1 : 0.5;
@@ -110,16 +98,16 @@ namespace SAMS.UI.VisualComponents
 
         public static readonly RoutedEvent DetallesClickedEvent =
             EventManager.RegisterRoutedEvent(
-                nameof(DetallesClicked), 
-                RoutingStrategy.Bubble, 
-                typeof(RoutedEventHandler), 
+                nameof(DetallesClicked),
+                RoutingStrategy.Bubble,
+                typeof(RoutedEventHandler),
                 typeof(ActionsControl));
 
         public static readonly RoutedEvent EditarClickedEvent =
             EventManager.RegisterRoutedEvent(
-                nameof(EditarClicked), 
-                RoutingStrategy.Bubble, 
-                typeof(RoutedEventHandler), 
+                nameof(EditarClicked),
+                RoutingStrategy.Bubble,
+                typeof(RoutedEventHandler),
                 typeof(ActionsControl));
 
         public static readonly RoutedEvent EliminarClickedEvent =

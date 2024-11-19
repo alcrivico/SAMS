@@ -1,19 +1,8 @@
 ﻿using SAMS.UI.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
 
 namespace SAMS.UI.VisualComponents
 {
@@ -72,7 +61,7 @@ namespace SAMS.UI.VisualComponents
             switch (Employee)
             {
                 case "Administrador":
-                    
+
                     if (SideElementSelected == 1)
                     {
                         SetElement(
@@ -705,7 +694,7 @@ namespace SAMS.UI.VisualComponents
         {
 
             if (SideElementSelected != 1)
-            { 
+            {
                 SideElement1.ElementBorder.BorderBrush = (Brush)FindResource("SolidColorBrush_DodgerBlue");
                 SideElement1.ElementBorder.BorderThickness = new Thickness(3);
             }
@@ -715,7 +704,7 @@ namespace SAMS.UI.VisualComponents
 
         private void SideElement1_MouseLeave(object sender, MouseEventArgs e)
         {
-            
+
             if (SideElementSelected != 1)
             {
                 SideElement1.ElementBorder.BorderThickness = new Thickness(0);
@@ -900,7 +889,7 @@ namespace SAMS.UI.VisualComponents
         private void SideElement1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            SideElementControl element = (SideElementControl) sender;
+            SideElementControl element = (SideElementControl)sender;
 
             switch (Employee)
             {
@@ -921,7 +910,7 @@ namespace SAMS.UI.VisualComponents
         private void SideElement2_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            SideElementControl element = (SideElementControl) sender;
+            SideElementControl element = (SideElementControl)sender;
 
             switch (Employee)
             {
@@ -942,7 +931,7 @@ namespace SAMS.UI.VisualComponents
         private void SideElement3_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            SideElementControl element = (SideElementControl) sender;
+            SideElementControl element = (SideElementControl)sender;
 
             switch (Employee)
             {
@@ -961,7 +950,7 @@ namespace SAMS.UI.VisualComponents
         private void SideElement4_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            SideElementControl element = (SideElementControl) sender;
+            SideElementControl element = (SideElementControl)sender;
 
             switch (Employee)
             {
@@ -980,7 +969,7 @@ namespace SAMS.UI.VisualComponents
         private void SideElement5_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            SideElementControl element = (SideElementControl) sender;
+            SideElementControl element = (SideElementControl)sender;
 
             switch (Employee)
             {
@@ -997,7 +986,7 @@ namespace SAMS.UI.VisualComponents
         private void SideElement6_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            SideElementControl element = (SideElementControl) sender;
+            SideElementControl element = (SideElementControl)sender;
 
             switch (Employee)
             {

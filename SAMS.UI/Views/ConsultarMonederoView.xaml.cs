@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using SAMS.UI.DAO;
 using SAMS.UI.DTO;
-using SAMS.UI.DAO;
 using SAMS.UI.VisualComponents;
+using System.Windows;
 
 namespace SAMS.UI.Views
 {
@@ -42,7 +30,7 @@ namespace SAMS.UI.Views
 
         private void CargarDatos(MonederosDTO monedero)
         {
-            
+
             try
             {
 

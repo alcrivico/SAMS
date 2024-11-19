@@ -1,9 +1,9 @@
-﻿using System.Windows;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SAMS.UI.Models.DataContext;
 using SAMS.UI.Views;
+using System.Windows;
 
 namespace SAMS.UI
 {
