@@ -162,7 +162,11 @@ namespace SAMS.UI.Views
 
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
-            Debug.Print("Detalles");
+            //ActionsControl actionBar = (ActionsControl)sender;
+            //MonederosDTO monedero = (MonederosDTO)actionBar.DataContext;
+
+            DetalleProveedorView detalleProveedorView = new DetalleProveedorView();
+            detalleProveedorView.Show();
         }
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
