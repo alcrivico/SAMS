@@ -1,8 +1,12 @@
 ﻿using SAMS.UI.DTO;
+using SAMS.UI.VisualComponents;
+using System.Globalization;
+using System.Resources;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SAMS.UI.Views
 {
@@ -95,11 +99,19 @@ namespace SAMS.UI.Views
 
         private void CerrarSesionLogo_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            bool result = ConfirmationControl.Show(
+                "Confirmación",
+                "¿Estás seguro de cerrar sesión?",
+                "Aceptar",
+                "Cancelar"
+            );
 
-            IniciarSesionView iniciarSesionView = new IniciarSesionView();
-
-            iniciarSesionView.Show();
-            this.Close();
+            if (result)
+            {
+                IniciarSesionView iniciarSesionView = new IniciarSesionView();
+                iniciarSesionView.Show();
+                this.Close();
+            }
 
         }
 

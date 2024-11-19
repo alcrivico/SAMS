@@ -39,7 +39,6 @@ namespace SAMS.UI.DAO
             // Comparar la contraseña hasheada con la almacenada en la base de datos
             if (empleadoData.PasswordHash != contraseñaHasheada)
             {
-                InformationControl.Show("Autenticación Fallida", "La contraseña" + contraseñaHasheada, "Aceptar");
                 return null;
             }
 
