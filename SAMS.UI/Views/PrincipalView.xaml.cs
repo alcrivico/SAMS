@@ -1,4 +1,6 @@
-﻿using SAMS.UI.VisualComponents;
+﻿using SAMS.UI.DTO;
+using SAMS.UI.Models.Entities;
+using SAMS.UI.VisualComponents;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,10 +26,20 @@ namespace SAMS.UI.Views
     /// </summary>
     public partial class PrincipalView : Window
     {
+        private EmpleadoLoginDTO empleado;
 
+        //Este constructor no deberia existir
         public PrincipalView()
         {
             InitializeComponent();
+        }
+
+        public PrincipalView(EmpleadoLoginDTO empleado)
+        {
+            InitializeComponent();
+            this.empleado = empleado;
+            //SideBarControl_MenuLateral.Employee = empleado.TipoEmpleado;
+            SideBarControl_MenuLateral.Employee = "Administrador";
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

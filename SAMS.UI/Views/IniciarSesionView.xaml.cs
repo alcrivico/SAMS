@@ -124,9 +124,10 @@ namespace SAMS.UI.Views
                     MostrarMensajeErrorDatosInvalidos();
                 }else
                 {
-                    InformationControl.Show("Autenticación Exitosa", 
-                        $"Bienvenido, {empleadoAutenticado.NombreEmpleado} " +
-                        $"{empleadoAutenticado.ApellidoPaterno}.", "Aceptar");
+                    PrincipalView principalView = new PrincipalView(empleadoAutenticado);
+                    principalView.Show();
+                    this.Close();
+
                 }
 
             }
