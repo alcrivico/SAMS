@@ -133,7 +133,7 @@
                                 </Grid>
 
                                 <Border
-                                    x:Name="AlertBorder"
+                                    x:Name="AlertaBorder"
                                     Grid.Row="3"
                                     Width="280"
                                     Height="30"
@@ -141,10 +141,9 @@
                                     Background="{StaticResource SolidColorBrush_Gold}"
                                     BorderThickness="0"
                                     CornerRadius="10"
-                                    Visibility="Visible">
+                                    Visibility="Hidden">
                                     <TextBlock
-                                        x:Name="AlertTextBlock"
-                                        Margin="1"
+                                        x:Name="AlertTextBlock_Alerta"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Background="Transparent"
@@ -153,7 +152,8 @@
                                         FontWeight="Bold"
                                         Foreground="{StaticResource SolidColorBrush_EerieBlack}"
                                         Text="Correo y/o contraseña incorrectos. Por favor, verifíquelos."
-                                        TextAlignment="Center" />
+                                        TextAlignment="Center"
+                                        TextWrapping="Wrap" />
                                 </Border>
 
                                 <Grid Grid.Row="4">

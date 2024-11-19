@@ -31,7 +31,7 @@ namespace SAMS.UI
 
 
 
-            RegistrarProductoView initialView = new();
+            IniciarSesionView initialView = new();
             initialView.Show();
 
         }

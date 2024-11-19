@@ -42,11 +42,14 @@ public class Empleado
     {
         using (SHA256 sha256 = SHA256.Create())
         {
-            byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            StringBuilder builder = new StringBuilder();
+            // Usa Encoding.Unicode para asegurar compatibilidad con SQL Server
+            byte[] bytes = sha256.ComputeHash(Encoding.Unicode.GetBytes(password));
+
+            // Convierte a formato hexadecimal con prefijo '0x' y en mayúsculas
+            StringBuilder builder = new StringBuilder("0x");
             foreach (byte b in bytes)
             {
-                builder.Append(b.ToString("x2")); // Convierte a hexadecimal
+                builder.Append(b.ToString("X2")); // Hexadecimal en mayúsculas
             }
             return builder.ToString();
         }
