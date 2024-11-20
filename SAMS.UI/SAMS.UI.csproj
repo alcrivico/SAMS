@@ -12,6 +12,12 @@
     <None Remove="Resources\Fonts\Nunito\Nunito-Italic-VariableFont_wght.ttf" />
     <None Remove="Resources\Fonts\Nunito\Nunito-VariableFont_wght.ttf" />
     <None Remove="Resources\Images\LogoMensajesAyuda.png" />
+    <None Remove="Resources\Images\PrincipalAdministrador.png" />
+    <None Remove="Resources\Images\PrincipalCajero.png" />
+    <None Remove="Resources\Images\PrincipalContador.png" />
+    <None Remove="Resources\Images\PrincipalPaqueteria.png" />
+    <None Remove="Resources\Images\SAMSIsotype.ico" />
+    <None Remove="Resources\Images\SAMS_Isotype.ico" />
     <None Remove="Resources\Images\Tienda.png" />
   </ItemGroup>
   
@@ -38,6 +44,11 @@
     <Resource Include="Resources\Fonts\Nunito\Nunito-Italic-VariableFont_wght.ttf" />
     <Resource Include="Resources\Fonts\Nunito\Nunito-VariableFont_wght.ttf" />
     <Resource Include="Resources\Images\LogoMensajesAyuda.png" />
+    <Resource Include="Resources\Images\PrincipalAdministrador.png" />
+    <Resource Include="Resources\Images\PrincipalCajero.png" />
+    <Resource Include="Resources\Images\PrincipalContador.png" />
+    <Resource Include="Resources\Images\PrincipalPaqueteria.png" />
+    <Resource Include="Resources\Images\SAMSIsotype.ico" />
     <Resource Include="Resources\Images\Tienda.png" />
   </ItemGroup>
   

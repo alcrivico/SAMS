@@ -12,6 +12,7 @@
     <Color x:Key="Color_EerieBlack">#1E1E1E</Color>
     <Color x:Key="Color_Gold">#FFD500</Color>
     <Color x:Key="Color_Red">#FF0000</Color>
+    <Color x:Key="Color_RustyRed">#D52C40</Color>
 
     <SolidColorBrush x:Key="SolidColorBrush_White" Color="{StaticResource Color_White}" />
     <SolidColorBrush x:Key="SolidColorBrush_AntiFlashWhite" Color="{StaticResource Color_AntiFlashWhite}" />
@@ -25,5 +26,6 @@
     <SolidColorBrush x:Key="SolidColorBrush_EerieBlack" Color="{StaticResource Color_EerieBlack}" />
     <SolidColorBrush x:Key="SolidColorBrush_Gold" Color="{StaticResource Color_Gold}" />
     <SolidColorBrush x:Key="SolidColorBrush_Red" Color="{StaticResource Color_Red}" />
+    <SolidColorBrush x:Key="SolidColorBrush_RustyRed" Color="{StaticResource Color_RustyRed}" />
 
 </ResourceDictionary>

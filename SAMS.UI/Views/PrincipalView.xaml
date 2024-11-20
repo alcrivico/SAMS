@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:SAMS.UI.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Bienvenid@"
+    Title="SAMS-Bienvenid@"
     Width="1280"
     Height="720"
     MinWidth="800"
@@ -51,8 +51,7 @@
                         <!--  Employee debe ser una DependencyProperty que se pase por el constructor  -->
                         <!--  y que el actualiza en cuanto se cambia la propiedad y se asigna aquí  -->
                         <!--  como un binding  -->
-                        <components:SideBarControl Employee="Administrador" SideElementSelected="0" />
-
+                        <Grid x:Name="MenuLateral" />
                         <Grid Grid.Column="1">
 
                             <Grid.RowDefinitions>
@@ -92,7 +91,42 @@
 
                             </Grid>
 
-                            <Grid Name="Contenido" Grid.Row="1" />
+                            <Grid Name="Contenido" Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.2*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Viewbox
+                                    Grid.Row="0"
+                                    Margin="90,90,90,90"
+                                    HorizontalAlignment="Left">
+                                    <TextBlock
+                                        x:Name="TextBlock_MensajeBienvenida"
+                                        Width="105"
+                                        Height="57"
+                                        VerticalAlignment="Center"
+                                        FontFamily="{StaticResource Font_Nunito}"
+                                        FontSize="14"
+                                        FontWeight="Bold"
+                                        Foreground="{StaticResource SolidColorBrush_EerieBlack}"
+                                        Text="Bienvenid@ Raul Hernandez olivares"
+                                        TextAlignment="Center"
+                                        TextWrapping="Wrap" />
+                                </Viewbox>
+                                <Border
+                                    x:Name="Hangman"
+                                    Grid.Column="1"
+                                    Margin="0,0,20,0">
+                                    <Viewbox>
+                                        <Image
+                                            x:Name="ViewBox_ImagenPrincipal"
+                                            Width="610"
+                                            Height="500"
+                                            Margin="0,0,0,30"
+                                            Source="../Resources/Images/PrincipalAdministrador.png" />
+                                    </Viewbox>
+                                </Border>
+                            </Grid>
 
                         </Grid>
 

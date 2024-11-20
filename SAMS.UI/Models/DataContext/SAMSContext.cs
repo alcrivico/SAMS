@@ -31,6 +31,7 @@ public class SAMSContext : DbContext
     public DbSet<V_EmpleadoDetalle> V_EmpleadoDetalle { get; set; }
     public DbSet<V_Empleados> V_Empleados { get; set; }
     public DbSet<V_Producto> V_Producto { get; set; }
+    public DbSet<ProductoInventarioPromocionDTO> V_ProductoInventarioPromocion { get; set; }
     public DbSet<ReporteProductoInventarioDTO> V_ProductoInventario { get; set; }
     public DbSet<ReportePedidoDTO> V_ReportePedido { get; set; }
     public DbSet<ReporteVentaDTO> V_ReporteVenta { get; set; }
@@ -43,6 +44,12 @@ public class SAMSContext : DbContext
     public DbSet<ProductoInventarioVentaDTO> V_ProductoInventarioVenta { get; set; }
     public DbSet<VentasDTO> V_Ventas { get; set; }
     public DbSet<DetalleVentasDTO> V_DetalleVentas { get; set; }
+    public DbSet<EmpleadoLoginDTO> V_EmpleadoLogin { get; set; }
+    public DbSet<PedidosPendientesDTO> V_PedidosPendientes { get; set; }
+    public DbSet<ProductosRegistradosDTO> V_ProductosRegistrados { get; set; }
+    public DbSet<DetalleProductoDTO> V_DetalleProducto { get; set; }
+    
+
 
     // Configurar las vistas como una entidad sin clave
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -62,6 +69,9 @@ public class SAMSContext : DbContext
         modelBuilder.Entity<ReporteProductoInventarioDTO>()
             .HasNoKey()
             .ToView("V_ProductoInventario");
+        modelBuilder.Entity<ProductoInventarioPromocionDTO>()
+            .HasNoKey()
+            .ToView("V_ProductoInventarioPromocion");
         modelBuilder.Entity<ReportePedidoDTO>()
             .HasNoKey()
             .ToView("V_ReportePedido");
@@ -95,6 +105,19 @@ public class SAMSContext : DbContext
         modelBuilder.Entity<DetalleVentasDTO>()
             .HasNoKey()
             .ToView("V_DetalleVentas");
+        modelBuilder.Entity<PedidosPendientesDTO>()
+            .HasNoKey()
+            .ToView("V_PedidosPendientes");
+        modelBuilder.Entity<EmpleadoLoginDTO>()
+            .HasNoKey()
+            .ToView("V_EmpleadoLogin");
+        modelBuilder.Entity<ProductosRegistradosDTO>()
+            .HasNoKey()
+            .ToView("V_ProductosRegistrados");
+        modelBuilder.Entity<DetalleProductoDTO>()
+            .HasNoKey()
+            .ToView("V_DetalleProducto");
+
 
         base.OnModelCreating(modelBuilder);
     }

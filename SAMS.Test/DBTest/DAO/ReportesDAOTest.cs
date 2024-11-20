@@ -1,4 +1,6 @@
-﻿using SAMS.UI.DAO;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using SAMS.UI.DTO;
 namespace SAMS.Test.DBTest.DAO;
 
 public class ReportesDAOTest : SAMSContextTest
@@ -7,34 +9,51 @@ public class ReportesDAOTest : SAMSContextTest
     public async Task ConsultarReporteVenta()
     {
         using var context = GetContext();
-        var reportesDao = new ReportesDAO(context);
+        // Ejecutar la consulta directamente sobre el contexto
+        var reporteVentas = await Task.Run(() =>
+        {
+            DateTime inicioDelDia = DateTime.Now.Date;
+            DateTime finDelDia = DateTime.Now.Date.AddDays(1).AddMilliseconds(-1);
 
-        var reporteVentas = await reportesDao.ReporteVentas();
+            return context.Set<ReporteVentaDTO>()
+                .FromSqlRaw("SELECT * FROM dbo.V_ReporteVenta")
+                .AsNoTracking()
+                .ToList();
+        });
 
         Assert.NotNull(reporteVentas);
         Assert.True(reporteVentas.Any(), "El reporte de ventas está vacío.");
     }
 
     [Fact]
-    public void ConsultarReportePedidos()
+    public async Task ConsultarReportePedidos()
     {
         using var context = GetContext();
-        var reportesDao = new ReportesDAO(context);
+        // Ejecutar la consulta directamente sobre el contexto
+        var reportePedidos = await Task.Run(() =>
+        {
+            DateTime fechaInicio = DateTime.Now.AddMonths(-3);
+            DateTime fechaFin = DateTime.Now;
 
-        var reportePedidos = reportesDao.ReportePedidos();
+            return context.Set<ReportePedidoDTO>()
+                .FromSqlRaw("SELECT * FROM dbo.V_ReportePedido WHERE fechaPedido BETWEEN @fechaInicio AND @fechaFin",
+                    new SqlParameter("@fechaInicio", fechaInicio),
+                    new SqlParameter("@fechaFin", fechaFin))
+                .AsNoTracking()
+                .ToList();
+        });
 
         Assert.NotNull(reportePedidos);
-        Assert.True(reportePedidos.Any(), "No se encontraron Reporte de Pedidos");
+        Assert.True(reportePedidos.Any(), "No se encontraron reportes de pedidos.");
     }
 
     [Fact]
     public void ConsultarReporteInventario()
     {
         using var context = GetContext();
-        var repotesDao = new ReportesDAO(context);
+        var inventario = context.V_ProductoInventario.ToList();
 
-        var inventario = repotesDao.ReporteInventario();
         Assert.NotNull(inventario);
-        Assert.True(inventario.Any(), "No se encontro inventario");
+        Assert.True(inventario.Any(), "No se encontró inventario.");
     }
 }

@@ -63,7 +63,7 @@ public partial class ReporteVentasView : Window
                     { "Type", "Text" },
                     { "Name", "Fecha" },
                     { "Width", "*" },
-                    { "BindingName", "fechaRegistro" },
+                    { "BindingName", "FechaRegistroFormateada" },
 
                 },
                 new Dictionary<string, string> {
@@ -115,28 +115,28 @@ public partial class ReporteVentasView : Window
 
     private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
     {
-            if (listaReporteVenta != null)
-            {
-                var reporteFiltado = listaReporteVenta.Where(
-                    x => 
-                    x.noCaja.ToLower().Contains(campoBuscar.Text.ToLower()) ||
-                    x.nombre.ToLower().Contains(campoBuscar.Text.ToLower()) ||
-                    x.noVenta.ToString().Contains(campoBuscar.Text))
-                    .ToList();
+        if (listaReporteVenta != null)
+        {
+            var reporteFiltado = listaReporteVenta.Where(
+                x =>
+                x.noCaja.ToLower().Contains(campoBuscar.Text.ToLower()) ||
+                x.nombre.ToLower().Contains(campoBuscar.Text.ToLower()) ||
+                x.noVenta.ToString().Contains(campoBuscar.Text))
+                .ToList();
 
-                _reportes = new ObservableCollection<Object>(reporteFiltado);
+            _reportes = new ObservableCollection<Object>(reporteFiltado);
 
-                TablaReporte.SetItemsSource(_reportes);
-            }
-            else
-            {
-                _reportes.Clear();
-
-                _reportes = new ObservableCollection<Object>(listaReporteVenta);
-
-                TablaReporte.SetItemsSource(_reportes);
-            }
+            TablaReporte.SetItemsSource(_reportes);
         }
+        else
+        {
+            _reportes.Clear();
+
+            _reportes = new ObservableCollection<Object>(listaReporteVenta);
+
+            TablaReporte.SetItemsSource(_reportes);
+        }
+    }
 
     private void Imprimir_ButtonControlClick(object sender, RoutedEventArgs e)
     {

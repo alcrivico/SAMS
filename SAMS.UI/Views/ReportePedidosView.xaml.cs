@@ -63,7 +63,7 @@ public partial class ReportePedidosView : Window
                     { "Type", "Text" },
                     { "Name", "Fecha del pedido" },
                     { "Width", "*" },
-                    { "BindingName", "fechaPedido" },
+                    { "BindingName", "FechaPedidoFormateada" },
 
                 },
                 new Dictionary<string, string> {
@@ -71,7 +71,7 @@ public partial class ReportePedidosView : Window
                     { "Type", "Text" },
                     { "Name", "Fecha de entrega" },
                     { "Width", "*" },
-                    { "BindingName", "fechaEntrega" }
+                    { "BindingName", "FechaEntregaFormateada" }
 
                 },
                 new Dictionary<string, string> {
@@ -100,7 +100,7 @@ public partial class ReportePedidosView : Window
     {
         try
         {
-            listaReportePedido =ReportesDAO.ReportePedidos();
+            listaReportePedido = ReportesDAO.ReportePedidos();
             _reportes.Clear();
             _reportes = new ObservableCollection<Object>(listaReportePedido);
             TablaReporte.SetItemsSource(_reportes);

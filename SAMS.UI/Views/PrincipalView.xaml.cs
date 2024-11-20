@@ -1,21 +1,12 @@
-﻿using SAMS.UI.VisualComponents;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using SAMS.UI.DTO;
+using SAMS.UI.VisualComponents;
 using System.Globalization;
-using System.Linq;
 using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SAMS.UI.Views
 {
@@ -24,10 +15,29 @@ namespace SAMS.UI.Views
     /// </summary>
     public partial class PrincipalView : Window
     {
+        private EmpleadoLoginDTO empleado;
+        private SideBarControl SideBarControl_MenuLateral;
 
+        //Este constructor no deberia existir
         public PrincipalView()
         {
             InitializeComponent();
+        }
+
+        public PrincipalView(EmpleadoLoginDTO empleado)
+        {
+            InitializeComponent();
+            this.empleado = empleado;
+            
+            
+            SideBarControl_MenuLateral = new SideBarControl(empleado);
+            MenuLateral.Children.Add(SideBarControl_MenuLateral);  
+            SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
+            TextBlock_MensajeBienvenida.Text = "Bienvenid@, "
+                    + empleado.nombreEmpleado + " "
+                    + empleado.apellidoPaterno + " "
+                    + empleado.apellidoMaterno;
+            CargarImagenPrincipal();
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -69,14 +79,49 @@ namespace SAMS.UI.Views
 
         private void CerrarSesionLogo_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            bool result = ConfirmationControl.Show(
+                "Confirmación",
+                "¿Estás seguro de cerrar sesión?",
+                "Aceptar",
+                "Cancelar"
+            );
 
-            IniciarSesionView iniciarSesionView = new IniciarSesionView();
-
-            iniciarSesionView.Show();
-            this.Close();
+            if (result)
+            {
+                IniciarSesionView iniciarSesionView = new IniciarSesionView();
+                iniciarSesionView.Show();
+                this.Close();
+            }
 
         }
 
+        private void CargarImagenPrincipal()
+        {
+            if (SideBarControl_MenuLateral.Employee == "Administrador")
+            {
+                ViewBox_ImagenPrincipal.Source = new BitmapImage(
+                        new Uri("../Resources/Images/PrincipalAdministrador.png",
+                        UriKind.RelativeOrAbsolute));
+            }
+            else if (SideBarControl_MenuLateral.Employee == "Cajero")
+            {
+                ViewBox_ImagenPrincipal.Source = new BitmapImage(
+                        new Uri("../Resources/Images/PrincipalCajero.png",
+                        UriKind.RelativeOrAbsolute));
+            }
+            else if (SideBarControl_MenuLateral.Employee == "Paqueteria")
+            {
+                ViewBox_ImagenPrincipal.Source = new BitmapImage(
+                        new Uri("../Resources/Images/PrincipalPaqueteria.png",
+                        UriKind.RelativeOrAbsolute));
+            }
+            else if (SideBarControl_MenuLateral.Employee == "Contador")
+            {
+                ViewBox_ImagenPrincipal.Source = new BitmapImage(
+                        new Uri("../Resources/Images/PrincipalContador.png",
+                        UriKind.RelativeOrAbsolute));
+            }
+        }
     }
 
 }

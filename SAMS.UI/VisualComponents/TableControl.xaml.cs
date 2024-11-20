@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SAMS.UI.VisualComponents
 {
@@ -29,12 +19,12 @@ namespace SAMS.UI.VisualComponents
 
         public static readonly RoutedEvent SelectedItemChangedEvent =
             EventManager.RegisterRoutedEvent(
-                nameof(SelectedItemChanged), 
-                RoutingStrategy.Bubble,                          
-                typeof(RoutedEventHandler), 
+                nameof(SelectedItemChanged),
+                RoutingStrategy.Bubble,
+                typeof(RoutedEventHandler),
                 typeof(TableControl));
 
-        public event RoutedEventHandler SelectedItemChanged 
+        public event RoutedEventHandler SelectedItemChanged
         {
             add { AddHandler(SelectedItemChangedEvent, value); }
             remove { RemoveHandler(SelectedItemChangedEvent, value); }
@@ -110,7 +100,8 @@ namespace SAMS.UI.VisualComponents
                         dataGridTemplateColumn.HeaderStyle = FindResource("GeneralColumnHeader") as Style;
                         dataGridTemplateColumn.CellStyle = FindResource("GeneralCell") as Style;
                     }
-                    if (ColumnWidth != -1) {
+                    if (ColumnWidth != -1)
+                    {
                         dataGridTemplateColumn.Width = new DataGridLength(ColumnWidth, DataGridLengthUnitType.Pixel);
                     }
                     else

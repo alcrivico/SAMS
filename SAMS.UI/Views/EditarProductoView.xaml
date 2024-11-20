@@ -1,0 +1,494 @@
+﻿<Window
+    x:Class="SAMS.UI.Views.EditarProductoView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="1280"
+    Height="720"
+    MinWidth="800"
+    MinHeight="600"
+    MaxWidth="1920"
+    MaxHeight="1080"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Grid>
+
+        <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20, 20, 5, 20">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <components:TitleBarControl
+                    Grid.Row="0"
+                    MouseLeftButtonDown="TitleBarControl_MouseLeftButtonDown"
+                    WindowStateChangeRequested="TitleBarControl_WindowStateChangeRequested" />
+
+                <Border
+                    Grid.Row="1"
+                    Margin="40,15,40,40"
+                    Background="{StaticResource SolidColorBrush_AntiFlashWhite}"
+                    CornerRadius="40">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.20*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid x:Name="MenuLateral" Grid.Column="0" />
+
+                        <Grid Grid.Column="1" Margin="30,0,30,0">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.1*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="0.1*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Viewbox Grid.Column="0" HorizontalAlignment="Left">
+                                    <Grid>
+                                        <TextBlock
+                                            x:Name="UseCaseTitle"
+                                            Margin="0,12,12,12"
+                                            HorizontalAlignment="Left"
+                                            FontFamily="{StaticResource Font_Nunito}"
+                                            FontSize="24"
+                                            FontWeight="Bold"
+                                            Text="Productos" />
+                                    </Grid>
+                                </Viewbox>
+
+                            </Grid>
+
+                            <Grid Name="Contenido" Grid.Row="1">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="0.2*" />
+                                </Grid.RowDefinitions>
+
+                                <Grid Name="Campos" Grid.Row="0">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid Grid.Column="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="2*" />
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+
+                                        <Grid Grid.Row="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="0.4*" />
+                                            </Grid.RowDefinitions>
+                                            <Viewbox
+                                                Grid.Row="0"
+                                                Margin="0,10,10,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom">
+                                                <components:TextBoxControl
+                                                    x:Name="TextBox_Nombre"
+                                                    Width="525"
+                                                    Height="50"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    FieldName="Nombre:"
+                                                    IsEnabled="False"
+                                                    Text="" />
+                                            </Viewbox>
+
+                                        </Grid>
+                                        <Grid Grid.Row="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="0.18*" />
+                                            </Grid.RowDefinitions>
+
+                                            <Viewbox
+                                                Margin="0,10,10,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom">
+                                                <components:TextAreaControl
+                                                    x:Name="TextArea_Descripcion"
+                                                    Width="404"
+                                                    Height="94"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Bottom"
+                                                    FieldName="Descripción:"
+                                                    IsEnabled="False"
+                                                    RenderTransformOrigin="0.5,0.5" />
+                                            </Viewbox>
+                                            <Viewbox
+                                                Grid.Row="1"
+                                                Margin="0,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top">
+                                                <TextBlock
+                                                    x:Name="TextBlock_MensajeDescripcionInvalida"
+                                                    Width="215"
+                                                    Height="27"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FontFamily="{StaticResource Font_Nunito}"
+                                                    FontSize="14"
+                                                    FontWeight="Bold"
+                                                    Foreground="{StaticResource SolidColorBrush_Red}"
+                                                    Text="Ingresa una descripción válida"
+                                                    TextAlignment="Left"
+                                                    Visibility="Hidden" />
+                                            </Viewbox>
+                                        </Grid>
+                                        <Grid Grid.Row="2">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="0.4*" />
+                                            </Grid.RowDefinitions>
+                                            <Viewbox
+                                                Grid.Row="0"
+                                                Margin="0,10,10,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom">
+                                                <components:TextBoxControl
+                                                    x:Name="TextBox_CantidadBodega"
+                                                    Width="525"
+                                                    Height="50"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    FieldName="Cantidad en bodega:"
+                                                    IsEnabled="False"
+                                                    Text="" />
+                                            </Viewbox>
+
+                                        </Grid>
+                                        <Grid Grid.Row="3">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="0.4*" />
+                                            </Grid.RowDefinitions>
+                                            <Viewbox
+                                                Grid.Row="0"
+                                                Margin="0,10,10,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom">
+                                                <components:TextBoxControl
+                                                    x:Name="TextBox_CantidadExhibicion"
+                                                    Width="525"
+                                                    Height="50"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    FieldName="Cantidad en Exhibición:"
+                                                    IsEnabled="False"
+                                                    Text="" />
+                                            </Viewbox>
+                                        </Grid>
+                                        <Grid Grid.Row="4">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="0.4*" />
+                                            </Grid.RowDefinitions>
+                                            <Viewbox
+                                                Grid.Row="0"
+                                                Margin="0,10,10,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom">
+                                                <components:TextBoxControl
+                                                    x:Name="TextBox_PrecioActual"
+                                                    Width="525"
+                                                    Height="50"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    FieldName="Precio actual:"
+                                                    IsEnabled="False"
+                                                    Text="" />
+                                            </Viewbox>
+                                            <Viewbox
+                                                Grid.Row="1"
+                                                Margin="0,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top">
+                                                <TextBlock
+                                                    x:Name="TextBlock_MensajePrecioInvalido"
+                                                    Width="180"
+                                                    Height="24"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FontFamily="{StaticResource Font_Nunito}"
+                                                    FontSize="14"
+                                                    FontWeight="Bold"
+                                                    Foreground="{StaticResource SolidColorBrush_Red}"
+                                                    Text="Ingresa un precio válido"
+                                                    TextAlignment="Left"
+                                                    Visibility="Hidden" />
+                                            </Viewbox>
+                                        </Grid>
+
+                                    </Grid>
+
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="0.71*" />
+                                            <RowDefinition Height="1.1*" />
+                                            <RowDefinition Height="0.5*" />
+                                            <RowDefinition Height="2*" />
+
+                                        </Grid.RowDefinitions>
+                                        <Grid Grid.Row="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="0.4*" />
+                                            </Grid.RowDefinitions>
+                                            <Viewbox
+                                                Grid.Row="0"
+                                                Margin="0,10,10,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom">
+                                                <components:DatePickerControl
+                                                    x:Name="DatePicker_FechaCaducidad"
+                                                    Width="525"
+                                                    Height="50"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    FieldName="Fecha de caducidad:"
+                                                    IsEnabled="False" />
+                                            </Viewbox>
+                                            <Viewbox
+                                                Grid.Row="1"
+                                                Margin="0,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top">
+                                                <TextBlock
+                                                    x:Name="TextBlock_MensajeFechaInvalida"
+                                                    Width="180"
+                                                    Height="24"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FontFamily="{StaticResource Font_Nunito}"
+                                                    FontSize="14"
+                                                    FontWeight="Bold"
+                                                    Foreground="{StaticResource SolidColorBrush_Red}"
+                                                    Text="Seleccione una fecha valida"
+                                                    TextAlignment="Left"
+                                                    Visibility="Hidden" />
+                                            </Viewbox>
+                                        </Grid>
+                                        <Grid Grid.Row="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <Viewbox
+                                                Grid.Row="0"
+                                                Margin="0,10,10,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom">
+                                                <components:ComboBoxControl
+                                                    x:Name="ComboBox_Categorias"
+                                                    Width="379"
+                                                    Height="40"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FieldName="Categorias:"
+                                                    IsEnabled="False" />
+                                            </Viewbox>
+                                            <Viewbox
+                                                Grid.Row="1"
+                                                Margin="0,10,10,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom">
+                                                <components:ComboBoxControl
+                                                    x:Name="ComboBox_UnidadMedida"
+                                                    Width="379"
+                                                    Height="40"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FieldName="Unidades de medida:"
+                                                    IsEnabled="False" />
+                                            </Viewbox>
+                                        </Grid>
+                                        <Grid Grid.Row="2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Viewbox
+                                                Grid.Column="0"
+                                                Margin="5,5,5,5"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Bottom">
+                                                <components:CheckBoxControl
+                                                    x:Name="CheckBox_EsPerecedero"
+                                                    Height="40"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FieldName="Es perecedero"
+                                                    IsEnabled="False" />
+                                            </Viewbox>
+                                            <Viewbox
+                                                Grid.Column="1"
+                                                Margin="5,5,5,5"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Bottom">
+                                                <components:CheckBoxControl
+                                                    x:Name="CheckBox_EsDevolvible"
+                                                    Height="40"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FieldName="Es devolvible"
+                                                    IsEnabled="False" />
+                                            </Viewbox>
+                                        </Grid>
+                                        <Border
+                                            x:Name="EditarCantidadBodegaExhibición"
+                                            Grid.Row="4"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            Background="{StaticResource SolidColorBrush_White}"
+                                            BorderThickness="5"
+                                            CornerRadius="30"
+                                            Visibility="Hidden">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="0.4*" />
+                                                    <RowDefinition Height="1.2*" />
+
+                                                </Grid.RowDefinitions>
+                                                <Viewbox
+                                                    Grid.Row="0"
+                                                    Margin="20,10,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center">
+                                                    <TextBlock
+                                                        x:Name="TextBlock_SubtituloEditarCantidad"
+                                                        Width="284"
+                                                        Height="39"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource Font_Nunito}"
+                                                        FontSize="14"
+                                                        FontWeight="Bold"
+                                                        Foreground="{StaticResource SolidColorBrush_EerieBlack}"
+                                                        Text="Editar cantidad en bodega o exhibición "
+                                                        TextAlignment="Left"
+                                                        TextWrapping="Wrap" />
+                                                </Viewbox>
+                                                <Viewbox
+                                                    Grid.Row="1"
+                                                    Margin="50,0,50,0"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Bottom">
+                                                    <components:TextBoxControl
+                                                        x:Name="TextBoxControl_CantidadAMover"
+                                                        Width="288"
+                                                        Height="46"
+                                                        VerticalAlignment="Center"
+                                                        FieldName="Cantidad a mover:" />
+                                                </Viewbox>
+                                                <Viewbox
+                                                    Grid.Row="2"
+                                                    Margin="50,0,50,0"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Top">
+                                                    <TextBlock
+                                                        x:Name="TextBlock_MensajeCantidadInvalida"
+                                                        Width="246"
+                                                        Height="24"
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource Font_Nunito}"
+                                                        FontSize="14"
+                                                        FontWeight="Bold"
+                                                        Foreground="{StaticResource SolidColorBrush_Red}"
+                                                        Text="La cantidad es mayor a la registrada"
+                                                        TextAlignment="Left"
+                                                        Visibility="Hidden" />
+                                                </Viewbox>
+                                                <Viewbox
+                                                    Grid.Row="3"
+                                                    Margin="50,0,50,0"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Top">
+                                                    <components:ComboBoxControl
+                                                        x:Name="ComboBoxControl_Categorias"
+                                                        Width="209"
+                                                        Height="40"
+                                                        HorizontalAlignment="Left"
+                                                        FieldName="Ubicaciones" />
+                                                </Viewbox>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+
+
+                                </Grid>
+
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="1" Margin="20,20,20,20">
+                                        <components:ButtonControl
+                                            x:Name="Button_Modificar"
+                                            HorizontalAlignment="Right"
+                                            ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                            ButtonControlClick="Button_Modificar_ButtonControlClick"
+                                            FontSize="24"
+                                            Text="Modificar"
+                                            Visibility="Hidden" />
+                                    </Grid>
+                                    <Grid Grid.Column="2" Margin="20,20,20,20">
+                                        <components:ButtonControl
+                                            x:Name="Button_Volver"
+                                            HorizontalAlignment="Center"
+                                            ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                                            ButtonControlClick="Button_Cancelar_ButtonControlClick"
+                                            FontSize="24"
+                                            Text="Volver" />
+                                    </Grid>
+                                </Grid>
+
+                            </Grid>
+
+                        </Grid>
+
+                    </Grid>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</Window>
+

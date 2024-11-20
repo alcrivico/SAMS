@@ -1,27 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualBasic;
-using SAMS.UI.DAO;
+﻿using SAMS.UI.DAO;
 using SAMS.UI.DTO;
-using SAMS.UI.Models.DataContext;
 using SAMS.UI.Models.Entities;
 using SAMS.UI.VisualComponents;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SAMS.UI.Views
 {
@@ -186,8 +169,8 @@ namespace SAMS.UI.Views
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
 
-            ActionsControl actionBar = (ActionsControl) sender;
-            MonederosDTO monedero = (MonederosDTO) actionBar.DataContext;
+            ActionsControl actionBar = (ActionsControl)sender;
+            MonederosDTO monedero = (MonederosDTO)actionBar.DataContext;
 
             ConsultarMonederoView consultarMonederoView = new ConsultarMonederoView(monedero);
             consultarMonederoView.Show();
@@ -197,16 +180,16 @@ namespace SAMS.UI.Views
         private void botonEditarClick(object sender, RoutedEventArgs e)
         {
 
-            ActionsControl actionBar = (ActionsControl) sender;
-            MonederosDTO mondero = (MonederosDTO) actionBar.DataContext;
+            ActionsControl actionBar = (ActionsControl)sender;
+            MonederosDTO mondero = (MonederosDTO)actionBar.DataContext;
 
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
 
-            ActionsControl actionBar = (ActionsControl) sender;
-            MonederosDTO monedero = (MonederosDTO) actionBar.DataContext;
+            ActionsControl actionBar = (ActionsControl)sender;
+            MonederosDTO monedero = (MonederosDTO)actionBar.DataContext;
 
         }
 
