@@ -13,32 +13,7 @@ namespace SAMS.UI.DAO
     {
         private static SAMSContext _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
 
-        public static List<V_Proveedores> ObtenerProveedores()
-        {
-            List<V_Proveedores> proveedores = new List<V_Proveedores>();
-
-            var proveedoresData = from p in _sams.V_Proveedores
-                                  select new
-                                  {
-                                      p.nombre,
-                                      p.rfc,
-                                      p.estadoProveedor
-                                  };
-
-            foreach (var proveedorData in proveedoresData)
-            {
-
-                V_Proveedores proveedor = new V_Proveedores
-                {
-                    nombre = proveedorData.nombre,
-                    rfc = proveedorData.rfc,
-                    estadoProveedor = proveedorData.estadoProveedor
-                };
-
-                proveedores.Add(proveedor);
-            }
-
-            return proveedores;
-        }
+        public static IEnumerable<V_Proveedores> ObtenerProveedores() => _sams.V_Proveedores.ToList();
+            
     }
 }

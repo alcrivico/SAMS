@@ -115,13 +115,12 @@ namespace SAMS.UI.Views
         {
             try
             {
-                listaProveedores = ProveedorDAO.ObtenerProveedores();
-                _proveedores.Clear();
-                _proveedores = new ObservableCollection<Object>(listaProveedores);
+                _proveedores = new ObservableCollection<Object>(ProveedorDAO.ObtenerProveedores());
                 TablaProveedores.SetItemsSource(_proveedores);
             }
             catch (Exception ex)
             {
+                Debug.Print(ex.Message);
                 InformationControl.Show("Error", "Ocurrió un error al obtener los proveedores", "Aceptar");
                 this.Close();
             }
