@@ -1,22 +1,11 @@
 ﻿using SAMS.UI.DAO;
 using SAMS.UI.DTO;
-using SAMS.UI.Models.Entities;
 using SAMS.UI.VisualComponents;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace SAMS.UI.Views
 {
@@ -25,13 +14,12 @@ namespace SAMS.UI.Views
     /// </summary>
     public partial class VerProveedoresView : Window
     {
-        Proveedor _proveedor;
         List<V_Proveedores> listaProveedores;
         ObservableCollection<Object> _proveedores;
 
         public VerProveedoresView()
         {
-            _proveedor = new Proveedor();
+            listaProveedores = new List<V_Proveedores>();
             _proveedores = new ObservableCollection<Object>();
 
             InitializeComponent();
@@ -92,7 +80,7 @@ namespace SAMS.UI.Views
                     { "Type", "Text" },
                     { "Name", "Estado" },
                     { "Width", "*" },
-                    { "BindingName", "estadoProveedor" }
+                    { "BindingName", "estado" }
                 },
                 new Dictionary<string, string> {
 
@@ -115,7 +103,9 @@ namespace SAMS.UI.Views
         {
             try
             {
-                _proveedores = new ObservableCollection<Object>(ProveedorDAO.ObtenerProveedores());
+                listaProveedores = ProveedorDAO.ObtenerProveedores().ToList();
+                _proveedores.Clear();
+                _proveedores = new ObservableCollection<Object>(listaProveedores);
                 TablaProveedores.SetItemsSource(_proveedores);
             }
             catch (Exception ex)
@@ -161,10 +151,10 @@ namespace SAMS.UI.Views
 
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
-            //ActionsControl actionBar = (ActionsControl)sender;
-            //MonederosDTO monedero = (MonederosDTO)actionBar.DataContext;
+            ActionsControl actionBar = (ActionsControl)sender;
+            V_Proveedores proveedor = (V_Proveedores)actionBar.DataContext;
 
-            DetalleProveedorView detalleProveedorView = new DetalleProveedorView();
+            DetalleProveedorView detalleProveedorView = new DetalleProveedorView(proveedor);
             detalleProveedorView.Show();
         }
 

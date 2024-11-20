@@ -7,5 +7,9 @@ public class V_Proveedores
 
     public string rfc { get; set; }
 
-    public string estadoProveedor { get; set; }
+    public string telefono { get; set; }
+
+    public string correo { get; set; }
+
+    public string estado{ get; set; }
 }

@@ -61,15 +61,18 @@
                             </Grid.RowDefinitions>
                             <Viewbox Grid.Row="0" HorizontalAlignment="Left">
                                 <components:TextBoxControl 
+                                    IsEnabled="False"
                                     Margin="0 15"
                                     x:Name="campoRFC"
                                     Grid.Row="0"
                                     Width="350" 
-                                    FieldName="RFC"/>
+                                    FieldName="RFC"
+                                    />
                             </Viewbox>
                             <Viewbox Grid.Row="1" HorizontalAlignment="Left">
                                 <components:TextBoxControl
                                     x:Name="campoNombre"
+                                    IsEnabled="False"
                                     Grid.Row="1"
                                     Margin="0 15"
                                     Width="440"
@@ -78,6 +81,7 @@
                             <Viewbox Grid.Row="2" HorizontalAlignment="Left">
                                 <components:TextBoxControl
                                     x:Name="campoCorreo"
+                                    IsEnabled="False"
                                     Grid.Row="2"
                                     Margin="0 15"
                                     Width="440"
@@ -86,6 +90,7 @@
                             <Viewbox Grid.Row="3" HorizontalAlignment="Left">
                                 <components:TextBoxControl
                                     x:Name="campoTelefono"
+                                    IsEnabled="False"
                                     Margin="0 15"
                                     Grid.Row="3"
                                     Width="200"
@@ -94,6 +99,7 @@
                             <Viewbox Grid.Row="4" HorizontalAlignment="Left">
                                 <components:TextBoxControl
                                     Margin="0 15"
+                                    IsEnabled="False"
                                     x:Name="campoEstado"
                                     Grid.Row="4"
                                     Width="150"
@@ -103,7 +109,7 @@
 
                         <!--Tabla de productos del proveedor-->
                         <Viewbox Grid.Column="1" Margin="20">
-                            <components:TableControl x:Name="TablaProductosProveedor" Width="500" Height="400"/>
+                            <components:TableControl x:Name="TablaProductosProveedor" Width="680" Height="600"/>
                         </Viewbox>
                     </Grid>
                     <components:ButtonControl
