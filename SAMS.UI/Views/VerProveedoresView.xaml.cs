@@ -168,5 +168,10 @@ namespace SAMS.UI.Views
             Debug.Print("Eliminar");
         }
 
+        private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+            RegistrarProveedorView registrarProveedorView = new RegistrarProveedorView();
+            registrarProveedorView.Show();
+        }
     }
 }

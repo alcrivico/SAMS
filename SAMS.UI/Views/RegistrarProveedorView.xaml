@@ -51,7 +51,9 @@
                             Grid.Row="0"
                             Width="350"
                             HorizontalAlignment="Left"
-                            FieldName="RFC" />
+                            FieldName="RFC"
+                            MaxLengthTextBox="12"
+                            TextBoxControlTextChanged="campoRfc_TextBoxControlTextChanged" />
 
                         <components:TextBoxControl
                             x:Name="campoNombre"
@@ -73,11 +75,11 @@
                             FieldName="Teléfono" />
                     </Grid>
                     <Border
-                        x:Name="btnSubirArchivo"
+                        x:Name="botonSubirArchivo"
                         Grid.Row="2"
                         Width="110"
                         Margin="0,10"
-                        MouseLeftButtonUp="btnSubirArchivo_MouseLeftButtonUp">
+                        MouseLeftButtonUp="botonSubirArchivo_MouseLeftButtonUp">
                         <Border.Background>
                             <ImageBrush ImageSource="{StaticResource icon_CargarArchivo}" Stretch="Uniform" />
                         </Border.Background>

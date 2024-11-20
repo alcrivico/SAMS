@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,9 +23,33 @@ namespace SAMS.UI.Views
         public RegistrarProveedorView()
         {
             InitializeComponent();
+            prepararComponentes();
         }
 
-        private void btnSubirArchivo_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void botonSubirArchivo_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Debug.WriteLine("Subiendo archivo...");
+        }
+
+        private void botonRegistrar_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Registrando archivo...");
+        }
+
+        private void botonCancelar_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void prepararComponentes()
+        {
+            botonRegistrar.IsEnabled = false;
+            campoNombre.IsEnabled = false;
+            campoCorreo.IsEnabled = false;
+            campoTelefono.IsEnabled = false;
+        }
+
+        private void campoRfc_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
 
         }
