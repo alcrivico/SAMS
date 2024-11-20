@@ -1,4 +1,6 @@
-﻿using SAMS.UI.Views;
+﻿using SAMS.UI.DTO;
+using SAMS.UI.Models.Entities;
+using SAMS.UI.Views;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,7 +13,8 @@ namespace SAMS.UI.VisualComponents
     /// </summary>
     public partial class SideBarControl : UserControl
     {
-
+        private EmpleadoLoginDTO empleado;
+        private Window _parentWindow;
         public string Employee
         {
             get { return (string)GetValue(EmployeeProperty); }
@@ -38,9 +41,9 @@ namespace SAMS.UI.VisualComponents
                 typeof(SideBarControl),
                 new PropertyMetadata(0, LoadEmployeeMenu));
 
-        public SideBarControl()
+        public SideBarControl(EmpleadoLoginDTO empleado)
         {
-
+            this.empleado = empleado;
             InitializeComponent();
 
         }
@@ -48,7 +51,7 @@ namespace SAMS.UI.VisualComponents
         private void HomeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            PrincipalView principalView = new();
+            PrincipalView principalView = new(empleado);
 
             principalView.Show();
             Window.GetWindow(this).Close();
@@ -894,6 +897,11 @@ namespace SAMS.UI.VisualComponents
             switch (Employee)
             {
                 case "Administrador":
+                    VerProductosView principalView = new(empleado);
+                    principalView.Show();
+                    
+                    //Este metodo para cerrar la ventana se debe remplazar
+                    Window.GetWindow(this).Close();
                     break;
                 case "Cajero":
                     break;

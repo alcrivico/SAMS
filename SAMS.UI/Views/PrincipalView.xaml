@@ -51,8 +51,7 @@
                         <!--  Employee debe ser una DependencyProperty que se pase por el constructor  -->
                         <!--  y que el actualiza en cuanto se cambia la propiedad y se asigna aquí  -->
                         <!--  como un binding  -->
-                        <components:SideBarControl x:Name="SideBarControl_MenuLateral" SideElementSelected="0" />
-
+                        <Grid x:Name="MenuLateral" />
                         <Grid Grid.Column="1">
 
                             <Grid.RowDefinitions>

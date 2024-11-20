@@ -29,8 +29,6 @@ namespace SAMS.UI
             ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider();
 
-
-
             IniciarSesionView initialView = new();
             initialView.Show();
 

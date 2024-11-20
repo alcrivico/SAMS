@@ -48,7 +48,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <components:SideBarControl Employee="Administrador" SideElementSelected="1" />
+                        <Grid Grid.Column="1" x:Name="MenuLateral" />
 
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>

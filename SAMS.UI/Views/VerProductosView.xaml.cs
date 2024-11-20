@@ -1,4 +1,9 @@
-﻿using System.Windows;
+﻿using SAMS.UI.DAO;
+using SAMS.UI.DTO;
+using SAMS.UI.Models.Entities;
+using SAMS.UI.VisualComponents;
+using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SAMS.UI.Views
@@ -8,9 +13,27 @@ namespace SAMS.UI.Views
     /// </summary>
     public partial class VerProductosView : Window
     {
-        public VerProductosView()
+        List<ProductosRegistradosDTO> listaProductos;
+        ObservableCollection<Object> _productos;
+        EmpleadoLoginDTO empleado;
+        SideBarControl SideBarControl_MenuLateral;
+
+        public VerProductosView(EmpleadoLoginDTO empleado)
         {
+            this.empleado = empleado;
+            _productos = new ObservableCollection<Object>();
             InitializeComponent();
+            
+            DefinirColumnas();
+            ObtenerProductos();
+
+            SideBarControl_MenuLateral = new SideBarControl(empleado);
+            MenuLateral.Children.Add(SideBarControl_MenuLateral);
+            SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
+
+            TableControl_TablaProductos.OnDetallesClickedHandler += botonDetallesClick;
+            TableControl_TablaProductos.OnEditarClickedHandler += botonEditarClick;
+            TableControl_TablaProductos.OnEliminarClickedHandler += botonEliminarClick;
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -36,5 +59,142 @@ namespace SAMS.UI.Views
             this.WindowState = e;
         }
 
+        private void DefinirColumnas()
+        {
+
+            Dictionary<string, string>[] columnas =
+            {
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Nombre" },
+                    { "Width", "*" },
+                    { "BindingName", "nombreProducto" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Cantidad" },
+                    { "Width", "*" },
+                    { "BindingName", "cantidad" },
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Precio" },
+                    { "Width", "*" },
+                    { "BindingName", "precioActual" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "categoría" },
+                    { "Width", "*" },
+                    { "BindingName", "nombreCategoria" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Actions" },
+                    { "Name", "Acciones" },
+                    { "Width", "*" },
+                    { "Detalles", "True" },
+                    { "Editar", "True" },
+                    { "Eliminar", "False" }
+
+                }
+
+            };
+
+            TableControl_TablaProductos.DefineColumns(columnas);
+
+        }
+
+        private void ObtenerProductos()
+        {
+
+            try
+            {
+                listaProductos = ProductoInventarioDAO.ObtenerProductosRegistrados();
+                _productos.Clear();
+
+                _productos = new ObservableCollection<Object>(listaProductos);
+
+                TableControl_TablaProductos.SetItemsSource(_productos);
+
+            }
+            catch (Exception ex)
+            {
+                InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
+                    " inténtelo de nuevo más tarde", "Aceptar");
+                this.Close();
+
+            }
+
+        }
+
+        private void botonDetallesClick(object sender, RoutedEventArgs e)
+        {
+            ActionsControl actionBar = (ActionsControl)sender;
+            ProductosRegistradosDTO productoSeleccionado = (ProductosRegistradosDTO)actionBar.DataContext;
+
+            EditarProductoView editarProductoView = new EditarProductoView(empleado, productoSeleccionado);
+            editarProductoView.Show();
+            this.Close();
+
+        }
+
+        private void botonEditarClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void botonEliminarClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_AgregarProductos_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
+        {
+            if (listaProductos != null)
+            {
+
+                if (campoBuscar.Text.Length > 0)
+                {
+                    var productosFiltrados = listaProductos.Where(
+                        p =>
+                        p.nombreProducto.Contains(campoBuscar.Text, StringComparison.OrdinalIgnoreCase) ||
+                        p.nombreCategoria.Contains(campoBuscar.Text, StringComparison.OrdinalIgnoreCase) ||
+                        p.precioActual.ToString().Contains(campoBuscar.Text, StringComparison.OrdinalIgnoreCase));
+
+                    _productos.Clear();
+
+                    _productos = new ObservableCollection<Object>(productosFiltrados);
+
+                    TableControl_TablaProductos.SetItemsSource(_productos);
+
+                }
+                else
+                {
+
+                    _productos.Clear();
+
+                    _productos = new ObservableCollection<Object>(listaProductos);
+
+                    TableControl_TablaProductos.SetItemsSource(_productos);
+
+                }
+
+            }
+
+        }
     }
 }

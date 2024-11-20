@@ -47,10 +47,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <components:SideBarControl
-                            Grid.Column="0"
-                            Employee="Administrador"
-                            SideElementSelected="1" />
+                        <Grid x:Name="MenuLateral" />
 
                         <Grid Grid.Column="1" Margin="30,0,30,0">
 
@@ -101,7 +98,8 @@
                                             Width="450"
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Left"
-                                            FieldName="Buscar producto" />
+                                            FieldName="Buscar producto"
+                                            TextBoxControlTextChanged="campoBuscar_TextBoxControlTextChanged"/>
                                     </Viewbox>
 
                                     <components:ButtonControl
@@ -111,6 +109,7 @@
                                         BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
                                         ButtonBackgroundColor="Transparent"
                                         ButtonBorderColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                        ButtonControlClick="Button_AgregarProductos_ButtonControlClick"
                                         ButtonForegroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
                                         IsDropShadowEnabled="False"
                                         Text="Agregar Productos +" />
@@ -120,7 +119,7 @@
                                 <Grid Grid.Row="1">
                                     <Viewbox>
                                         <components:TableControl
-                                            x:Name="TablaMonederos"
+                                            x:Name="TableControl_TablaProductos"
                                             Width="935"
                                             Height="450" />
                                     </Viewbox>

@@ -47,10 +47,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <components:SideBarControl
-                            Grid.Column="0"
-                            Employee="Administrador"
-                            SideElementSelected="1" />
+                        <Grid x:Name="MenuLateral" Grid.Column="0" />
 
                         <Grid Grid.Column="1" Margin="30,0,30,0">
 
@@ -121,6 +118,7 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     FieldName="Nombre:"
+                                                    IsEnabled="False"
                                                     Text="" />
                                             </Viewbox>
 
@@ -142,6 +140,7 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Bottom"
                                                     FieldName="Descripción:"
+                                                    IsEnabled="False"
                                                     RenderTransformOrigin="0.5,0.5" />
                                             </Viewbox>
                                             <Viewbox
@@ -160,7 +159,8 @@
                                                     FontWeight="Bold"
                                                     Foreground="{StaticResource SolidColorBrush_Red}"
                                                     Text="Ingresa una descripción válida"
-                                                    TextAlignment="Left" />
+                                                    TextAlignment="Left"
+                                                    Visibility="Hidden" />
                                             </Viewbox>
                                         </Grid>
                                         <Grid Grid.Row="2">
@@ -180,6 +180,7 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     FieldName="Cantidad en bodega:"
+                                                    IsEnabled="False"
                                                     Text="" />
                                             </Viewbox>
 
@@ -201,6 +202,7 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     FieldName="Cantidad en Exhibición:"
+                                                    IsEnabled="False"
                                                     Text="" />
                                             </Viewbox>
                                         </Grid>
@@ -221,6 +223,7 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     FieldName="Precio actual:"
+                                                    IsEnabled="False"
                                                     Text="" />
                                             </Viewbox>
                                             <Viewbox
@@ -239,7 +242,8 @@
                                                     FontWeight="Bold"
                                                     Foreground="{StaticResource SolidColorBrush_Red}"
                                                     Text="Ingresa un precio válido"
-                                                    TextAlignment="Left" />
+                                                    TextAlignment="Left"
+                                                    Visibility="Hidden" />
                                             </Viewbox>
                                         </Grid>
 
@@ -264,12 +268,13 @@
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Bottom">
                                                 <components:DatePickerControl
-                                                    x:Name="TextBox_FechaCaducidad"
+                                                    x:Name="DatePicker_FechaCaducidad"
                                                     Width="525"
                                                     Height="50"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
-                                                    FieldName="Precio actual:" />
+                                                    FieldName="Fecha de caducidad:"
+                                                    IsEnabled="False" />
                                             </Viewbox>
                                             <Viewbox
                                                 Grid.Row="1"
@@ -287,7 +292,8 @@
                                                     FontWeight="Bold"
                                                     Foreground="{StaticResource SolidColorBrush_Red}"
                                                     Text="Seleccione una fecha valida"
-                                                    TextAlignment="Left" />
+                                                    TextAlignment="Left"
+                                                    Visibility="Hidden" />
                                             </Viewbox>
                                         </Grid>
                                         <Grid Grid.Row="1">
@@ -306,7 +312,8 @@
                                                     Height="40"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
-                                                    FieldName="Categorias:" />
+                                                    FieldName="Categorias:"
+                                                    IsEnabled="False" />
                                             </Viewbox>
                                             <Viewbox
                                                 Grid.Row="1"
@@ -319,7 +326,8 @@
                                                     Height="40"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
-                                                    FieldName="Unidades de medida:" />
+                                                    FieldName="Unidades de medida:"
+                                                    IsEnabled="False" />
                                             </Viewbox>
                                         </Grid>
                                         <Grid Grid.Row="2">
@@ -337,7 +345,8 @@
                                                     Height="40"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
-                                                    FieldName="Es perecedero" />
+                                                    FieldName="Es perecedero"
+                                                    IsEnabled="False" />
                                             </Viewbox>
                                             <Viewbox
                                                 Grid.Column="1"
@@ -345,11 +354,12 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Bottom">
                                                 <components:CheckBoxControl
-                                                    x:Name="CheckBox_EsPerecedero1"
+                                                    x:Name="CheckBox_EsDevolvible"
                                                     Height="40"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
-                                                    FieldName="Es devolvible" />
+                                                    FieldName="Es devolvible"
+                                                    IsEnabled="False" />
                                             </Viewbox>
                                         </Grid>
                                         <Border
@@ -360,7 +370,8 @@
                                             VerticalAlignment="Stretch"
                                             Background="{StaticResource SolidColorBrush_White}"
                                             BorderThickness="5"
-                                            CornerRadius="30">
+                                            CornerRadius="30"
+                                            Visibility="Hidden">
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*" />
@@ -416,7 +427,8 @@
                                                         FontWeight="Bold"
                                                         Foreground="{StaticResource SolidColorBrush_Red}"
                                                         Text="La cantidad es mayor a la registrada"
-                                                        TextAlignment="Left" />
+                                                        TextAlignment="Left"
+                                                        Visibility="Hidden" />
                                                 </Viewbox>
                                                 <Viewbox
                                                     Grid.Row="3"
@@ -450,16 +462,17 @@
                                             ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
                                             ButtonControlClick="Button_Modificar_ButtonControlClick"
                                             FontSize="24"
-                                            Text="Modificar" />
+                                            Text="Modificar"
+                                            Visibility="Hidden" />
                                     </Grid>
                                     <Grid Grid.Column="2" Margin="20,20,20,20">
                                         <components:ButtonControl
-                                            x:Name="Button_Cancelar"
+                                            x:Name="Button_Volver"
                                             HorizontalAlignment="Center"
                                             ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
                                             ButtonControlClick="Button_Cancelar_ButtonControlClick"
                                             FontSize="24"
-                                            Text="Cancelar" />
+                                            Text="Volver" />
                                     </Grid>
                                 </Grid>
 

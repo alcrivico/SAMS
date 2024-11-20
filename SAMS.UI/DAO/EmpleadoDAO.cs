@@ -18,16 +18,16 @@ namespace SAMS.UI.DAO
 
             // Consultar la vista V_EmpleadoLogin desde _sams
             var empleadoData = (from e in _sams.V_EmpleadoLogin
-                                where e.Correo == correo
+                                where e.correo == correo
                                 select new
                                 {
-                                    e.Correo,
-                                    e.PasswordHash,
-                                    e.NumeroEmpleado,
-                                    e.NombreEmpleado,
-                                    e.ApellidoPaterno,
-                                    e.ApellidoMaterno,
-                                    e.TipoEmpleado
+                                    e.correo,
+                                    e.passwordHash,
+                                    e.numeroEmpleado,
+                                    e.nombreEmpleado,
+                                    e.apellidoPaterno,
+                                    e.apellidoMaterno,
+                                    e.tipoEmpleado
                                 }).FirstOrDefault();
 
             // Si no encuentra un empleado con el correo, retorna null
@@ -37,7 +37,7 @@ namespace SAMS.UI.DAO
             }
 
             // Comparar la contraseña hasheada con la almacenada en la base de datos
-            if (empleadoData.PasswordHash != contraseñaHasheada)
+            if (empleadoData.passwordHash != contraseñaHasheada)
             {
                 return null;
             }
@@ -45,13 +45,13 @@ namespace SAMS.UI.DAO
             // Si las contraseñas coinciden, retornar los datos del empleado
             return new EmpleadoLoginDTO
             {
-                Correo = empleadoData.Correo,
-                PasswordHash = empleadoData.PasswordHash,
-                NumeroEmpleado = empleadoData.NumeroEmpleado,
-                NombreEmpleado = empleadoData.NombreEmpleado,
-                ApellidoPaterno = empleadoData.ApellidoPaterno,
-                ApellidoMaterno = empleadoData.ApellidoMaterno,
-                TipoEmpleado = empleadoData.TipoEmpleado
+                correo = empleadoData.correo,
+                passwordHash = empleadoData.passwordHash,
+                numeroEmpleado = empleadoData.numeroEmpleado,
+                nombreEmpleado = empleadoData.nombreEmpleado,
+                apellidoPaterno = empleadoData.apellidoPaterno,
+                apellidoMaterno = empleadoData.apellidoMaterno,
+                tipoEmpleado = empleadoData.tipoEmpleado
             };
         }
 

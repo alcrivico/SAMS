@@ -2,12 +2,12 @@
 {
     public class EmpleadoLoginDTO
     {
-        public string Correo { get; set; }
-        public string PasswordHash { get; set; }
-        public string NumeroEmpleado { get; set; }
-        public string NombreEmpleado { get; set; }
-        public string ApellidoPaterno { get; set; }
-        public string ApellidoMaterno { get; set; }
-        public string TipoEmpleado { get; set; }
+        public string correo { get; set; }
+        public string passwordHash { get; set; }
+        public string numeroEmpleado { get; set; }
+        public string nombreEmpleado { get; set; }
+        public string apellidoPaterno { get; set; }
+        public string apellidoMaterno { get; set; }
+        public string tipoEmpleado { get; set; }
     }
 }

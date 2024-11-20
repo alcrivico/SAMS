@@ -16,6 +16,7 @@ namespace SAMS.UI.Views
     public partial class PrincipalView : Window
     {
         private EmpleadoLoginDTO empleado;
+        private SideBarControl SideBarControl_MenuLateral;
 
         //Este constructor no deberia existir
         public PrincipalView()
@@ -27,37 +28,16 @@ namespace SAMS.UI.Views
         {
             InitializeComponent();
             this.empleado = empleado;
-            //SideBarControl_MenuLateral.Employee = empleado.TipoEmpleado;
-            SideBarControl_MenuLateral.Employee = "Administrador";
+            
+            
+            SideBarControl_MenuLateral = new SideBarControl(empleado);
+            MenuLateral.Children.Add(SideBarControl_MenuLateral);  
+            SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
             TextBlock_MensajeBienvenida.Text = "Bienvenid@, "
-                    + empleado.NombreEmpleado + " "
-                    + empleado.ApellidoPaterno + " "
-                    + empleado.ApellidoMaterno;
-
-            if (SideBarControl_MenuLateral.Employee == "Administrador")
-            {
-                ViewBox_ImagenPrincipal.Source = new BitmapImage(
-                        new Uri("../Resources/Images/PrincipalAdministrador.png",
-                        UriKind.RelativeOrAbsolute));
-            }
-            else if (SideBarControl_MenuLateral.Employee == "Cajero")
-            {
-                ViewBox_ImagenPrincipal.Source = new BitmapImage(
-                        new Uri("../Resources/Images/PrincipalCajero.png",
-                        UriKind.RelativeOrAbsolute));
-            }
-            else if (SideBarControl_MenuLateral.Employee == "Paqueteria")
-            {
-                ViewBox_ImagenPrincipal.Source = new BitmapImage(
-                        new Uri("../Resources/Images/PrincipalPaqueteria.png",
-                        UriKind.RelativeOrAbsolute));
-            }
-            else if (SideBarControl_MenuLateral.Employee == "Contador")
-            {
-                ViewBox_ImagenPrincipal.Source = new BitmapImage(
-                        new Uri("../Resources/Images/PrincipalContador.png",
-                        UriKind.RelativeOrAbsolute));
-            }
+                    + empleado.nombreEmpleado + " "
+                    + empleado.apellidoPaterno + " "
+                    + empleado.apellidoMaterno;
+            CargarImagenPrincipal();
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -115,6 +95,33 @@ namespace SAMS.UI.Views
 
         }
 
+        private void CargarImagenPrincipal()
+        {
+            if (SideBarControl_MenuLateral.Employee == "Administrador")
+            {
+                ViewBox_ImagenPrincipal.Source = new BitmapImage(
+                        new Uri("../Resources/Images/PrincipalAdministrador.png",
+                        UriKind.RelativeOrAbsolute));
+            }
+            else if (SideBarControl_MenuLateral.Employee == "Cajero")
+            {
+                ViewBox_ImagenPrincipal.Source = new BitmapImage(
+                        new Uri("../Resources/Images/PrincipalCajero.png",
+                        UriKind.RelativeOrAbsolute));
+            }
+            else if (SideBarControl_MenuLateral.Employee == "Paqueteria")
+            {
+                ViewBox_ImagenPrincipal.Source = new BitmapImage(
+                        new Uri("../Resources/Images/PrincipalPaqueteria.png",
+                        UriKind.RelativeOrAbsolute));
+            }
+            else if (SideBarControl_MenuLateral.Employee == "Contador")
+            {
+                ViewBox_ImagenPrincipal.Source = new BitmapImage(
+                        new Uri("../Resources/Images/PrincipalContador.png",
+                        UriKind.RelativeOrAbsolute));
+            }
+        }
     }
 
 }
