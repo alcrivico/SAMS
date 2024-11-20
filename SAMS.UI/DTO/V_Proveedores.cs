@@ -7,5 +7,5 @@ public class V_Proveedores
 
     public string rfc { get; set; }
 
-    public bool estadoProveedor { get; set; }
+    public string estadoProveedor { get; set; }
 }

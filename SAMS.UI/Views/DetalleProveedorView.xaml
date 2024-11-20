@@ -46,7 +46,7 @@
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.4*"/>
-                            <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition Width="0.5*"/>
                         </Grid.ColumnDefinitions>
                         
                         <!--Datos del proveedor-->
@@ -59,36 +59,41 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Viewbox Grid.Row="0" Width="350" HorizontalAlignment="Left">
+                            <Viewbox Grid.Row="0" HorizontalAlignment="Left">
                                 <components:TextBoxControl 
+                                    Margin="0 15"
                                     x:Name="campoRFC"
                                     Grid.Row="0"
                                     Width="350" 
                                     FieldName="RFC"/>
                             </Viewbox>
-                            <Viewbox Grid.Row="1" Width="440" HorizontalAlignment="Left">
+                            <Viewbox Grid.Row="1" HorizontalAlignment="Left">
                                 <components:TextBoxControl
                                     x:Name="campoNombre"
                                     Grid.Row="1"
+                                    Margin="0 15"
                                     Width="440"
                                     FieldName="Nombre"/>
                             </Viewbox>
-                            <Viewbox Grid.Row="2" Width="440" HorizontalAlignment="Left">
+                            <Viewbox Grid.Row="2" HorizontalAlignment="Left">
                                 <components:TextBoxControl
                                     x:Name="campoCorreo"
                                     Grid.Row="2"
+                                    Margin="0 15"
                                     Width="440"
                                     FieldName="Correo electrónico"/>
                             </Viewbox>
-                            <Viewbox Grid.Row="3" Width="200" HorizontalAlignment="Left">
+                            <Viewbox Grid.Row="3" HorizontalAlignment="Left">
                                 <components:TextBoxControl
                                     x:Name="campoTelefono"
+                                    Margin="0 15"
                                     Grid.Row="3"
                                     Width="200"
                                     FieldName="Teléfono"/>
                             </Viewbox>
-                            <Viewbox Grid.Row="4" Width="150" HorizontalAlignment="Left">
+                            <Viewbox Grid.Row="4" HorizontalAlignment="Left">
                                 <components:TextBoxControl
+                                    Margin="0 15"
                                     x:Name="campoEstado"
                                     Grid.Row="4"
                                     Width="150"

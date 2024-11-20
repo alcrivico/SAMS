@@ -92,7 +92,7 @@ namespace SAMS.UI.Views
                     { "Type", "Text" },
                     { "Name", "Estado" },
                     { "Width", "*" },
-                    { "BindingName", "estado" }
+                    { "BindingName", "estadoProveedor" }
                 },
                 new Dictionary<string, string> {
 
