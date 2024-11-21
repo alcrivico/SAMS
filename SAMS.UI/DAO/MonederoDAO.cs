@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
+using SAMS.UI.Models.Entities;
 
 namespace SAMS.UI.DAO
 {
@@ -68,6 +69,68 @@ namespace SAMS.UI.DAO
 
             return monedero;
 
+        }
+
+        public static MonederoDTO ActualizarMonedero(MonederoDTO monedero)
+        {
+
+            var monederoData = _sams.Monedero.Where(m => m.codigoDeBarras == monedero.codigoDeBarras).FirstOrDefault();
+
+            monederoData.nombre = monedero.nombre;
+            monederoData.apellidoPaterno = monedero.apellidoPaterno;
+            monederoData.apellidoMaterno = monedero.apellidoMaterno;
+            monederoData.telefono = monedero.telefono;
+
+            _sams.SaveChanges();
+
+            return monedero;
+
+        }
+
+        public static MonederoDTO RegistrarMonedero(MonederoDTO monedero)
+        {
+
+            Monedero monederoData = new Monedero
+            {
+                nombre = monedero.nombre,
+                apellidoPaterno = monedero.apellidoPaterno,
+                apellidoMaterno = monedero.apellidoMaterno,
+                telefono = monedero.telefono,
+                codigoDeBarras = monedero.codigoDeBarras
+            };
+
+            monederoData.SetSaldo(0);
+
+            _sams.Monedero.Add(monederoData);
+            _sams.SaveChanges();
+
+            return monedero;
+
+        }
+
+        public static void GenerarCodigoDeBarras(MonederoDTO monedero)
+        {
+
+            Random random = new Random();
+
+            string codigoDeBarras = "";
+
+            do
+            {
+                codigoDeBarras = "";
+                for (int i = 0; i < 12; i++)
+                {
+                    codigoDeBarras += random.Next(0, 9).ToString();
+                }
+            } while (_sams.Monedero.Any(m => m.codigoDeBarras == codigoDeBarras));
+
+            monedero.codigoDeBarras = codigoDeBarras;
+
+        }
+
+        public static bool ExisteMonedero(MonederoDTO monedero)
+        {
+            return (_sams.Monedero.Any(m => m.telefono == monedero.telefono)) ? true : false;
         }
 
     }

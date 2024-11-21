@@ -37,7 +37,6 @@ namespace SAMS.UI.Views
 
             TablaMonederos.OnDetallesClickedHandler += botonDetallesClick;
             TablaMonederos.OnEditarClickedHandler += botonEditarClick;
-            TablaMonederos.OnEliminarClickedHandler += botonEliminarClick;
 
         }
 
@@ -128,7 +127,7 @@ namespace SAMS.UI.Views
             catch (Exception ex)
             {
 
-                InformationControl.Show("Error", "Ocurrió un error al obtener los monederos", "Aceptar");
+                InformationControl.Show("Error", "No se pudo conectar a la red del supermercado, inténtelo de nuevo más tarde", "Aceptar");
 
                 this.Close();
 
@@ -171,6 +170,18 @@ namespace SAMS.UI.Views
 
         }
 
+        private void botonRegistrar_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+
+            RegistrarMonederoView registrarMonederoView = new RegistrarMonederoView();
+
+            registrarMonederoView.MonederoRegistrado += RegistrarMonederoView_MonederoRegistrado;
+
+            registrarMonederoView.Show();
+
+        }
+
+
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
 
@@ -188,13 +199,41 @@ namespace SAMS.UI.Views
             ActionsControl actionBar = (ActionsControl)sender;
             MonederosDTO mondero = (MonederosDTO)actionBar.DataContext;
 
+            ActualizarMonederoView actualizarMonederoView = new ActualizarMonederoView(mondero);
+            actualizarMonederoView.MonederoActualizado += ActualizarMonederoView_MonederoActualizado;
+            actualizarMonederoView.Show();
+
         }
 
-        private void botonEliminarClick(object sender, RoutedEventArgs e)
+        private void ActualizarMonederoView_MonederoActualizado(object sender, MonederosDTO e)
         {
 
-            ActionsControl actionBar = (ActionsControl)sender;
-            MonederosDTO monedero = (MonederosDTO)actionBar.DataContext;
+            var monederoExistente = _monederos.OfType<MonederosDTO>().FirstOrDefault(m => m.codigoDeBarras == e.codigoDeBarras);
+
+            if (monederoExistente != null)
+            {
+                monederoExistente.telefono = e.telefono;
+                monederoExistente.nombrePropietario = e.nombrePropietario;
+                monederoExistente.saldo = e.saldo;
+            }
+            else
+            {
+                _monederos.Add(e);
+            }
+
+            TablaMonederos.SetItemsSource(null);
+            listaMonederos = _monederos.OfType<MonederosDTO>().ToList();
+            TablaMonederos.SetItemsSource(_monederos);
+
+        }
+
+        private void RegistrarMonederoView_MonederoRegistrado(object sender, MonederosDTO e)
+        {
+
+            _monederos.Add(e);
+            TablaMonederos.SetItemsSource(null);
+            listaMonederos = _monederos.OfType<MonederosDTO>().ToList();
+            TablaMonederos.SetItemsSource(_monederos);
 
         }
 
