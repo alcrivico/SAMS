@@ -332,6 +332,7 @@ GO
 CREATE VIEW V_ProductosRegistrados
 AS
 SELECT 
+    PI.codigo AS CodigoProducto,                            -- Código del producto
     PI.nombre AS NombreProducto,                              -- Nombre del producto
     CONCAT(PI.cantidadBodega + PI.cantidadExhibicion, ' ', UM.nombre) AS Cantidad, -- Total cantidad con unidad
     PI.precioActual AS PrecioActual,                         -- Precio actual del producto

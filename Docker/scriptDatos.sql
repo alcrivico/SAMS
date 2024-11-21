@@ -58,18 +58,35 @@ GO
 
 -- 8. Puesto
 INSERT INTO Puesto (nombre) VALUES
-('Gerente'),
+('Administrador'),
 ('Cajero'),
-('Almacen'),
+('Paqueteria'),
 ('Contador');
 GO
 
 -- 9. Empleado
 -- El empleado va a jalar JPL001 ese numero es de acuer a las uniciales de el nombre completo de la persona
-INSERT INTO Empleado (rfc, noempleado, nombre, apellidoPaterno, apellidoMaterno, correo, password, telefono, puestoId) VALUES
-('GARC840214HNL', 'E001', 'Juan', 'Pérez', 'López', 'juan.perez@gmail.com', 'contrasena123', '5551234567', 1),
-('MALO920512HNL', 'E002', 'María', 'López', 'Sánchez', 'maria.lopez@gmail.com', 'contrasena123', '5552345678', 2),
-('SACH950814HNL', 'E003', 'Carlos', 'Sánchez', 'Pérez', 'carlos.sanchez@gmail.com', 'contrasena123', '5553456789', 3);
+-- Declarar variables para las contraseñas y calcular sus hashes
+DECLARE @password1 NVARCHAR(MAX) = 'Morales300802';
+DECLARE @password2 NVARCHAR(MAX) = 'contraseña';
+DECLARE @password3 NVARCHAR(MAX) = 'alcrivico';
+DECLARE @password4 NVARCHAR(MAX) = 'soyunpokemonytuno';
+DECLARE @password5 NVARCHAR(MAX) = 'soyunagalletaytuno';
+
+DECLARE @hash1 NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @password1), 1);
+DECLARE @hash2 NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @password2), 1);
+DECLARE @hash3 NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @password3), 1);
+DECLARE @hash4 NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @password4), 1);
+DECLARE @hash5 NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @password5), 1);
+
+-- Insertar los valores con las contraseñas hasheadas
+INSERT INTO Empleado (rfc, noEmpleado, nombre, apellidoPaterno, apellidoMaterno, correo, password, telefono, puestoId) 
+VALUES
+('MOCM840214HNL', 'E001', 'Miguel Angel', 'Morales', 'Cruz', 'miguel@gmail.com', @hash1, '5551234567', 1),
+('MALO920512HNL', 'E002', 'Raul', 'Hernadez', 'Olivares', 'raul@gmail.com', @hash2, '5552345678', 1),
+('VICA950814HNL', 'E003', 'Albhieri Cristoff', 'Villa', 'Contreras', 'alcrivico@gmail.com', @hash3, '5553456789', 2),
+('GOLC950814HNL', 'E004', 'Cesar', 'Gonzalez', 'Lopez', 'cesar@gmail.com', @hash4, '5553456781', 1),
+('MOAV950814HNL', 'E005', 'Victoria', 'Moyano', 'Arguelles', 'victoria@gmail.com', @hash5, '5553456721', 3);
 GO
 
 -- 10. Caja
