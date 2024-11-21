@@ -144,7 +144,7 @@ namespace SAMS.UI.Views
             ActionsControl actionBar = (ActionsControl)sender;
             ProductosRegistradosDTO productoSeleccionado = (ProductosRegistradosDTO)actionBar.DataContext;
 
-            EditarProductoView editarProductoView = new EditarProductoView(empleado, productoSeleccionado);
+            EditarProductoView editarProductoView = new EditarProductoView(empleado, productoSeleccionado, false);
             editarProductoView.Show();
             this.Close();
 
@@ -152,7 +152,12 @@ namespace SAMS.UI.Views
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
         {
-            
+            ActionsControl actionBar = (ActionsControl)sender;
+            ProductosRegistradosDTO productoSeleccionado = (ProductosRegistradosDTO)actionBar.DataContext;
+
+            EditarProductoView editarProductoView = new EditarProductoView(empleado, productoSeleccionado, true);
+            editarProductoView.Show();
+            this.Close();
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)

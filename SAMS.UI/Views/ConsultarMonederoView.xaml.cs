@@ -51,7 +51,7 @@ namespace SAMS.UI.Views
             }
             catch (Exception ex)
             {
-                InformationControl.Show("Error", "No se pudo acceder a la red de la empresa", "Aceptar");
+                InformationControl.Show("Error", "No se pudo conectar a la red del supermercado, inténtelo de nuevo más tarde", "Aceptar");
             }
 
         }

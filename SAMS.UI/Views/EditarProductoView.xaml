@@ -406,7 +406,7 @@
                                                     VerticalAlignment="Bottom">
                                                     <components:TextBoxControl
                                                         x:Name="TextBoxControl_CantidadAMover"
-                                                        Width="288"
+                                                        Width="358"
                                                         Height="46"
                                                         VerticalAlignment="Center"
                                                         FieldName="Cantidad a mover:" />
@@ -426,7 +426,7 @@
                                                         FontSize="14"
                                                         FontWeight="Bold"
                                                         Foreground="{StaticResource SolidColorBrush_Red}"
-                                                        Text="La cantidad es mayor a la registrada"
+                                                        Text="Ingrese una cantidad valida"
                                                         TextAlignment="Left"
                                                         Visibility="Hidden" />
                                                 </Viewbox>
@@ -436,8 +436,8 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Top">
                                                     <components:ComboBoxControl
-                                                        x:Name="ComboBoxControl_Categorias"
-                                                        Width="209"
+                                                        x:Name="ComboBoxControl_Ubicaciones"
+                                                        Width="279"
                                                         Height="40"
                                                         HorizontalAlignment="Left"
                                                         FieldName="Ubicaciones" />
