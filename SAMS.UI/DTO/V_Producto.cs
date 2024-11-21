@@ -8,4 +8,6 @@ public class V_Producto
     public string codigo { get; set; }
 
     public string descripcion { get; set; }
+
+    public string rfc { get; set; }
 }

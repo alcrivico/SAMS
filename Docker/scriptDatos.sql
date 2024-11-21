@@ -58,16 +58,16 @@ GO
 
 -- 8. Puesto
 INSERT INTO Puesto (nombre) VALUES
-('Gerente'),
+('Administrador'),
 ('Cajero'),
-('Almacen'),
+('Paqueteria'),
 ('Contador');
 GO
 
 -- 9. Empleado
 -- El empleado va a jalar JPL001 ese numero es de acuer a las uniciales de el nombre completo de la persona
 INSERT INTO Empleado (rfc, noempleado, nombre, apellidoPaterno, apellidoMaterno, correo, password, telefono, puestoId) VALUES
-('GARC840214HNL', 'E001', 'Juan', 'Pérez', 'López', 'juan.perez@gmail.com', 'contrasena123', '5551234567', 1),
+('HEOR000623BK', 'E001', 'Raul', 'Hernandez', 'Olivares', 'raulh230600@gmail.com', '0xECB3CE554F5B016FB5606C8699BEA216004A9CB2B4FA82D9387A4BBC1FD5B0F9', '2281940630', 1),
 ('MALO920512HNL', 'E002', 'María', 'López', 'Sánchez', 'maria.lopez@gmail.com', 'contrasena123', '5552345678', 2),
 ('SACH950814HNL', 'E003', 'Carlos', 'Sánchez', 'Pérez', 'carlos.sanchez@gmail.com', 'contrasena123', '5553456789', 3);
 GO
@@ -82,6 +82,21 @@ GO
 -- 11. Producto
 INSERT INTO Producto (codigo, descripcion, esDevolvible, esPerecedero, nombre, proveedorId, unidadDeMedidaId) VALUES
 ('7501000111110', 'Leche entera pasteurizada Alpura', 1, 1, 'Leche Entera Alpura 1L', 1, 1),
+('7501000111111', 'Leche descremada Alpura', 1, 1, 'Leche Descremada Alpura 1L', 1, 1),
+('7501000111112', 'Leche deslactosada Alpura', 1, 1, 'Leche Deslactosada Alpura 1L', 1, 1),
+('7501000111113', 'Leche con chocolate Alpura', 1, 1, 'Leche con Chocolate Alpura 1L', 1, 1),
+('7501000111114', 'Leche enteral Alpura', 1, 1, 'Leche Enteral Alpura 1L', 1, 1),
+('7501000111115', 'Leche 100% leche Alpura', 1, 1, 'Leche 100% Alpura 1L', 1, 1),
+('7501000111116', 'Leche líquida Alpura', 1, 1, 'Leche Líquida Alpura 1L', 1, 1),
+('7501000111117', 'Leche baja en grasa Alpura', 1, 1, 'Leche Baja en Grasa Alpura 1L', 1, 1),
+('7501000111118', 'Leche sin lactosa Alpura', 1, 1, 'Leche Sin Lactosa Alpura 1L', 1, 1),
+('7501000111119', 'Leche con calcio Alpura', 1, 1, 'Leche con Calcio Alpura 1L', 1, 1),
+('7501000111120', 'Leche con Omega 3 Alpura', 1, 1, 'Leche con Omega 3 Alpura 1L', 1, 1),
+('7501000111121', 'Leche orgánica Alpura', 1, 1, 'Leche Orgánica Alpura 1L', 1, 1),
+('7501000111122', 'Leche sin grasa Alpura', 1, 1, 'Leche Sin Grasa Alpura 1L', 1, 1),
+('7501000111123', 'Leche baja en calorías Alpura', 1, 1, 'Leche Baja en Calorías Alpura 1L', 1, 1),
+('7501000111124', 'Leche natural Alpura', 1, 1, 'Leche Natural Alpura 1L', 1, 1),
+('7501000111125', 'Leche sin azúcares añadidos Alpura', 1, 1, 'Leche sin Azúcares Añadidos Alpura 1L', 1, 1),
 ('7501000122223', 'Pan de caja blanco Bimbo', 1, 0, 'Pan Blanco Bimbo 680g', 2, 4),
 ('7501000133336', 'Refresco Coca-Cola 2 litros', 1, 0, 'Coca-Cola 2L', 3, 1);
 GO

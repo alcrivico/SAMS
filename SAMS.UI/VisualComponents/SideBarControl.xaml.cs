@@ -51,7 +51,7 @@ namespace SAMS.UI.VisualComponents
         private void HomeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            PrincipalView principalView = new(empleado);
+            PrincipalView principalView = new (empleado);
 
             principalView.Show();
             Window.GetWindow(this).Close();
@@ -60,6 +60,12 @@ namespace SAMS.UI.VisualComponents
 
         private void SetMenuByEmployee()
         {
+            SideElement1.MouseLeftButtonUp -= SideElement1_MouseLeftButtonUp;
+            SideElement2.MouseLeftButtonUp -= SideElement2_MouseLeftButtonUp;
+            SideElement3.MouseLeftButtonUp -= SideElement3_MouseLeftButtonUp;
+            SideElement4.MouseLeftButtonUp -= SideElement4_MouseLeftButtonUp;
+            SideElement5.MouseLeftButtonUp -= SideElement5_MouseLeftButtonUp;
+            SideElement6.MouseLeftButtonUp -= SideElement6_MouseLeftButtonUp;
 
             switch (Employee)
             {
@@ -892,15 +898,11 @@ namespace SAMS.UI.VisualComponents
         private void SideElement1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            SideElementControl element = (SideElementControl)sender;
-
             switch (Employee)
             {
                 case "Administrador":
-                    VerProductosView principalView = new(empleado);
-                    principalView.Show();
-                    
-                    //Este metodo para cerrar la ventana se debe remplazar
+                    VerProductosView productosView = new VerProductosView(empleado);
+                    productosView.Show();
                     Window.GetWindow(this).Close();
                     break;
                 case "Cajero":
@@ -912,7 +914,7 @@ namespace SAMS.UI.VisualComponents
                 default:
                     break;
             }
-
+            
         }
 
         private void SideElement2_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -923,6 +925,9 @@ namespace SAMS.UI.VisualComponents
             switch (Employee)
             {
                 case "Administrador":
+                    VerProveedoresView proveedoresView = new VerProveedoresView(empleado);
+                    proveedoresView.Show();
+                    Window.GetWindow(this).Close();
                     break;
                 case "Cajero":
                     break;
@@ -946,12 +951,19 @@ namespace SAMS.UI.VisualComponents
                 case "Administrador":
                     break;
                 case "Cajero":
+
+                    VerMonederosView verMonederosView = new VerMonederosView(empleado);
+
+                    verMonederosView.Show();
+
                     break;
                 case "Paqueteria":
                     break;
                 default:
                     break;
             }
+
+            Window.GetWindow(this).Close();
 
         }
 

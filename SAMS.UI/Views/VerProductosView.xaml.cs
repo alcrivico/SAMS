@@ -3,6 +3,7 @@ using SAMS.UI.DTO;
 using SAMS.UI.Models.Entities;
 using SAMS.UI.VisualComponents;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -28,6 +29,7 @@ namespace SAMS.UI.Views
             ObtenerProductos();
 
             SideBarControl_MenuLateral = new SideBarControl(empleado);
+            SideBarControl_MenuLateral.SideElementSelected = 1;
             MenuLateral.Children.Add(SideBarControl_MenuLateral);
             SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
 
@@ -128,6 +130,7 @@ namespace SAMS.UI.Views
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
                 InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
                     " inténtelo de nuevo más tarde", "Aceptar");
                 this.Close();
