@@ -188,6 +188,9 @@ namespace SAMS.UI.Views
             ActionsControl actionBar = (ActionsControl)sender;
             MonederosDTO mondero = (MonederosDTO)actionBar.DataContext;
 
+            ActualizarMonederoView actualizarMonederoView = new ActualizarMonederoView(mondero);
+            actualizarMonederoView.Show();
+
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
