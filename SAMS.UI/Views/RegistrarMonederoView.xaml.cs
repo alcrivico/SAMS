@@ -19,32 +19,29 @@ using System.Windows.Shapes;
 namespace SAMS.UI.Views
 {
     /// <summary>
-    /// Interaction logic for ActualizarMonederoView.xaml
+    /// Interaction logic for RegistrarMonederoView.xaml
     /// </summary>
-    public partial class ActualizarMonederoView : Window
+    public partial class RegistrarMonederoView : Window
     {
 
         MonederoDTO _monedero;
 
-        public event EventHandler<MonederosDTO> MonederoActualizado;
+        public event EventHandler<MonederosDTO> MonederoRegistrado;
 
-        public ActualizarMonederoView()
+        public RegistrarMonederoView()
         {
-            InitializeComponent();
-        }
 
-        public ActualizarMonederoView(MonederosDTO monedero)
-        {
+            _monedero = new MonederoDTO();
 
             InitializeComponent();
 
-            this.DataContext = monedero;
+            GenerarCodigoDeBarras();
 
-            CargarDatos(monedero);
+            campoCodigoBarras.Text = _monedero.codigoDeBarras;
 
         }
 
-        private void botonAceptar_ButtonControlClick(object sender, RoutedEventArgs e)
+        private void botonRegistrar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
 
             try
@@ -60,25 +57,26 @@ namespace SAMS.UI.Views
                 }
                 else
                 {
-
-                    MonederoDTO monedero = new MonederoDTO
+                    _monedero = new MonederoDTO
                     {
                         nombre = campoNombre.Text,
                         apellidoPaterno = campoApellidoP.Text,
                         apellidoMaterno = campoApellidoM.Text,
                         telefono = campoTelefono.Text,
+                        saldo = 0,
                         codigoDeBarras = campoCodigoBarras.Text
                     };
 
-                    MonederoDAO.ActualizarMonedero(monedero);
-                    InformationControl.Show("Información", "Monedero actualizado correctamente", "Aceptar");
+                    MonederoDAO.RegistrarMonedero(_monedero);
 
-                    MonederoActualizado?.Invoke(this, new MonederosDTO
+                    InformationControl.Show("Éxito", "Monedero registrado correctamente", "Aceptar");
+
+                    MonederoRegistrado?.Invoke(this, new MonederosDTO
                     {
-                        codigoDeBarras = monedero.codigoDeBarras,
-                        telefono = monedero.telefono,
-                        nombrePropietario = $"{monedero.nombre} {monedero.apellidoPaterno} {monedero.apellidoMaterno}",
-                        saldo = monedero.saldo
+                        nombrePropietario = $"{_monedero.nombre} {_monedero.apellidoPaterno} {_monedero.apellidoMaterno}",
+                        telefono = _monedero.telefono,
+                        saldo = _monedero.saldo,
+                        codigoDeBarras = _monedero.codigoDeBarras
                     });
 
                     this.Close();
@@ -94,14 +92,14 @@ namespace SAMS.UI.Views
 
         private void botonCancelar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            
+
             if (
-                campoNombre.Text != _monedero.nombre || 
-                campoApellidoP.Text != _monedero.apellidoPaterno || 
-                campoApellidoM.Text != _monedero.apellidoMaterno || 
-                campoTelefono.Text != _monedero.telefono)
+                campoNombre.Text.Length == 0 ||
+                campoApellidoP.Text.Length == 0 ||
+                campoApellidoM.Text.Length == 0 ||
+                campoTelefono.Text.Length == 0)
             {
-                if (ConfirmationControl.Show("Advertencia", "¿Estás seguro de cancelar los cambios?, se perderán los campos actualizados", "Aceptar", "Cancelar"))
+                if (ConfirmationControl.Show("Advertencia", "¿Estás seguro de cancelar el registro?, se perderán los campos llenados", "Aceptar", "Cancelar"))
                 {
                     this.Close();
                 }
@@ -113,35 +111,24 @@ namespace SAMS.UI.Views
 
         }
 
-        private void CargarDatos(MonederosDTO monedero)
+
+        private void GenerarCodigoDeBarras()
         {
+
             try
             {
-
-                _monedero = MonederoDAO.ObtenerMonedero(monedero.codigoDeBarras);
-
-                campoNombre.Text = _monedero.nombre;
-
-                campoApellidoP.Text = _monedero.apellidoPaterno;
-
-                campoApellidoM.Text = _monedero.apellidoMaterno;
-
-                campoTelefono.Text = _monedero.telefono;
-
-                campoSaldo.Text = _monedero.saldo.ToString();
-
-                campoCodigoBarras.Text = _monedero.codigoDeBarras;
-
+                MonederoDAO.GenerarCodigoDeBarras(_monedero);
             }
             catch (Exception ex)
             {
-                InformationControl.Show("Error", "No se pudo acceder a la red de la empresa", "Aceptar");
+                InformationControl.Show("Error", "No se pudo conectar a la red del supermercado, inténtelo de nuevo más tarde", "Aceptar");
             }
 
         }
 
         private void campoNombre_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
+
             if (campoNombre.Text.Length > 0)
             {
                 campoNombre.Text = campoNombre.Text.Substring(0, 1).ToUpper() + campoNombre.Text.Substring(1);
@@ -151,18 +138,15 @@ namespace SAMS.UI.Views
             if (campoNombre.Text.Length != 0 &&
                 campoApellidoP.Text.Length != 0 &&
                 campoApellidoM.Text.Length != 0 &&
-                campoTelefono.Text.Length != 0 &&
-                (campoNombre.Text != _monedero.nombre ||
-                campoApellidoP.Text != _monedero.apellidoPaterno ||
-                campoApellidoM.Text != _monedero.apellidoMaterno ||
-                campoTelefono.Text != _monedero.telefono))
+                campoTelefono.Text.Length != 0)
             {
-                botonAceptar.IsButtonEnabled = true;
+                botonRegistrar.IsButtonEnabled = true;
             }
             else
             {
-                botonAceptar.IsButtonEnabled = false;
+                botonRegistrar.IsButtonEnabled = false;
             }
+
         }
 
         private void campoApellidoP_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
@@ -173,21 +157,16 @@ namespace SAMS.UI.Views
                 campoApellidoP.Text = campoApellidoP.Text.Substring(0, 1).ToUpper() + campoApellidoP.Text.Substring(1);
                 campoApellidoP.Text = campoApellidoP.Text.Trim();
             }
-
             if (campoNombre.Text.Length != 0 &&
                 campoApellidoP.Text.Length != 0 &&
                 campoApellidoM.Text.Length != 0 &&
-                campoTelefono.Text.Length != 0 &&
-                (campoNombre.Text != _monedero.nombre ||
-                campoApellidoP.Text != _monedero.apellidoPaterno ||
-                campoApellidoM.Text != _monedero.apellidoMaterno ||
-                campoTelefono.Text != _monedero.telefono))
+                campoTelefono.Text.Length != 0)
             {
-                botonAceptar.IsButtonEnabled = true;
+                botonRegistrar.IsButtonEnabled = true;
             }
             else
             {
-                botonAceptar.IsButtonEnabled = false;
+                botonRegistrar.IsButtonEnabled = false;
             }
 
         }
@@ -200,21 +179,16 @@ namespace SAMS.UI.Views
                 campoApellidoM.Text = campoApellidoM.Text.Substring(0, 1).ToUpper() + campoApellidoM.Text.Substring(1);
                 campoApellidoM.Text = campoApellidoM.Text.Trim();
             }
-
             if (campoNombre.Text.Length != 0 &&
                 campoApellidoP.Text.Length != 0 &&
                 campoApellidoM.Text.Length != 0 &&
-                campoTelefono.Text.Length != 0 &&
-                (campoNombre.Text != _monedero.nombre ||
-                campoApellidoP.Text != _monedero.apellidoPaterno ||
-                campoApellidoM.Text != _monedero.apellidoMaterno ||
-                campoTelefono.Text != _monedero.telefono))
+                campoTelefono.Text.Length != 0)
             {
-                botonAceptar.IsButtonEnabled = true;
+                botonRegistrar.IsButtonEnabled = true;
             }
             else
             {
-                botonAceptar.IsButtonEnabled = false;
+                botonRegistrar.IsButtonEnabled = false;
             }
 
         }
@@ -222,28 +196,20 @@ namespace SAMS.UI.Views
         private void campoTelefono_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
 
-            if (campoTelefono.Text.Length != 0)
-            {
-                campoTelefono.Text = campoTelefono.Text.Trim();
-            }
-
             if (campoNombre.Text.Length != 0 &&
                 campoApellidoP.Text.Length != 0 &&
                 campoApellidoM.Text.Length != 0 &&
-                campoTelefono.Text.Length != 0 &&
-                (campoNombre.Text != _monedero.nombre ||
-                campoApellidoP.Text != _monedero.apellidoPaterno ||
-                campoApellidoM.Text != _monedero.apellidoMaterno ||
-                campoTelefono.Text != _monedero.telefono))
+                campoTelefono.Text.Length != 0)
             {
-                botonAceptar.IsButtonEnabled = true;
+                botonRegistrar.IsButtonEnabled = true;
             }
             else
             {
-                botonAceptar.IsButtonEnabled = false;
+                botonRegistrar.IsButtonEnabled = false;
             }
 
         }
+        
     }
 
 }

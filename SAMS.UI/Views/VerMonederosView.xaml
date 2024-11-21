@@ -105,12 +105,14 @@
                                     </Viewbox>
 
                                     <components:ButtonControl
+                                        x:Name="botonRegistrar"
                                         Grid.Column="1"
                                         Margin="0,6,0,6"
                                         HorizontalAlignment="Right"
                                         BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
                                         ButtonBackgroundColor="Transparent"
                                         ButtonBorderColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                        ButtonControlClick="botonRegistrar_ButtonControlClick"
                                         ButtonForegroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
                                         IsDropShadowEnabled="False"
                                         Text="Agregar Monedero +" />

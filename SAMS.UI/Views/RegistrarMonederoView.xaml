@@ -1,5 +1,5 @@
 ﻿<Window
-    x:Class="SAMS.UI.Views.ActualizarMonederoView"
+    x:Class="SAMS.UI.Views.RegistrarMonederoView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
@@ -14,6 +14,7 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
+
     <Grid>
         <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="30">
             <Border
@@ -35,7 +36,7 @@
                         FontFamily="{StaticResource Font_Nunito}"
                         FontSize="24"
                         FontWeight="Bold"
-                        Text="Actualizar Monedero" />
+                        Text="Registrar Monedero" />
 
                     <Grid Grid.Row="1" Margin="20">
 
@@ -78,13 +79,6 @@
                             TextBoxControlTextChanged="campoTelefono_TextBoxControlTextChanged" />
 
                         <components:TextBoxControl
-                            x:Name="campoSaldo"
-                            Grid.Row="4"
-                            Width="160"
-                            EnableTextBox="False"
-                            FieldName="Saldo $" />
-
-                        <components:TextBoxControl
                             x:Name="campoCodigoBarras"
                             Grid.Row="5"
                             Width="160"
@@ -101,16 +95,16 @@
                         </Grid.ColumnDefinitions>
 
                         <components:ButtonControl
-                            x:Name="botonAceptar"
+                            x:Name="botonRegistrar"
                             Grid.Column="0"
                             Margin="0,0,0,10"
                             ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
-                            ButtonControlClick="botonAceptar_ButtonControlClick"
+                            ButtonControlClick="botonRegistrar_ButtonControlClick"
                             ButtonForegroundColor="{StaticResource SolidColorBrush_White}"
                             ButtonWidth="160"
                             FontSize="18"
                             IsButtonEnabled="False"
-                            Text="Aceptar" />
+                            Text="Registrar" />
 
                         <components:ButtonControl
                             x:Name="botonCancelar"
@@ -131,4 +125,5 @@
         </Border>
 
     </Grid>
+
 </Window>

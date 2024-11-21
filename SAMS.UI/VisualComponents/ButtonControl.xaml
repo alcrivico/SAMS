@@ -37,6 +37,7 @@
                 </Border.Style>
 
                 <TextBlock
+                    x:Name="Button_Text"
                     Margin="10,5,10,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"

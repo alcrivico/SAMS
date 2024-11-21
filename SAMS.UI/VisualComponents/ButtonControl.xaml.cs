@@ -30,7 +30,7 @@ namespace SAMS.UI.VisualComponents
                 "IsButtonEnabled",
                 typeof(bool),
                 typeof(ButtonControl),
-                new PropertyMetadata(true));
+                new PropertyMetadata(true, OnEnableButtonPropertyChanged));
 
         public bool IsButtonEnabled
         {
@@ -173,5 +173,24 @@ namespace SAMS.UI.VisualComponents
             Button_Border.Effect = null;
 
         }
+
+        private static void OnEnableButtonPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ButtonControl control = (ButtonControl)d;
+            control.IsButtonEnabled = (bool)e.NewValue;
+
+            if (control.IsButtonEnabled)
+            {
+                control.Button_Border.Opacity = 1;
+                control.Button_Text.Opacity = 1;
+            }
+            else
+            {
+                control.Button_Border.Opacity = 0.5;
+                control.Button_Text.Opacity = 0.5;
+            }
+
+        }
+
     }
 }

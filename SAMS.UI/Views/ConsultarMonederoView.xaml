@@ -75,7 +75,8 @@
                             Grid.Row="3"
                             Width="160"
                             EnableTextBox="False"
-                            FieldName="Teléfono" />
+                            FieldName="Teléfono"
+                            MaxLengthTextBox="10" />
 
                         <components:TextBoxControl
                             x:Name="campoSaldo"
