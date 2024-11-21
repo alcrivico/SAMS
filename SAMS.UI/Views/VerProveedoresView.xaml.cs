@@ -16,15 +16,22 @@ namespace SAMS.UI.Views
     {
         List<V_Proveedores> listaProveedores;
         ObservableCollection<Object> _proveedores;
-
-        public VerProveedoresView()
+        EmpleadoLoginDTO _empleado;
+        SideBarControl SideBarControl_MenuLateral;
+        public VerProveedoresView(EmpleadoLoginDTO empleado)
         {
+            _empleado = empleado;
             listaProveedores = new List<V_Proveedores>();
             _proveedores = new ObservableCollection<Object>();
 
             InitializeComponent();
             DefinirColumnas();
             ObtenerProveedores();
+
+            SideBarControl_MenuLateral = new SideBarControl(_empleado);
+            SideBarControl_MenuLateral.SideElementSelected = 2;
+            MenuLateral.Children.Add(SideBarControl_MenuLateral);
+            SideBarControl_MenuLateral.Employee = _empleado.tipoEmpleado;
 
             TablaProveedores.OnDetallesClickedHandler += botonDetallesClick;
             TablaProveedores.OnEditarClickedHandler += botonEditarClick;

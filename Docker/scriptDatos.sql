@@ -58,16 +58,16 @@ GO
 
 -- 8. Puesto
 INSERT INTO Puesto (nombre) VALUES
-('Gerente'),
+('Administrador'),
 ('Cajero'),
-('Almacen'),
+('Paqueteria'),
 ('Contador');
 GO
 
 -- 9. Empleado
 -- El empleado va a jalar JPL001 ese numero es de acuer a las uniciales de el nombre completo de la persona
 INSERT INTO Empleado (rfc, noempleado, nombre, apellidoPaterno, apellidoMaterno, correo, password, telefono, puestoId) VALUES
-('GARC840214HNL', 'E001', 'Juan', 'Pérez', 'López', 'juan.perez@gmail.com', 'contrasena123', '5551234567', 1),
+('HEOR000623BK', 'E001', 'Raul', 'Hernandez', 'Olivares', 'raulh230600@gmail.com', '0xECB3CE554F5B016FB5606C8699BEA216004A9CB2B4FA82D9387A4BBC1FD5B0F9', '2281940630', 1),
 ('MALO920512HNL', 'E002', 'María', 'López', 'Sánchez', 'maria.lopez@gmail.com', 'contrasena123', '5552345678', 2),
 ('SACH950814HNL', 'E003', 'Carlos', 'Sánchez', 'Pérez', 'carlos.sanchez@gmail.com', 'contrasena123', '5553456789', 3);
 GO

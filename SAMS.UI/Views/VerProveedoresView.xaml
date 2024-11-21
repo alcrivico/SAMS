@@ -52,10 +52,7 @@
                         <!--  Employee debe ser una DependencyProperty que se pase por el constructor  -->
                         <!--  y que el actualiza en cuanto se cambia la propiedad y se asigna aquí  -->
                         <!--  como un binding  -->
-                        <components:SideBarControl
-                            Grid.Column="0"
-                            Employee="Administrador"
-                            SideElementSelected="2" />
+                        <Grid x:Name="MenuLateral" />
 
                         <Grid Grid.Column="1" Margin="30,0,30,0">
 
