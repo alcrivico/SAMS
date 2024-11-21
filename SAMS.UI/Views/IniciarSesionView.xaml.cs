@@ -1,6 +1,7 @@
 ﻿using SAMS.UI.DAO;
 using SAMS.UI.DTO;
 using SAMS.UI.VisualComponents;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -124,6 +125,7 @@ namespace SAMS.UI.Views
             catch (Exception ex)
             {
                 MostrarMensajeErrorConexion();
+                Debug.WriteLine(ex.Message);
             }
         }
     }

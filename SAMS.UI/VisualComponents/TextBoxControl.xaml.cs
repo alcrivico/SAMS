@@ -36,6 +36,19 @@ namespace SAMS.UI.VisualComponents
                 typeof(TextBoxControl),
                 new PropertyMetadata(true, OnEnableTextBoxPropertyChanged));
 
+        public static readonly DependencyProperty MaxLengthProperty =
+            DependencyProperty.Register(
+                "MaxLengthTextBox",
+                typeof(int),
+                typeof(TextBoxControl),
+                new PropertyMetadata(1000));
+
+        public int MaxLengthTextBox
+        {
+            get { return (int)GetValue(MaxLengthProperty); }
+            set { SetValue(MaxLengthProperty, value); }
+        }
+
         public bool EnableTextBox
         {
             get { return (bool)GetValue(EnableTextBoxProperty); }

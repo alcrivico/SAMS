@@ -1,12 +1,12 @@
 ﻿<Window
-    x:Class="SAMS.UI.Views.ConsultarMonederoView"
+    x:Class="SAMS.UI.Views.ActualizarMonederoView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:SAMS.UI.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="SAMS - Consultar Monedero"
+    Title="SAMS - Actualizar Monedero"
     Width="400"
     Height="600"
     AllowsTransparency="True"
@@ -14,7 +14,6 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-
     <Grid>
         <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="30">
             <Border
@@ -36,7 +35,7 @@
                         FontFamily="{StaticResource Font_Nunito}"
                         FontSize="24"
                         FontWeight="Bold"
-                        Text="Detalle de Monedero" />
+                        Text="Actualizar Monedero" />
 
                     <Grid Grid.Row="1" Margin="20">
 
@@ -53,56 +52,69 @@
                             x:Name="campoNombre"
                             Grid.Row="0"
                             Width="160"
-                            EnableTextBox="False"
                             FieldName="Nombre" />
 
                         <components:TextBoxControl
                             x:Name="campoApellidoP"
                             Grid.Row="1"
                             Width="160"
-                            EnableTextBox="False"
                             FieldName="Apellido Paterno" />
 
                         <components:TextBoxControl
                             x:Name="campoApellidoM"
                             Grid.Row="2"
                             Width="160"
-                            EnableTextBox="False"
                             FieldName="Apellido Materno" />
 
                         <components:TextBoxControl
                             x:Name="campoTelefono"
                             Grid.Row="3"
                             Width="160"
-                            EnableTextBox="False"
                             FieldName="Teléfono" />
 
                         <components:TextBoxControl
                             x:Name="campoSaldo"
                             Grid.Row="4"
                             Width="160"
-                            EnableTextBox="False"
                             FieldName="Saldo $" />
 
                         <components:TextBoxControl
                             x:Name="campoCodigoBarras"
                             Grid.Row="5"
                             Width="160"
-                            EnableTextBox="False"
                             FieldName="Código de Barras" />
 
                     </Grid>
 
-                    <components:ButtonControl
-                        x:Name="botonSalir"
-                        Grid.Row="2"
-                        Margin="0,0,0,10"
-                        ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
-                        ButtonControlClick="botonSalir_ButtonControlClick"
-                        ButtonForegroundColor="{StaticResource SolidColorBrush_White}"
-                        ButtonWidth="160"
-                        FontSize="18"
-                        Text="Salir" />
+                    <Grid Grid.Row="2">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <components:ButtonControl
+                            x:Name="botonAceptar"
+                            Grid.Column="0"
+                            Margin="0,0,0,10"
+                            ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                            ButtonControlClick="botonAceptar_ButtonControlClick"
+                            ButtonForegroundColor="{StaticResource SolidColorBrush_White}"
+                            ButtonWidth="160"
+                            FontSize="18"
+                            Text="Aceptar" />
+
+                        <components:ButtonControl
+                            x:Name="botonCancelar"
+                            Grid.Column="1"
+                            Margin="0,0,0,10"
+                            ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                            ButtonControlClick="botonCancelar_ButtonControlClick"
+                            ButtonForegroundColor="{StaticResource SolidColorBrush_White}"
+                            ButtonWidth="160"
+                            FontSize="18"
+                            Text="Cancelar" />
+                    </Grid>
 
                 </Grid>
 
@@ -111,5 +123,4 @@
         </Border>
 
     </Grid>
-
 </Window>

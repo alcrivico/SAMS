@@ -1,0 +1,118 @@
+﻿<Window
+    x:Class="SAMS.UI.Views.RegistrarProveedorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Registrar proveedor"
+    Width="680"
+    Height="720"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Grid>
+        <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20 20 5 20">
+            <Border
+                Margin="30,30,30,30"
+                Background="{StaticResource SolidColorBrush_AntiFlashWhite}"
+                CornerRadius="20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.1*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="0.3*" />
+                        <RowDefinition Height="0.2*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Font_Nunito}"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Text="Registrar proveedor" />
+
+                    <Grid Grid.Row="1" Margin="35,0,25,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <components:TextBoxControl
+                            x:Name="campoRfc"
+                            Grid.Row="0"
+                            Width="350"
+                            HorizontalAlignment="Left"
+                            FieldName="RFC"
+                            MaxLengthTextBox="12"
+                            TextBoxControlTextChanged="campoRfc_TextBoxControlTextChanged" />
+
+                        <components:TextBoxControl
+                            x:Name="campoNombre"
+                            Grid.Row="1"
+                            Width="550"
+                            HorizontalAlignment="Left"
+                            FieldName="Nombre" />
+                        <components:TextBoxControl
+                            x:Name="campoCorreo"
+                            Grid.Row="2"
+                            Width="550"
+                            HorizontalAlignment="Left"
+                            FieldName="Correo electrónico" />
+                        <components:TextBoxControl
+                            x:Name="campoTelefono"
+                            Grid.Row="3"
+                            Width="200"
+                            HorizontalAlignment="Left"
+                            FieldName="Teléfono" />
+                    </Grid>
+                    <Border
+                        x:Name="botonSubirArchivo"
+                        Grid.Row="2"
+                        Width="110"
+                        Margin="0,10"
+                        MouseLeftButtonUp="botonSubirArchivo_MouseLeftButtonUp">
+                        <Border.Background>
+                            <ImageBrush ImageSource="{StaticResource icon_CargarArchivo}" Stretch="Uniform" />
+                        </Border.Background>
+                    </Border>
+                    <Grid Grid.Row="3" Margin="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                        </Grid.ColumnDefinitions>
+
+                        <components:ButtonControl
+                            x:Name="botonRegistrar"
+                            Grid.Column="0"
+                            Margin="0,0,0,10"
+                            ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                            ButtonControlClick="botonRegistrar_ButtonControlClick"
+                            ButtonForegroundColor="{StaticResource SolidColorBrush_White}"
+                            ButtonWidth="160"
+                            FontSize="18"
+                            Text="Registrar" />
+                        <components:ButtonControl
+                            x:Name="botonCancelar"
+                            Grid.Column="1"
+                            Margin="0,0,0,10"
+                            ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                            ButtonControlClick="botonCancelar_ButtonControlClick"
+                            ButtonForegroundColor="{StaticResource SolidColorBrush_White}"
+                            ButtonWidth="160"
+                            FontSize="18"
+                            Text="Cancelar" />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</Window>
