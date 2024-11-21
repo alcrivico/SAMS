@@ -14,10 +14,18 @@ public partial class RegistrarPromocionView : Window
 {
     List<ProductoInventarioPromocionDTO> listaProductoInventario;
     ObservableCollection<Object> _productosInventario;
-    public RegistrarPromocionView()
+    private EmpleadoLoginDTO empleado;
+    private SideBarControl SideBarControl_MenuLateral;
+    public RegistrarPromocionView(EmpleadoLoginDTO? empleado = null)
     {
         _productosInventario = new ObservableCollection<Object>();
+        this.empleado = empleado ?? new EmpleadoLoginDTO() { tipoEmpleado = "Paqueteria" };
         InitializeComponent();
+
+        SideBarControl_MenuLateral = new SideBarControl(empleado);
+        MenuLateral.Children.Add(SideBarControl_MenuLateral);
+        SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
+
         DefinirColumnas();
         ObtenerProductosInventario();
     }
@@ -122,6 +130,18 @@ public partial class RegistrarPromocionView : Window
 
     private void Registrar_ButtonControlClick(object sender, RoutedEventArgs e)
     {
+        var objetoSeleccionado = TablaProductos.GetSelectedItem();
 
+        if (objetoSeleccionado is ProductoInventarioPromocionDTO productoSeleccionado)
+        {
+            FormularioPromocionView formularioPromocionView = new(productoSeleccionado.id, this, empleado);
+            formularioPromocionView.ShowDialog();
+        }
+        else
+        {
+            InformationControl.Show("Aviso", "Debe seleccionar un producto antes de registrar una promoción.", "Aceptar");
+        }
     }
+
+
 }

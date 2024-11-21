@@ -144,12 +144,15 @@ INNER JOIN
     v.empleadoId = e.id
 GO
 
-CREATE VIEW V_Promocion AS
+CREATE OR alter VIEW V_Promocion AS
 SELECT
     p.id,
 	p.nombre,
-	p.porcentajeDescuento,
-	pv.fechaInicio,
+    CAST(pi.cantidadBodega + pi.cantidadExhibicion AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidad,
+    p.porcentajeDescuento,
+    p.cantMaxima,
+    p.cantMinima,
+    pv.fechaInicio,
 	pv.fechaFin
 FROM
 	Promocion p
@@ -157,6 +160,16 @@ INNER JOIN
 	PromocionVigencia pv
 	ON
 	p.id = pv.promocionId
+INNER JOIN
+    ProductoInventario pi
+    ON
+    p.id = pi.promocionId
+LEFT JOIN
+    UnidadDeMedida um
+    ON
+    pi.unidadDeMedidaId = um.id
+WHERE
+    pv.fechaFin >= GETDATE();
 GO
 
 
