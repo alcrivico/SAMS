@@ -76,12 +76,14 @@
                             x:Name="campoSaldo"
                             Grid.Row="4"
                             Width="160"
+                            EnableTextBox="False"
                             FieldName="Saldo $" />
 
                         <components:TextBoxControl
                             x:Name="campoCodigoBarras"
                             Grid.Row="5"
                             Width="160"
+                            EnableTextBox="False"
                             FieldName="Código de Barras" />
 
                     </Grid>
