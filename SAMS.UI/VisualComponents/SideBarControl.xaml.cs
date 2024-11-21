@@ -925,6 +925,9 @@ namespace SAMS.UI.VisualComponents
             switch (Employee)
             {
                 case "Administrador":
+                    VerProveedoresView proveedoresView = new VerProveedoresView(empleado);
+                    proveedoresView.Show();
+                    Window.GetWindow(this).Close();
                     break;
                 case "Cajero":
                     break;
