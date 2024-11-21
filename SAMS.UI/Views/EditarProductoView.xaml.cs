@@ -14,6 +14,7 @@ namespace SAMS.UI.Views
     /// </summary>
     public partial class EditarProductoView : Window
     {
+        bool esModificacion;
         DetalleProductoDTO detalleProducto;
         EmpleadoLoginDTO empleado;
         ProductosRegistradosDTO producto;
@@ -23,18 +24,19 @@ namespace SAMS.UI.Views
         List<UnidadDeMedidaDTO> unidadesDeMedida;
         private ObservableCollection<object> _unidadesDeMedida;
 
-        public EditarProductoView(EmpleadoLoginDTO empleado, ProductosRegistradosDTO producto)
+        public EditarProductoView(EmpleadoLoginDTO empleado, ProductosRegistradosDTO producto, bool esModificación)
         {
+            this.esModificacion = esModificación;
             this.empleado = empleado;
             this.producto = producto;
-            
+
+            InitializeComponent();
+
             categorias = new List<CategoriaDTO>();
             _categorias = new ObservableCollection<object>();
 
             unidadesDeMedida = new List<UnidadDeMedidaDTO>();
             _unidadesDeMedida = new ObservableCollection<object>();
-
-            InitializeComponent();
 
             SideBarControl_MenuLateral = new SideBarControl(empleado);
             MenuLateral.Children.Add(SideBarControl_MenuLateral);
@@ -43,6 +45,12 @@ namespace SAMS.UI.Views
             ObtenerCategorias();
             ObtenerUnidadesDeMedida();
             ObtenerDetalleproducto();
+            
+
+            if (esModificacion)
+            {
+                ActivarCamposProducto();
+            }  
 
         }
 
@@ -148,6 +156,26 @@ namespace SAMS.UI.Views
                     " inténtelo de nuevo más tarde", "Aceptar");
                 this.Close();
             }
+        }
+
+        private void ActivarCamposProducto()
+        {
+            TextArea_Descripcion.IsEnabled = true;
+            TextBox_PrecioActual.IsEnabled = true;
+            DatePicker_FechaCaducidad.IsEnabled = true;
+            ComboBox_Categorias.IsEnabled = true;
+            ComboBox_UnidadMedida.IsEnabled = true;
+            CheckBox_EsPerecedero.IsEnabled = true;
+            CheckBox_EsDevolvible.IsEnabled = true;
+            EditarCantidadBodegaExhibición.Visibility = Visibility.Visible;
+            Button_Modificar.Visibility = Visibility.Visible;
+            Button_Volver.Text = "Cancelar";
+
+        }
+
+        private void ValidarCamposProducto()
+        {
+
         }
 
     }
