@@ -18,13 +18,18 @@ namespace SAMS.UI.Views
         List<MonederosDTO> listaMonederos;
         ObservableCollection<Object> _monederos;
 
-        public VerMonederosView()
+        public VerMonederosView(EmpleadoLoginDTO empleado)
         {
 
             _monedero = new Monedero();
             _monederos = new ObservableCollection<Object>();
 
             InitializeComponent();
+
+            SideBarControl sideBarControl = new SideBarControl(empleado);
+            sideBarControl.Employee = empleado.tipoEmpleado;
+            sideBarControl.SideElementSelected = 3;
+            MenuLateral.Children.Add(sideBarControl);
 
             DefinirColumnas();
 

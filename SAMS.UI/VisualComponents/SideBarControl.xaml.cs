@@ -951,12 +951,19 @@ namespace SAMS.UI.VisualComponents
                 case "Administrador":
                     break;
                 case "Cajero":
+
+                    VerMonederosView verMonederosView = new VerMonederosView(empleado);
+
+                    verMonederosView.Show();
+
                     break;
                 case "Paqueteria":
                     break;
                 default:
                     break;
             }
+
+            Window.GetWindow(this).Close();
 
         }
 
