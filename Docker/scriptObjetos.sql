@@ -928,6 +928,18 @@ BEGIN
 END;
 GO
 
+-- CU-07 Registrar proveedor
+--Tipo Tabla para meter una lista de productos
+CREATE TYPE TipoProducto AS TABLE (
+    Codigo NVARCHAR(50),
+    Descripcion NVARCHAR(255),
+    EsDevolvible NVARCHAR(10),
+    EsPerecedero NVARCHAR(10),
+    Nombre NVARCHAR(100),
+    UnidadDeMedida NVARCHAR(50)
+);
+GO
+
 -- 4. disparadores
 
 -- 5. jobs
