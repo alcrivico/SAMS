@@ -14,11 +14,19 @@ public partial class ReporteInventarioView : Window
 {
     List<ReporteProductoInventarioDTO> listaReporteInventario;
     ObservableCollection<Object> _reportes;
-    public ReporteInventarioView()
+    private EmpleadoLoginDTO empleado;
+    private SideBarControl SideBarControl_MenuLateral;
+    public ReporteInventarioView(EmpleadoLoginDTO empleado)
     {
-        _reportes = new ObservableCollection<Object>();
 
+        _reportes = new ObservableCollection<Object>();
+        this.empleado = empleado;
         InitializeComponent();
+
+        SideBarControl_MenuLateral = new SideBarControl(empleado);
+        MenuLateral.Children.Add(SideBarControl_MenuLateral);
+        SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
+        
         DefinirColumnas();
         ObtenerInventario();
     }
