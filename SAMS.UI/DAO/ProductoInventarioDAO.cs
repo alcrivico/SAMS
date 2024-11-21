@@ -10,12 +10,9 @@ namespace SAMS.UI.DAO;
 public class ProductoInventarioDAO
 {
     private static SAMSContext _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
-    
-    private readonly SAMSContext context;
-    public ProductoInventarioDAO(SAMSContext context) => this.context = context;
+
     public static List<ProductoInventarioPromocionDTO> OptenerProductosSinPromocion() =>
             _sams.V_ProductoInventarioPromocion.ToList();
-
 
     public static List<ProductosRegistradosDTO> ObtenerProductosRegistrados()
     {
@@ -95,7 +92,7 @@ public class ProductoInventarioDAO
     public static List<CategoriaDTO> ObtenerCategorias()
     {
         var categorias = _sams.Categoria
-                              .Where(c => c.estado) 
+                              .Where(c => c.estado)
                               .Select(c => new CategoriaDTO
                               {
                                   nombre = c.nombre
@@ -117,35 +114,38 @@ public class ProductoInventarioDAO
         return unidadesDeMedida;
     }
 
-    public async Task<bool> EditarProductoInventario(EditarProductoInventarioDTO editarProductoInventarioDTO)
+    public static async Task<bool> EditarProductoInventario(EditarProductoInventarioDTO editarProductoInventarioDTO)
     {
-        if (editarProductoInventarioDTO == null)
+        var parameters = new[]
+        {
+            new SqlParameter("@codigoProducto", editarProductoInventarioDTO.codigoProducto),
+            new SqlParameter("@descripcion", editarProductoInventarioDTO.descripcion),
+            new SqlParameter("@cantidadBodega", editarProductoInventarioDTO.cantidadBodega),
+            new SqlParameter("@cantidadExhibicion", editarProductoInventarioDTO.cantidadExhibicion),
+            new SqlParameter("@precioActual", editarProductoInventarioDTO.precioActual),
+            new SqlParameter("@fechaCaducidad", editarProductoInventarioDTO.fechaCaducidad.ToString("yyyy-MM-dd")),
+            new SqlParameter("@nombreCategoria", editarProductoInventarioDTO.nombreCategoria),
+            new SqlParameter("@nombreUnidadMedida", editarProductoInventarioDTO.nombreUnidadMedida),
+            new SqlParameter("@esPerecedero", editarProductoInventarioDTO.esPerecedero),
+            new SqlParameter("@esDevolvible", editarProductoInventarioDTO.esDevolvible)
+        };
+
+        // Ejecutar el procedimiento almacenado
+        try
+        {
+            // Ejecutar el procedimiento almacenado
+            await _sams.Database.ExecuteSqlRawAsync(
+                @"EXEC [dbo].[T_EditarProductoInventario] 
+                @codigoProducto, @descripcion, @cantidadBodega, @cantidadExhibicion, 
+                @precioActual, @fechaCaducidad, @nombreCategoria, @nombreUnidadMedida, 
+                @esPerecedero, @esDevolvible",
+                parameters);
+
+            return true;
+        }
+        catch
         {
             return false;
         }
-
-        var parameters = new[]
-        {
-        new SqlParameter("@codigoProducto", editarProductoInventarioDTO.codigoProducto ?? (object)DBNull.Value),
-        new SqlParameter("@descripcion", editarProductoInventarioDTO.descripcion ?? (object)DBNull.Value),
-        new SqlParameter("@cantidadBodega", editarProductoInventarioDTO.cantidadBodega),
-        new SqlParameter("@cantidadExhibicion", editarProductoInventarioDTO.cantidadExhibicion),
-        new SqlParameter("@precioActual", editarProductoInventarioDTO.precioActual),
-        new SqlParameter("@fechaCaducidad", editarProductoInventarioDTO.fechaCaducidad.ToString("yyyy-MM-dd")),
-        new SqlParameter("@nombreCategoria", editarProductoInventarioDTO.nombreCategoria ?? (object)DBNull.Value),
-        new SqlParameter("@nombreUnidadMedida", editarProductoInventarioDTO.nombreUnidadMedida ?? (object)DBNull.Value),
-        new SqlParameter("@esPerecedero", editarProductoInventarioDTO.esPerecedero),
-        new SqlParameter("@esDevolvible", editarProductoInventarioDTO.esDevolvible)
-    };
-
-        // Ejecutar el procedimiento almacenado
-        int result = await context.Database.ExecuteSqlRawAsync(
-            @"EXEC [dbo].[T_EditarProductoInventario] 
-        @codigoProducto, @descripcion, @cantidadBodega, @cantidadExhibicion, 
-        @precioActual, @fechaCaducidad, @nombreCategoria, @nombreUnidadMedida, 
-        @esPerecedero, @esDevolvible",
-            parameters);
-
-        return result > 0;
     }
 }
