@@ -15,6 +15,7 @@
     MaxHeight="1080"
     AllowsTransparency="True"
     Background="Transparent"
+    Icon="../Resources/Images/SAMSIsotype.ico"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
@@ -48,7 +49,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Grid Grid.Column="1" x:Name="MenuLateral" />
+                        <Grid x:Name="MenuLateral" Grid.Column="0" />
 
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>
@@ -130,11 +131,11 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top">
                                         <components:TableControl
-                                            x:Name="TablaPedidos"
-                                            Width="1556"
-                                            Height="291"
+                                            x:Name="TableControl_TablaPedidos"
+                                            Width="1099"
+                                            Height="206"
                                             HorizontalAlignment="Left"
-                                            VerticalAlignment="Top" />
+                                            VerticalAlignment="Center" />
                                     </Viewbox>
                                 </Grid>
 
@@ -202,9 +203,9 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top">
                                             <components:TableControl
-                                                x:Name="TablaProductos"
-                                                Width="851"
-                                                Height="249"
+                                                x:Name="TableControl_TablaProductos"
+                                                Width="648"
+                                                Height="190"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top" />
                                         </Viewbox>

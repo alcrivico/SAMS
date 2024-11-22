@@ -148,4 +148,36 @@ public class ProductoInventarioDAO
             return false;
         }
     }
+
+    public static List<PedidosPendientesDTO> ObtenerPedidosPendientes()
+    {
+        List<PedidosPendientesDTO> pedidosPendientes = new List<PedidosPendientesDTO>();
+
+        var pedidosData = from p in _sams.V_PedidosPendientes
+                          select new
+                          {
+                              p.noPedido,
+                              p.fechaEntrega,
+                              p.nombreProveedor
+                          };
+
+        if (pedidosData == null)
+        {
+            return null;
+        }
+
+        foreach (var pedidoData in pedidosData)
+        {
+            PedidosPendientesDTO pedido = new PedidosPendientesDTO
+            {
+                noPedido = pedidoData.noPedido,
+                fechaEntrega = pedidoData.fechaEntrega,
+                nombreProveedor = pedidoData.nombreProveedor
+            };
+
+            pedidosPendientes.Add(pedido);
+        }
+
+        return pedidosPendientes;
+    }
 }

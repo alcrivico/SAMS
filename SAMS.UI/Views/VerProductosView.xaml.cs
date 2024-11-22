@@ -167,7 +167,9 @@ namespace SAMS.UI.Views
 
         private void Button_AgregarProductos_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            
+            RegistrarProductoView registrarProductoView = new RegistrarProductoView(empleado);
+            registrarProductoView.Show();
+            this.Close();
         }
 
         private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
