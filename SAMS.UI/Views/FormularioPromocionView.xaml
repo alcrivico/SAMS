@@ -53,37 +53,43 @@
                             x:Name="campoNombre"
                             Grid.Row="0"
                             Width="160"
-                            FieldName="Titulo:" />   
+                            FieldName="Titulo:" 
+                            TextBoxControlTextChanged="validarCampo_TextBoxControlTextChanged"/>   
 
                         <components:TextBoxControl
                             x:Name="campoPorcentajeDescuento"
                             Grid.Row="1"
                             Width="160"
-                            FieldName="Descuento:" />
+                            FieldName="Descuento:" 
+                            TextBoxControlTextChanged="validarCampo_TextBoxControlTextChanged"/>
 
                         <components:TextBoxControl
                             x:Name="campoCantMaxima"
                             Grid.Row="2"
                             Width="160"
-                            FieldName="Cantidad Maxima:" />
+                            FieldName="Cantidad Maxima:" 
+                            TextBoxControlTextChanged="validarCampo_TextBoxControlTextChanged"/>
 
                         <components:TextBoxControl
                             x:Name="campoCantMinima"
                             Grid.Row="3"
                             Width="160"
-                            FieldName="Cantidad Minima" />
+                            FieldName="Cantidad Minima" 
+                            TextBoxControlTextChanged="validarCampo_TextBoxControlTextChanged"/>
 
                         <components:DatePickerControl
                             x:Name="campofechaInicio"
                             Grid.Row="4"
                             Width="160"
-                            FieldName="Fecha de inicio:" />
+                            FieldName="Fecha de inicio:" 
+                            />
 
                         <components:DatePickerControl
                             x:Name="campofechaFin"
                             Grid.Row="5"
                             Width="160"
-                            FieldName="Fecha de finalizacion:" />
+                            FieldName="Fecha de finalizacion:" 
+                            />
 
                     </Grid>
 
@@ -99,7 +105,8 @@
                                 ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
                                 ButtonControlClick="Button_Registrar_ButtonControlClick"
                                 FontSize="24"
-                                Text="Registrar" />
+                                Text="Registrar" 
+                                IsButtonEnabled="False"/>
                         </Grid>
                         <Grid Grid.Column="1" Margin="10,5,10,10">
                             <components:ButtonControl

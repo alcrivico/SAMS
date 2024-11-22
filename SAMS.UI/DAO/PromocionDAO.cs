@@ -36,11 +36,6 @@ public class PromocionDAO
 
     public static async Task<bool> EditarPromocion(EditarPromocionDTO editarPromocionDTO)
     {
-        if (editarPromocionDTO.ProductoInventarioIdList == null)
-        {
-            editarPromocionDTO.ProductoInventarioIdList = new DataTable();
-            editarPromocionDTO.ProductoInventarioIdList.Columns.Add("productoInventarioId", typeof(int));
-        }
 
         var parameters = new[]
         {
@@ -49,17 +44,13 @@ public class PromocionDAO
             new SqlParameter("@porcentajeDescuento", editarPromocionDTO.porcentajeDescuento ?? (object)DBNull.Value),
             new SqlParameter("@fechaInicio", editarPromocionDTO.fechaInicio ?? (object)DBNull.Value),
             new SqlParameter("@fechaFin", editarPromocionDTO.fechaFin ?? (object)DBNull.Value),
-            new SqlParameter("@productoInventarioIdList", SqlDbType.Structured)
-            {
-                TypeName = "dbo.productoInventarioIdList",
-                Value = editarPromocionDTO.ProductoInventarioIdList
-            }
+          
         };
 
         int result = await _sams.Database.ExecuteSqlRawAsync(
             @"EXEC [dbo].[T_EditarPromocion] 
             @promocionId, @nombre, @porcentajeDescuento, 
-            @fechaInicio, @fechaFin, @productoInventarioIdList",
+            @fechaInicio, @fechaFin",
             parameters);
 
         return result > 0;
