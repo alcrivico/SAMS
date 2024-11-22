@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Win32;
+using SAMS.UI.DAO;
+using SAMS.UI.Models.Entities;
+using SAMS.UI.VisualComponents;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SAMS.UI.Views
 {
@@ -20,20 +13,44 @@ namespace SAMS.UI.Views
     /// </summary>
     public partial class RegistrarProveedorView : Window
     {
+        private string archivoSeleccionado;
         public RegistrarProveedorView()
         {
             InitializeComponent();
-            prepararComponentes();
+            campoRfc.Focus();
         }
 
         private void botonSubirArchivo_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine("Subiendo archivo...");
+            OpenFileDialog dialogo = new OpenFileDialog
+            {
+                Filter = "Archivos CSV (*.csv)|*.csv",
+                Title = "Seleccionar archivo CSV"
+            };
+
+            if (dialogo.ShowDialog() == true)
+            {
+                archivoSeleccionado = dialogo.FileName;
+            }
         }
 
         private void botonRegistrar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Registrando archivo...");
+            string rfc = campoRfc.Text.ToUpper();
+            string nombre = campoNombre.Text;
+            string correo = campoCorreo.Text.ToLower();
+            string telefono = campoTelefono.Text;
+
+            ProveedorDAO.RegistrarProveedor(new Proveedor
+            {
+                rfc = rfc,
+                nombre = nombre,
+                correo = correo,
+                telefono = telefono,
+                estadoProveedor = true
+            });
+
+            registrarProductos(archivoSeleccionado);
         }
 
         private void botonCancelar_ButtonControlClick(object sender, RoutedEventArgs e)
@@ -41,17 +58,47 @@ namespace SAMS.UI.Views
             this.Close();
         }
 
-        private void prepararComponentes()
-        {
-            botonRegistrar.IsEnabled = false;
-            campoNombre.IsEnabled = false;
-            campoCorreo.IsEnabled = false;
-            campoTelefono.IsEnabled = false;
-        }
-
         private void campoRfc_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
+            if (campoRfc.Text.Length == 12)
+            {
+                if (ProveedorDAO.ObtenerProveedorPorRfc(campoRfc.Text) != null)
+                {
+                    InformationControl.Show("RFC registrado", "El RFC ingresado ya se encuentra registrado", "Aceptar");
+                    campoRfc.Text = "";
+                    campoRfc.Focus();
+                }
+                else
+                {
+                    campoNombre.EnableTextBox = true;
+                    campoCorreo.EnableTextBox = true;
+                    campoTelefono.EnableTextBox = true;
+                    botonSubirArchivo.IsEnabled = true;
+                    botonRegistrar.IsButtonEnabled = true;
+                    campoNombre.Focus();
+                }
+            }
+        }
 
+        private void registrarProductos(string pathArchivo)
+        {
+            List<Producto> productos = new List<Producto>();
+            string[] lineas = System.IO.File.ReadAllLines(pathArchivo);
+            try
+            {
+                foreach (string linea in lineas)
+                {
+                    string[] campos = linea.Split(',');
+                    Debug.WriteLine(campos);
+                    ProductoProveedorDAO.RegistrarProducto(campos[0], campos[1], campos[2].ToLower(), campos[3].ToLower(), campos[4], campoRfc.Text, campos[5]);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                InformationControl.Show("Error al registrar productos", "Ocurrió un error al registrar los productos", "Aceptar");
+            }
         }
     }
 }
