@@ -57,6 +57,7 @@ namespace SAMS.UI.Views
                 }
                 else
                 {
+
                     _monedero = new MonederoDTO
                     {
                         nombre = campoNombre.Text,
@@ -67,17 +68,25 @@ namespace SAMS.UI.Views
                         codigoDeBarras = campoCodigoBarras.Text
                     };
 
-                    MonederoDAO.RegistrarMonedero(_monedero);
+                    bool monederoExistente = MonederoDAO.ExisteMonedero(_monedero);
 
-                    InformationControl.Show("Éxito", "Monedero registrado correctamente", "Aceptar");
-
-                    MonederoRegistrado?.Invoke(this, new MonederosDTO
+                    if (monederoExistente)
                     {
-                        nombrePropietario = $"{_monedero.nombre} {_monedero.apellidoPaterno} {_monedero.apellidoMaterno}",
-                        telefono = _monedero.telefono,
-                        saldo = _monedero.saldo,
-                        codigoDeBarras = _monedero.codigoDeBarras
-                    });
+                        InformationControl.Show("Advertencia", "Los datos del titular ya se encuentran registrados en el sistema, cancele el registro o cambie los datos del titular", "Aceptar");
+                    }
+                    else
+                    {
+
+                        MonederoDAO.RegistrarMonedero(_monedero);
+                        MonederoRegistrado?.Invoke(this, new MonederosDTO
+                        {
+                            codigoDeBarras = _monedero.codigoDeBarras,
+                            telefono = _monedero.telefono,
+                            saldo = _monedero.saldo,
+                            nombrePropietario = _monedero.nombre + " " + _monedero.apellidoPaterno + " " + _monedero.apellidoMaterno
+                        });
+
+                    }
 
                     this.Close();
                 }

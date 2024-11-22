@@ -144,12 +144,15 @@ INNER JOIN
     v.empleadoId = e.id
 GO
 
-CREATE VIEW V_Promocion AS
+CREATE OR alter VIEW V_Promocion AS
 SELECT
     p.id,
 	p.nombre,
-	p.porcentajeDescuento,
-	pv.fechaInicio,
+    CAST(pi.cantidadBodega + pi.cantidadExhibicion AS NVARCHAR(50)) + ' ' + COALESCE(um.nombre, '') AS cantidad,
+    p.porcentajeDescuento,
+    p.cantMaxima,
+    p.cantMinima,
+    pv.fechaInicio,
 	pv.fechaFin
 FROM
 	Promocion p
@@ -157,6 +160,16 @@ INNER JOIN
 	PromocionVigencia pv
 	ON
 	p.id = pv.promocionId
+INNER JOIN
+    ProductoInventario pi
+    ON
+    p.id = pi.promocionId
+LEFT JOIN
+    UnidadDeMedida um
+    ON
+    pi.unidadDeMedidaId = um.id
+WHERE
+    pv.fechaFin >= GETDATE();
 GO
 
 
@@ -826,16 +839,16 @@ GO
 
 -- CU-05 Editar Producto
 CREATE PROCEDURE T_EditarProductoInventario
-    @codigoProducto NVARCHAR(MAX),      -- Código del producto
-    @descripcion NVARCHAR(MAX),         -- Nueva descripción
-    @cantidadBodega INT,                -- Nueva cantidad en bodega
-    @cantidadExhibicion INT,            -- Nueva cantidad en exhibición
-    @precioActual DECIMAL(18, 2),       -- Nuevo precio actual
-    @fechaCaducidad DATE,               -- Nueva fecha de caducidad
-    @idCategoria INT,                   -- Nueva categoría
-    @idUnidadMedida INT,                -- Nueva unidad de medida
-    @esPerecedero BIT,                  -- Es perecedero
-    @esDevolvible BIT                   -- Es devolvible
+    @codigoProducto NVARCHAR(MAX),
+    @descripcion NVARCHAR(MAX),
+    @cantidadBodega INT,
+    @cantidadExhibicion INT,
+    @precioActual DECIMAL(18, 2),
+    @fechaCaducidad NVARCHAR(MAX), -- Recibimos como string para validar
+    @nombreCategoria NVARCHAR(MAX),
+    @nombreUnidadMedida NVARCHAR(MAX),
+    @esPerecedero BIT,
+    @esDevolvible BIT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -844,7 +857,18 @@ BEGIN
     BEGIN TRAN;
 
     BEGIN TRY
-        -- Verificar si el producto existe en ProductoInventario
+        -- Validar formato de fecha
+        DECLARE @fechaValida DATE;
+        BEGIN TRY
+            SET @fechaValida = CAST(@fechaCaducidad AS DATE); -- Validar conversión
+        END TRY
+        BEGIN CATCH
+            RAISERROR('La fecha de caducidad proporcionada no es válida.', 16, 1);
+            ROLLBACK TRAN;
+            RETURN;
+        END CATCH
+
+        -- Verificar si el producto existe
         IF NOT EXISTS (SELECT 1 FROM ProductoInventario WHERE codigo = @codigoProducto)
         BEGIN
             RAISERROR('El producto no existe en ProductoInventario.', 16, 1);
@@ -852,7 +876,33 @@ BEGIN
             RETURN;
         END
 
-        -- Actualizar datos en ProductoInventario
+        -- Obtener el ID de la categoría
+        DECLARE @idCategoria INT;
+        SELECT @idCategoria = id 
+        FROM Categoria
+        WHERE nombre = @nombreCategoria;
+
+        IF @idCategoria IS NULL
+        BEGIN
+            RAISERROR('La categoría proporcionada no existe.', 16, 1);
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        -- Obtener el ID de la unidad de medida
+        DECLARE @idUnidadMedida INT;
+        SELECT @idUnidadMedida = id 
+        FROM UnidadDeMedida
+        WHERE nombre = @nombreUnidadMedida;
+
+        IF @idUnidadMedida IS NULL
+        BEGIN
+            RAISERROR('La unidad de medida proporcionada no existe.', 16, 1);
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        -- Actualizar ProductoInventario
         UPDATE ProductoInventario
         SET 
             descripcion = @descripcion,
@@ -866,13 +916,13 @@ BEGIN
         WHERE 
             codigo = @codigoProducto;
 
-        -- Verificar si hay un DetallePedido relacionado para actualizar fecha de caducidad
+        -- Verificar si hay un DetallePedido relacionado
         IF EXISTS (SELECT 1 FROM DetallePedido DP
                    INNER JOIN ProductoInventario PI ON DP.productoId = PI.id
                    WHERE PI.codigo = @codigoProducto)
         BEGIN
             UPDATE DP
-            SET fechaCaducidad = @fechaCaducidad
+            SET fechaCaducidad = @fechaValida -- Usamos la fecha validada
             FROM DetallePedido DP
             INNER JOIN ProductoInventario PI ON DP.productoId = PI.id
             WHERE PI.codigo = @codigoProducto;
@@ -882,11 +932,10 @@ BEGIN
         COMMIT TRAN;
     END TRY
     BEGIN CATCH
-        -- Revertir cambios en caso de error
+        -- Revertir transacción en caso de error
         IF @@TRANCOUNT > 0
             ROLLBACK TRAN;
 
-        -- Propagar mensaje de error
         THROW;
     END CATCH
 END;

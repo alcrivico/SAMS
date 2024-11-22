@@ -895,6 +895,7 @@ namespace SAMS.UI.VisualComponents
 
         }
 
+        //fila 1
         private void SideElement1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
@@ -917,6 +918,7 @@ namespace SAMS.UI.VisualComponents
             
         }
 
+        //fila 2
         private void SideElement2_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
@@ -944,6 +946,7 @@ namespace SAMS.UI.VisualComponents
 
         }
 
+        //fila 3
         private void SideElement3_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
@@ -970,6 +973,7 @@ namespace SAMS.UI.VisualComponents
 
         }
 
+        //fila 4
         private void SideElement4_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
@@ -996,6 +1000,7 @@ namespace SAMS.UI.VisualComponents
 
         }
 
+        //fila 5
         private void SideElement5_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
@@ -1013,6 +1018,7 @@ namespace SAMS.UI.VisualComponents
 
         }
 
+        //fila 6
         private void SideElement6_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
@@ -1021,8 +1027,14 @@ namespace SAMS.UI.VisualComponents
             switch (Employee)
             {
                 case "Administrador":
+                    ReporteInventarioView reporteInventarioView = new(empleado);
+                    reporteInventarioView.Show();
+                    Window.GetWindow(this).Close();
                     break;
                 case "Paqueteria":
+                    EditarPromocionView editarPromocionView = new(empleado);
+                    editarPromocionView.Show();
+                    Window.GetWindow(this).Close();
                     break;
                 default:
                     break;

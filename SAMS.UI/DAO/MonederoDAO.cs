@@ -128,6 +128,11 @@ namespace SAMS.UI.DAO
 
         }
 
+        public static bool ExisteMonedero(MonederoDTO monedero)
+        {
+            return (_sams.Monedero.Any(m => m.telefono == monedero.telefono)) ? true : false;
+        }
+
     }
 
 }
