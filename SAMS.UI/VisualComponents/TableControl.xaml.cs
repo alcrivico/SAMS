@@ -68,6 +68,11 @@ namespace SAMS.UI.VisualComponents
                     dataGridTextColumn.Binding = new Binding(columns[i]["BindingName"]);
                     dataGridTextColumn.IsReadOnly = true;
 
+                    Style textBlockStyle = new Style(typeof(TextBlock));
+                    textBlockStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
+                    textBlockStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Center));
+
+                    dataGridTextColumn.ElementStyle = textBlockStyle;
 
                     if (i != 0)
                     {

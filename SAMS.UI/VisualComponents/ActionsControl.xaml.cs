@@ -81,9 +81,9 @@ namespace SAMS.UI.VisualComponents
         private void OnEditarActivoChanged(bool newValue)
         {
 
-            BotonDetalle.IsEnabled = newValue;
-            BotonDetalle.Opacity = newValue ? 1 : 0.5;
-            TextDetalle.Opacity = newValue ? 1 : 0.5;
+            BotonEditar.IsEnabled = newValue;
+            BotonEditar.Opacity = newValue ? 1 : 0.5;
+            TextEditar.Opacity = newValue ? 1 : 0.5;
 
         }
 

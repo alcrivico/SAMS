@@ -1,4 +1,10 @@
-﻿using System.Windows;
+﻿using SAMS.UI.DAO;
+using SAMS.UI.DTO;
+using SAMS.UI.Models.Entities;
+using SAMS.UI.VisualComponents;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SAMS.UI.Views
@@ -8,9 +14,27 @@ namespace SAMS.UI.Views
     /// </summary>
     public partial class RegistrarProductoView : Window
     {
-        public RegistrarProductoView()
+        EmpleadoLoginDTO empleado;
+        SideBarControl SideBarControl_MenuLateral;
+        List<PedidosPendientesDTO> listaPedidos;
+        ObservableCollection<Object> _pedidos;
+
+        public RegistrarProductoView(EmpleadoLoginDTO empleado)
         {
+            this.empleado = empleado;
+
             InitializeComponent();
+
+            _pedidos = new ObservableCollection<Object>();
+
+            DefinirColumnasPedidos();
+            ObtenerPedidosPendientes();
+            DefinirColumnasProductos();
+
+            SideBarControl_MenuLateral = new SideBarControl(empleado);
+            SideBarControl_MenuLateral.SideElementSelected = 1;
+            MenuLateral.Children.Add(SideBarControl_MenuLateral);
+            SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -43,6 +67,105 @@ namespace SAMS.UI.Views
 
         private void Button_Cancelar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
+
+        }
+
+        private void DefinirColumnasPedidos()
+        {
+
+            Dictionary<string, string>[] columnas =
+            {
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "No pedido" },
+                    { "Width", "*" },
+                    { "BindingName", "noPedido" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Fecha de entrega" },
+                    { "Width", "*" },
+                    { "BindingName", "fechaEntrega" },
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Proveedor" },
+                    { "Width", "*" },
+                    { "BindingName", "nombreProveedor" }
+
+                }
+            };
+            
+            TableControl_TablaPedidos.DefineColumns(columnas);
+
+        }
+
+        private void ObtenerPedidosPendientes()
+        {
+            try
+            {
+                listaPedidos = ProductoInventarioDAO.ObtenerPedidosPendientes();
+                _pedidos.Clear();
+
+                _pedidos = new ObservableCollection<Object>(listaPedidos);
+
+                TableControl_TablaPedidos.SetItemsSource(_pedidos);
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
+                    " inténtelo de nuevo más tarde", "Aceptar");
+                this.Close();
+            }
+        }
+
+        private void DefinirColumnasProductos()
+        {
+
+            Dictionary<string, string>[] columnas =
+            {
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Código" },
+                    { "Width", "*" },
+                    { "BindingName", "codigoProducto" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Nombre" },
+                    { "Width", "*" },
+                    { "BindingName", "nombreProducto" },
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Cantidad" },
+                    { "Width", "*" },
+                    { "BindingName", "cantidad" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Precio de compra" },
+                    { "Width", "*" },
+                    { "BindingName", "precioCompra" }
+
+                }
+            };
+
+            TableControl_TablaProductos.DefineColumns(columnas);
 
         }
     }

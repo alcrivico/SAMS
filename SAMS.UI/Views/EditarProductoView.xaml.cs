@@ -42,6 +42,7 @@ namespace SAMS.UI.Views
 
             SideBarControl_MenuLateral = new SideBarControl(empleado);
             MenuLateral.Children.Add(SideBarControl_MenuLateral);
+            SideBarControl_MenuLateral.SideElementSelected = 1;
             SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
 
             ObtenerCategorias();
@@ -83,21 +84,21 @@ namespace SAMS.UI.Views
         {
             if (ValidarCamposProducto() && ModificarCantidadDeInventario())
             {
-                if (!CamposCambiados())
+                if (!CamposSinCambios())
                 {
                     EditarProductoInventarioDTO();
                 }
                 else
                 {
+                    InformationControl.Show("Éxito", "Producto editado exitosamente", "Aceptar");
                     CerrarVentana();
                 }
             }
-
         }
 
         private void Button_Cancelar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            if (esModificacion)
+            if (esModificacion && !CamposSinCambios())
             {
                 bool result = ConfirmationControl.Show(
                     "Confirmación",
@@ -262,7 +263,7 @@ namespace SAMS.UI.Views
             TextBlock_MensajeFechaInvalida.Visibility = Visibility.Hidden;
         }
 
-        private bool CamposCambiados()
+        private bool CamposSinCambios()
         {
             if (TextBox_Nombre.Text.Trim() != detalleProducto.nombreProducto)
             {
@@ -436,7 +437,7 @@ namespace SAMS.UI.Views
 
                 if (resultado)
                 {
-                    InformationControl.Show("Éxito", "El producto se editó correctamente", "Aceptar");
+                    InformationControl.Show("Éxito", "Producto editado exitosamente", "Aceptar");
                     CerrarVentana();
                 }
                 else
@@ -444,13 +445,10 @@ namespace SAMS.UI.Views
                     InformationControl.Show("Error", "No se pudo editar el producto. Inténtalo de nuevo más tarde.", "Aceptar");
                 }
             }
-            catch (FormatException)
-            {
-                InformationControl.Show("Error", "Algunos campos tienen un formato incorrecto. Por favor verifica los datos.", "Aceptar");
-            }
             catch (Exception ex)
             {
-                InformationControl.Show("Error", $"Ocurrió un error inesperado: {ex.Message}", "Aceptar");
+                InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
+                        " inténtelo de nuevo más tarde", "Aceptar");
             }
 
         }

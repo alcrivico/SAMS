@@ -36,8 +36,9 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="16*" />
+            <ColumnDefinition Width="15*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <TextBlock
@@ -57,7 +58,7 @@
 
         <Rectangle
             x:Name="DatePicker_Highlight"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="3"
             Panel.ZIndex="2"
             Fill="{StaticResource SolidColorBrush_EerieBlack}"
             Opacity="0.5"
@@ -67,7 +68,7 @@
 
         <Border
             x:Name="DatePicker_Border"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="3"
             Height="40"
             Panel.ZIndex="0"
             Background="{StaticResource SolidColorBrush_White}"
@@ -114,7 +115,7 @@
 
         <Popup
             x:Name="CalendarPopup"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="3"
             Placement="Bottom"
             PlacementTarget="{Binding ElementName=CalendarButton}"
             StaysOpen="False">
