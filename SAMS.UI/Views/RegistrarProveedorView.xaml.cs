@@ -14,6 +14,7 @@ namespace SAMS.UI.Views
     public partial class RegistrarProveedorView : Window
     {
         private string archivoSeleccionado;
+        private string[] productos;
         public RegistrarProveedorView()
         {
             InitializeComponent();
@@ -30,7 +31,7 @@ namespace SAMS.UI.Views
 
             if (dialogo.ShowDialog() == true)
             {
-                archivoSeleccionado = dialogo.FileName;
+                productos = System.IO.File.ReadAllLines(dialogo.FileName);
             }
         }
 
@@ -41,16 +42,25 @@ namespace SAMS.UI.Views
             string correo = campoCorreo.Text.ToLower();
             string telefono = campoTelefono.Text;
 
-            ProveedorDAO.RegistrarProveedor(new Proveedor
+            Proveedor proveedor = new Proveedor
             {
                 rfc = rfc,
                 nombre = nombre,
                 correo = correo,
-                telefono = telefono,
-                estadoProveedor = true
-            });
+                telefono = telefono
+            };
 
-            registrarProductos(archivoSeleccionado);
+            try
+            {
+                ProveedorDAO.RegistrarProveedorYProductos(proveedor, productos);
+                InformationControl.Show("Proveedor registrado", "El proveedor y sus productos han sido registrados correctamente", "Aceptar");
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                InformationControl.Show("Error al registrar proveedor", ex.Message, "Aceptar");
+            }
         }
 
         private void botonCancelar_ButtonControlClick(object sender, RoutedEventArgs e)
@@ -77,27 +87,6 @@ namespace SAMS.UI.Views
                     botonRegistrar.IsButtonEnabled = true;
                     campoNombre.Focus();
                 }
-            }
-        }
-
-        private void registrarProductos(string pathArchivo)
-        {
-            List<Producto> productos = new List<Producto>();
-            string[] lineas = System.IO.File.ReadAllLines(pathArchivo);
-            try
-            {
-                foreach (string linea in lineas)
-                {
-                    string[] campos = linea.Split(',');
-                    Debug.WriteLine(campos);
-                    ProductoProveedorDAO.RegistrarProducto(campos[0], campos[1], campos[2].ToLower(), campos[3].ToLower(), campos[4], campoRfc.Text, campos[5]);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                InformationControl.Show("Error al registrar productos", "Ocurrió un error al registrar los productos", "Aceptar");
             }
         }
     }

@@ -17,6 +17,7 @@ namespace SAMS.UI.Views
         public IniciarSesionView()
         {
             InitializeComponent();
+            TextBoxControl_Email.Text = "raul@gmail.com";
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
