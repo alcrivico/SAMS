@@ -57,6 +57,7 @@ namespace SAMS.UI.DAO
                         valores[3].Trim().ToLower(),
                         valores[4].Trim(),
                         valores[5].Trim()
+                        
                     );
                 }
                 else

@@ -88,6 +88,14 @@ namespace SAMS.UI.Views
                     campoNombre.Focus();
                 }
             }
+            else
+            {
+                campoNombre.EnableTextBox = false;
+                campoCorreo.EnableTextBox = false;
+                campoTelefono.EnableTextBox = false;
+                botonSubirArchivo.IsEnabled = false;
+                botonRegistrar.IsButtonEnabled = false;
+            }
         }
     }
 }
