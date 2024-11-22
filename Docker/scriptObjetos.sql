@@ -940,6 +940,57 @@ CREATE TYPE TipoProducto AS TABLE (
 );
 GO
 
+-- Procedimiento para reigstrar proveedor y productos
+CREATE PROCEDURE SP_RegistrarProveedorYProductos
+    @RFC NVARCHAR(13),
+    @Nombre NVARCHAR(100),
+    @Correo NVARCHAR(100),
+    @Telefono NVARCHAR(20),
+    @Productos TipoProducto READONLY
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Insertar proveedor
+        DECLARE @ProveedorId INT;
+
+        INSERT INTO Proveedor (RFC, Nombre, Correo, Telefono, estadoProveedor)
+        VALUES (@RFC, @Nombre, @Correo, @Telefono, 1);
+
+        -- Obtener el ID del proveedor recién insertado
+        SET @ProveedorId = SCOPE_IDENTITY();
+
+        -- Insertar productos asociados
+        INSERT INTO Producto (Codigo, Descripcion, EsDevolvible, EsPerecedero, Nombre, ProveedorId, UnidadDeMedidaId)
+        SELECT 
+            p.Codigo,
+            p.Descripcion,
+            CASE 
+                WHEN p.EsDevolvible = 'no' THEN 0
+                ELSE 1 
+            END AS EsDevolvible,
+            CASE 
+                WHEN p.EsPerecedero = 'no' THEN 0
+                ELSE 1 
+            END AS EsPerecedero,
+            p.Nombre,
+            @ProveedorId,
+            (SELECT Id FROM UnidadDeMedida WHERE Nombre = p.UnidadDeMedida)
+        FROM @Productos p;
+
+        -- Confirmar transacción
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Revertir transacción en caso de error
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
 -- 4. disparadores
 
 -- 5. jobs
