@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace SAMS.UI.VisualComponents
@@ -19,7 +20,7 @@ namespace SAMS.UI.VisualComponents
         }
 
         public static readonly DependencyProperty SelectedDateProperty =
-            DependencyProperty.Register("SelectedDate", typeof(DateTime?), typeof(DatePickerControl), new PropertyMetadata(null));
+            DependencyProperty.Register("SelectedDate", typeof(DateTime?), typeof(DatePickerControl), new PropertyMetadata(null, OnSelectedDateChanged));
 
         public DateTime? SelectedDate
         {
@@ -27,10 +28,10 @@ namespace SAMS.UI.VisualComponents
             set { SetValue(SelectedDateProperty, value); }
         }
 
-        public string FieldName
+        private static void OnSelectedDateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            get { return (string)GetValue(FieldNameProperty); }
-            set { SetValue(FieldNameProperty, value); }
+            DatePickerControl control = (DatePickerControl)d;
+            control.RaiseEvent(new RoutedEventArgs(SelectedDateChangedEvent));
         }
 
         public static readonly DependencyProperty FieldNameProperty =
@@ -40,10 +41,10 @@ namespace SAMS.UI.VisualComponents
                                typeof(DatePickerControl),
                                new PropertyMetadata(string.Empty));
 
-        public int TextBoxWidth
+        public string FieldName
         {
-            get { return (int)GetValue(TextBoxWidthProperty); }
-            set { SetValue(TextBoxWidthProperty, value); }
+            get { return (string)GetValue(FieldNameProperty); }
+            set { SetValue(FieldNameProperty, value); }
         }
 
         public static readonly DependencyProperty TextBoxWidthProperty =
@@ -53,10 +54,10 @@ namespace SAMS.UI.VisualComponents
                                typeof(DatePickerControl),
                                new PropertyMetadata(150));
 
-        public int TextBoxHeight
+        public int TextBoxWidth
         {
-            get { return (int)GetValue(TextBoxHeightProperty); }
-            set { SetValue(TextBoxHeightProperty, value); }
+            get { return (int)GetValue(TextBoxWidthProperty); }
+            set { SetValue(TextBoxWidthProperty, value); }
         }
 
         public static readonly DependencyProperty TextBoxHeightProperty =
@@ -65,5 +66,26 @@ namespace SAMS.UI.VisualComponents
                               typeof(int),
                               typeof(DatePickerControl),
                               new PropertyMetadata(150));
+
+        public int TextBoxHeight
+        {
+            get { return (int)GetValue(TextBoxHeightProperty); }
+            set { SetValue(TextBoxHeightProperty, value); }
+        }
+
+        public static readonly RoutedEvent SelectedDateChangedEvent =
+            EventManager.RegisterRoutedEvent(
+                nameof(SelectedDateChanged),
+                RoutingStrategy.Bubble,
+                typeof(RoutedEventHandler),
+                typeof(DatePickerControl));
+
+        public event RoutedEventHandler SelectedDateChanged
+        {
+            add { AddHandler(SelectedDateChangedEvent, value); }
+            remove { RemoveHandler(SelectedDateChangedEvent, value); }
+        }
+
+
     }
 }

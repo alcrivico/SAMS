@@ -275,7 +275,8 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     FieldName="Fecha de caducidad:"
-                                                    IsEnabled="False" />
+                                                    IsEnabled="False"
+                                                    />
                                             </Viewbox>
                                             <Viewbox
                                                 Grid.Row="1"

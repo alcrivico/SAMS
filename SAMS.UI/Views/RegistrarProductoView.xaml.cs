@@ -1,6 +1,9 @@
-﻿using SAMS.UI.DTO;
+﻿using SAMS.UI.DAO;
+using SAMS.UI.DTO;
 using SAMS.UI.Models.Entities;
 using SAMS.UI.VisualComponents;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -13,6 +16,8 @@ namespace SAMS.UI.Views
     {
         EmpleadoLoginDTO empleado;
         SideBarControl SideBarControl_MenuLateral;
+        List<PedidosPendientesDTO> listaPedidos;
+        ObservableCollection<Object> _pedidos;
 
         public RegistrarProductoView(EmpleadoLoginDTO empleado)
         {
@@ -20,7 +25,10 @@ namespace SAMS.UI.Views
 
             InitializeComponent();
 
+            _pedidos = new ObservableCollection<Object>();
+
             DefinirColumnasPedidos();
+            ObtenerPedidosPendientes();
             DefinirColumnasProductos();
 
             SideBarControl_MenuLateral = new SideBarControl(empleado);
@@ -92,9 +100,30 @@ namespace SAMS.UI.Views
 
                 }
             };
-
+            
             TableControl_TablaPedidos.DefineColumns(columnas);
 
+        }
+
+        private void ObtenerPedidosPendientes()
+        {
+            try
+            {
+                listaPedidos = ProductoInventarioDAO.ObtenerPedidosPendientes();
+                _pedidos.Clear();
+
+                _pedidos = new ObservableCollection<Object>(listaPedidos);
+
+                TableControl_TablaPedidos.SetItemsSource(_pedidos);
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
+                    " inténtelo de nuevo más tarde", "Aceptar");
+                this.Close();
+            }
         }
 
         private void DefinirColumnasProductos()

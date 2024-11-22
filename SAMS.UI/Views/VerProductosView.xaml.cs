@@ -130,7 +130,7 @@ namespace SAMS.UI.Views
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.ToString());
+                //Debug.WriteLine(ex.ToString());
                 InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
                     " inténtelo de nuevo más tarde", "Aceptar");
                 this.Close();
