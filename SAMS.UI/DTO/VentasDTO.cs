@@ -7,7 +7,7 @@
 
         public int cantidad { get; set; }
 
-        public required string noVenta { get; set; }
+        public required int noVenta { get; set; }
 
         public DateTime fechaRegistro { get; set; }
 
