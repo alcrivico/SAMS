@@ -37,44 +37,132 @@
                         FontSize="24"
                         FontWeight="Bold"
                         Text="Registrar proveedor" />
-
-                    <Grid Grid.Row="1" Margin="35,0,25,0">
+                    
+                    <!--Grid para el ingreso de datos-->
+                    <Grid Grid.Row="1" Margin="35,0,35,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+                        
+                        <!--Grid para el RFC-->
+                        <Grid Grid.Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.4*" />
+                            </Grid.RowDefinitions>
 
-                        <components:TextBoxControl
-                            x:Name="campoRfc"
-                            Grid.Row="0"
-                            Width="350"
-                            HorizontalAlignment="Left"
-                            FieldName="RFC"
-                            MaxLengthTextBox="12"
-                            TextBoxControlTextChanged="campoRfc_TextBoxControlTextChanged" />
-                        <components:TextBoxControl
-                            x:Name="campoNombre"
-                            Grid.Row="1"
-                            Width="480"
-                            EnableTextBox="False"
-                            HorizontalAlignment="Left"
-                            FieldName="Nombre" />
-                        <components:TextBoxControl
-                            x:Name="campoCorreo"
-                            Grid.Row="2"
-                            EnableTextBox="False"
-                            Width="480"
-                            HorizontalAlignment="Left"
-                            FieldName="Correo electrónico" />
-                        <components:TextBoxControl
-                            x:Name="campoTelefono"
-                            Grid.Row="3"
-                            EnableTextBox="False"
-                            Width="200"
-                            HorizontalAlignment="Left"
-                            FieldName="Teléfono" />
+                            <components:TextBoxControl
+                                x:Name="campoRfc"
+                                Grid.Row="0"
+                                Width="350"
+                                HorizontalAlignment="Left"
+                                FieldName="RFC"
+                                MaxLengthTextBox="12"
+                                VerticalAlignment="Bottom"
+                                TextBoxControlTextChanged="campoRfc_TextBoxControlTextChanged" />
+
+                            <Label
+                                x:Name="mensajeErrorRfc"
+                                Grid.Row="1"
+                                Content="* Favor de ingresar un RFC válido"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                VerticalAlignment="Top"
+                                Visibility="Hidden"
+                                FontFamily="{StaticResource Font_Nunito}"
+                                Foreground="{StaticResource SolidColorBrush_Red}" />
+                        </Grid>
+                        
+                        <!--Grid para el nombre-->
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.4*" />
+                            </Grid.RowDefinitions>
+
+                            <components:TextBoxControl
+                                x:Name="campoNombre"
+                                Grid.Row="0"
+                                Width="470"
+                                EnableTextBox="False"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                TextBoxControlTextChanged="campoNombre_TextBoxControlTextChanged"
+                                FieldName="Nombre" />
+
+                            <Label
+                                x:Name="mensajeErrorNombre"
+                                Grid.Row="1"
+                                Content="* Favor de ingresar un nombre válido"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                VerticalAlignment="Top"
+                                Visibility="Hidden"
+                                FontFamily="{StaticResource Font_Nunito}"
+                                Foreground="{StaticResource SolidColorBrush_Red}" />
+                        </Grid>
+                        
+                        <!--Grid para el correo-->
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.4*" />
+                            </Grid.RowDefinitions>
+
+                            <components:TextBoxControl
+                                x:Name="campoCorreo"
+                                Grid.Row="0"
+                                EnableTextBox="False"
+                                Width="470"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                TextBoxControlTextChanged="campoCorreo_TextBoxControlTextChanged"
+                                FieldName="Correo electrónico" />
+
+                            <Label
+                                x:Name="mensajeErrorCorreo"
+                                Grid.Row="1"
+                                Content="* Favor de ingresar un correo electrónico válido"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                VerticalAlignment="Top"
+                                Visibility="Hidden"
+                                FontFamily="{StaticResource Font_Nunito}"
+                                Foreground="{StaticResource SolidColorBrush_Red}" />
+                        </Grid>
+
+                        <!--Grid para el telefono-->
+                        <Grid Grid.Row="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.4*" />
+                            </Grid.RowDefinitions>
+
+                            <components:TextBoxControl
+                                x:Name="campoTelefono"
+                                Grid.Row="0"
+                                EnableTextBox="False"
+                                Width="200"
+                                MaxLengthTextBox="10"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                TextBoxControlTextChanged="campoTelefono_TextBoxControlTextChanged"
+                                FieldName="Teléfono" />
+
+                            <Label
+                                x:Name="mensajeErrorTelefono"
+                                Grid.Row="1"
+                                Content="* Favor de ingresar solo numeros"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                VerticalAlignment="Top"
+                                Visibility="Hidden"
+                                FontFamily="{StaticResource Font_Nunito}"
+                                Foreground="{StaticResource SolidColorBrush_Red}" />
+                        </Grid>
                     </Grid>
                     <Border
                         x:Name="botonSubirArchivo"
@@ -85,7 +173,7 @@
                         Cursor="Hand"
                         MouseLeftButtonUp="botonSubirArchivo_MouseLeftButtonUp">
                         <Border.Background>
-                            <ImageBrush ImageSource="{StaticResource icon_CargarArchivo}" Stretch="Uniform" />
+                            <ImageBrush x:Name="botonSubirArchivoBrush" ImageSource="{StaticResource icon_CargarArchivo}" Stretch="Uniform" />
                         </Border.Background>
                     </Border>
                     <Grid Grid.Row="3" Margin="10">
