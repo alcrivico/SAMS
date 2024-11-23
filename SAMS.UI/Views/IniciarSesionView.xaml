@@ -15,9 +15,11 @@
     MaxHeight="1080"
     AllowsTransparency="True"
     Background="Transparent"
+    Icon="../Resources/Images/SAMSIsotype.ico"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
+    KeyUp="Window_KeyUp"
     mc:Ignorable="d">
 
     <Grid>

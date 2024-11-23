@@ -260,11 +260,11 @@ CREATE TABLE [dbo].[ProductoInventario] (
   [precioActual] decimal(18,2)  NOT NULL,
   [esPerecedero] bit  NOT NULL,
   [esDevolvible] bit  NOT NULL,
-  [ubicacion] bit  NOT NULL,
+  [fechaCaducidad] datetime2(7) NULL,
   [unidadDeMedidaId] int  NOT NULL,
   [categoriaId] int  NOT NULL,
   [estadoProductoId] int  NOT NULL,
-  [promocionId] int  NULL
+  [promocionId] int NULL
 )
 GO
 

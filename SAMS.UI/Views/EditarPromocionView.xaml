@@ -1,12 +1,12 @@
 ﻿<Window
-    x:Class="SAMS.UI.Views.VerProductosView"
+    x:Class="SAMS.UI.Views.EditarPromocionView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:SAMS.UI.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="SAMS-Productos"
+    Title="SAMS - Promociones"
     Width="1280"
     Height="720"
     MinWidth="800"
@@ -74,7 +74,7 @@
                                             FontFamily="{StaticResource Font_Nunito}"
                                             FontSize="24"
                                             FontWeight="Bold"
-                                            Text="Productos" />
+                                            Text="Promociones" />
                                     </Grid>
                                 </Viewbox>
 
@@ -100,7 +100,7 @@
                                             Width="450"
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Left"
-                                            FieldName="Buscar producto"
+                                            FieldName="Buscar Promoción:"
                                             TextBoxControlTextChanged="campoBuscar_TextBoxControlTextChanged" />
                                     </Viewbox>
 
@@ -111,17 +111,18 @@
                                         BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
                                         ButtonBackgroundColor="Transparent"
                                         ButtonBorderColor="{StaticResource SolidColorBrush_DodgerBlue}"
-                                        ButtonControlClick="Button_AgregarProductos_ButtonControlClick"
                                         ButtonForegroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
                                         IsDropShadowEnabled="False"
-                                        Text="Agregar Productos +" />
+                                        Text="Agregar Promocion +" 
+                                        x:Name="Agregar"
+                                        ButtonControlClick="Registrar_ButtonControlClick"/>
 
                                 </Grid>
 
                                 <Grid Grid.Row="1">
                                     <Viewbox>
                                         <components:TableControl
-                                            x:Name="TableControl_TablaProductos"
+                                            x:Name="TablaPromociones"
                                             Width="935"
                                             Height="450" />
                                     </Viewbox>
@@ -142,4 +143,3 @@
     </Grid>
 
 </Window>
-

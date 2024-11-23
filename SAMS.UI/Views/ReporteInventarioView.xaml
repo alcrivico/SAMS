@@ -46,11 +46,9 @@
                             <ColumnDefinition Width="0.20*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-
-                        <components:SideBarControl
-                            Grid.Column="0"
-                            Employee="Cajero"
-                            SideElementSelected="3" />
+                        
+                        <!-- Agregando el menu lateral-->
+                        <Grid x:Name="MenuLateral"/>
 
                         <Grid Grid.Column="1" Margin="30,0,30,0">
 

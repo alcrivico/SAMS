@@ -130,7 +130,7 @@ namespace SAMS.UI.Views
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.ToString());
+                //Debug.WriteLine(ex.ToString());
                 InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
                     " inténtelo de nuevo más tarde", "Aceptar");
                 this.Close();
@@ -167,7 +167,9 @@ namespace SAMS.UI.Views
 
         private void Button_AgregarProductos_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            
+            RegistrarProductoView registrarProductoView = new RegistrarProductoView(empleado);
+            registrarProductoView.Show();
+            this.Close();
         }
 
         private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)

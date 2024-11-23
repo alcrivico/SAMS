@@ -33,6 +33,7 @@ namespace SAMS.UI.VisualComponents
         public TableControl()
         {
             InitializeComponent();
+            DataGridStructure.SelectionChanged += DataGridStructure_SelectionChanged;
         }
 
         private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -68,6 +69,11 @@ namespace SAMS.UI.VisualComponents
                     dataGridTextColumn.Binding = new Binding(columns[i]["BindingName"]);
                     dataGridTextColumn.IsReadOnly = true;
 
+                    Style textBlockStyle = new Style(typeof(TextBlock));
+                    textBlockStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
+                    textBlockStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Center));
+
+                    dataGridTextColumn.ElementStyle = textBlockStyle;
 
                     if (i != 0)
                     {
@@ -158,7 +164,7 @@ namespace SAMS.UI.VisualComponents
 
         private void DataGridStructure_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(SelectedItemChangedEvent));
+            RaiseEvent(new RoutedEventArgs (SelectedItemChangedEvent));
         }
     }
 

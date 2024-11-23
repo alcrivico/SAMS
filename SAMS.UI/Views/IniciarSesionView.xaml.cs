@@ -45,6 +45,19 @@ namespace SAMS.UI.Views
 
         private void Button_Entrar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
+            EjecutarBotonLogin();
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                EjecutarBotonLogin();
+            }
+        }
+
+        private void EjecutarBotonLogin()
+        {
             if (!ValidarCredenciales())
             {
                 MostrarMensajeErrorDatosInvalidos();
@@ -129,5 +142,6 @@ namespace SAMS.UI.Views
                 Debug.WriteLine(ex.Message);
             }
         }
+
     }
 }

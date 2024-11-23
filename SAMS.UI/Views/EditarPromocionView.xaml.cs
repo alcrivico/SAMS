@@ -8,27 +8,27 @@ using System.Windows.Input;
 namespace SAMS.UI.Views;
 
 /// <summary>
-/// Lógica de interacción para ReporteInventarioView.xaml
+/// Lógica de interacción para EditarPromocionView.xaml
 /// </summary>
-public partial class ReporteInventarioView : Window
+public partial class EditarPromocionView : Window
 {
-    List<ReporteProductoInventarioDTO> listaReporteInventario;
-    ObservableCollection<Object> _reportes;
+    List<PromocionesDTO> listaPromociones;
+    ObservableCollection<Object> _promociones;
     private EmpleadoLoginDTO empleado;
     private SideBarControl SideBarControl_MenuLateral;
-    public ReporteInventarioView(EmpleadoLoginDTO empleado)
-    {
 
-        _reportes = new ObservableCollection<Object>();
-        this.empleado = empleado; 
+    public EditarPromocionView(EmpleadoLoginDTO? empleado = null)
+    {
+        _promociones = new ObservableCollection<Object>();
+        this.empleado = empleado ?? new EmpleadoLoginDTO() { tipoEmpleado = "Paqueteria" };
         InitializeComponent();
 
         SideBarControl_MenuLateral = new SideBarControl(empleado);
         MenuLateral.Children.Add(SideBarControl_MenuLateral);
         SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
-        
+
         DefinirColumnas();
-        ObtenerInventario();
+        ObtenerPromociones();
     }
 
     private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -62,7 +62,7 @@ public partial class ReporteInventarioView : Window
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Producto" },
+                    { "Name", "nombre" },
                     { "Width", "*" },
                     { "BindingName", "nombre" }
 
@@ -70,43 +70,45 @@ public partial class ReporteInventarioView : Window
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Bodega" },
+                    { "Name", "Cantidad" },
                     { "Width", "*" },
-                    { "BindingName", "cantidadBodega" },
+                    { "BindingName", "cantidad" },
 
                 },
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Exhibicion" },
+                    { "Name", "Finzalizacion" },
                     { "Width", "*" },
-                    { "BindingName", "cantidadExhibicion" }
+                    { "BindingName", "fechaFin" }
 
                 },
-                new Dictionary<string, string> {
+                 new Dictionary<string, string> {
 
-                    { "Type", "Text" },
-                    { "Name", "Precio" },
+                    { "Type", "Actions" },
+                    { "Name", "Acciones" },
                     { "Width", "*" },
-                    { "BindingName", "precioActual" }
+                    { "Detalles", "False" },
+                    { "Editar", "True" },
+                    { "Eliminar", "True" }
 
                 }
             };
 
-        TablaReporte.DefineColumns(columnas);
+        TablaPromociones.DefineColumns(columnas);
 
     }
 
-    private void ObtenerInventario()
+    private async void ObtenerPromociones()
     {
         try
         {
-            listaReporteInventario = ReportesDAO.ReporteInventario();
-            _reportes.Clear();
-            _reportes = new ObservableCollection<Object>(listaReporteInventario);
-            TablaReporte.SetItemsSource(_reportes);
+            listaPromociones = PromocionDAO.VerPromociones();
+            _promociones.Clear();
+            _promociones = new ObservableCollection<Object>(listaPromociones);
+            TablaPromociones.SetItemsSource(_promociones);
         }
-        catch (Exception ex)
+        catch
         {
             InformationControl.Show("Error", "Ocurrió un error al obtener Inventario de Producto", "Aceptar");
 
@@ -116,29 +118,31 @@ public partial class ReporteInventarioView : Window
 
     private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
     {
-        if (listaReporteInventario != null)
+        if (listaPromociones != null)
         {
-            var reporteFiltado = listaReporteInventario.Where(
+            var reporteFiltado = listaPromociones.Where(
                 x => x.nombre.ToLower().Contains(campoBuscar.Text.ToLower())).ToList();
 
-            _reportes.Clear();
+            _promociones.Clear();
 
-            _reportes = new ObservableCollection<Object>(reporteFiltado);
+            _promociones = new ObservableCollection<Object>(reporteFiltado);
 
-            TablaReporte.SetItemsSource(_reportes);
+            TablaPromociones.SetItemsSource(_promociones);
         }
         else
         {
-            _reportes.Clear();
+            _promociones.Clear();
 
-            _reportes = new ObservableCollection<Object>(listaReporteInventario);
+            _promociones = new ObservableCollection<Object>(listaPromociones);
 
-            TablaReporte.SetItemsSource(_reportes);
+            TablaPromociones.SetItemsSource(_promociones);
         }
     }
 
-    private void Imprimir_ButtonControlClick(object sender, RoutedEventArgs e)
+    private void Registrar_ButtonControlClick(object sender, RoutedEventArgs e)
     {
-
+        RegistrarPromocionView registrarPromocionView = new(empleado);
+        registrarPromocionView.ShowDialog();
+        this.Close();
     }
 }
