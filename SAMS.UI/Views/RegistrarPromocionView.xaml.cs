@@ -134,8 +134,9 @@ public partial class RegistrarPromocionView : Window
 
         if (objetoSeleccionado is ProductoInventarioPromocionDTO productoSeleccionado)
         {
+            
             FormularioPromocionView formularioPromocionView = new(productoSeleccionado.id, this, empleado);
-            formularioPromocionView.ShowDialog();
+            formularioPromocionView.Show();
         }
         else
         {

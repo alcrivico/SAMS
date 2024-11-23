@@ -144,7 +144,7 @@ INNER JOIN
     v.empleadoId = e.id
 GO
 
-CREATE OR alter VIEW V_Promocion AS
+CREATE OR ALTER VIEW V_Promocion AS
 SELECT
     p.id,
 	p.nombre,
@@ -530,21 +530,13 @@ BEGIN
 END;
 GO
 
-
--- 1. Crear tipo de tabla para lista de IDs si no existe
-IF TYPE_ID('dbo.productoInventarioIdList') IS NULL
-    CREATE TYPE dbo.productoInventarioIdList AS TABLE (productoInventarioId INT);
-GO
-
--- 2. Procedimiento T_EditarPromocion con formato solicitado
 CREATE PROCEDURE [dbo].T_EditarPromocion
 (
     @promocionId INT,
     @nombre NVARCHAR(100),
     @porcentajeDescuento INT,
     @fechaInicio DATE,
-    @fechaFin DATE,
-    @productoInventarioIdList dbo.productoInventarioIdList READONLY -- Usar el tipo de tabla correcto
+    @fechaFin DATE
 )
 AS
 BEGIN
@@ -584,35 +576,6 @@ BEGIN
                 promocionId = @promocionId;
         END
 
-        -- 3. Obtener los productos que actualmente tienen la promoción
-        DECLARE @CurrentProductos TABLE (productoInventarioId INT);
-        INSERT INTO 
-            @CurrentProductos
-        SELECT 
-            id 
-        FROM 
-            ProductoInventario 
-        WHERE 
-            promocionId = @promocionId;
-
-        -- 4. Actualizar ProductoInventario según el arreglo proporcionado
-
-        -- Agregar promocionId a los productos en el arreglo pero no en la tabla
-        UPDATE ProductoInventario
-        SET promocionId = @promocionId
-        WHERE 
-            id IN (SELECT productoInventarioId FROM @productoInventarioIdList) -- Usar la variable correcta
-        AND id NOT IN (SELECT productoInventarioId FROM @CurrentProductos);
-
-        -- Quitar promocionId de los productos en la tabla pero no en el arreglo
-        UPDATE 
-            ProductoInventario
-        SET promocionId = NULL
-        WHERE 
-            id IN (SELECT productoInventarioId FROM @CurrentProductos)
-        AND 
-            id NOT IN (SELECT productoInventarioId FROM @productoInventarioIdList); -- Usar la variable correcta
-
         -- Confirmar la transacción
         COMMIT TRANSACTION;
     END TRY
@@ -626,6 +589,7 @@ BEGIN
     END CATCH;
 END;
 GO
+
 
 CREATE PROCEDURE [dbo].T_FinalizarPromocion
 (
