@@ -3,6 +3,7 @@ using SAMS.UI.DTO;
 using SAMS.UI.Models.Entities;
 using SAMS.UI.VisualComponents;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -190,6 +191,9 @@ namespace SAMS.UI.Views
             {
                 InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
                     " inténtelo de nuevo más tarde", "Aceptar");
+                Debug.WriteLine(ex.ToString());
+                PrincipalView principalView = new PrincipalView(empleado);
+                principalView.Show();
                 this.Close();
             }
         }

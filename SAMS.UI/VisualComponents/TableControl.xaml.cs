@@ -33,6 +33,7 @@ namespace SAMS.UI.VisualComponents
         public TableControl()
         {
             InitializeComponent();
+            DataGridStructure.SelectionChanged += DataGridStructure_SelectionChanged;
         }
 
         private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -163,7 +164,7 @@ namespace SAMS.UI.VisualComponents
 
         private void DataGridStructure_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(SelectedItemChangedEvent));
+            RaiseEvent(new RoutedEventArgs (SelectedItemChangedEvent));
         }
     }
 

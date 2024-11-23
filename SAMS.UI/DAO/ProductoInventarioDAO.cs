@@ -180,4 +180,41 @@ public class ProductoInventarioDAO
 
         return pedidosPendientes;
     }
+
+    public static List<ProductosPorPedidoDTO> ObtenerProductosPorPedido(string noPedido)
+    {
+        List<ProductosPorPedidoDTO> productosPorPedido = new List<ProductosPorPedidoDTO>();
+
+        var productosData = from p in _sams.V_ProductosPorPedido
+                            where p.numeroPedido == noPedido
+                            select new
+                            {
+                                p.numeroPedido,
+                                p.codigoProducto,
+                                p.nombreProducto,
+                                p.cantidad,
+                                p.precioCompra
+                            };
+
+        if (productosData == null)
+        {
+            return null;
+        }
+
+        foreach (var productoData in productosData)
+        {
+            ProductosPorPedidoDTO producto = new ProductosPorPedidoDTO
+            {
+                numeroPedido = productoData.numeroPedido,
+                codigoProducto = productoData.codigoProducto,
+                nombreProducto = productoData.nombreProducto,
+                cantidad = productoData.cantidad,
+                precioCompra = productoData.precioCompra
+            };
+
+            productosPorPedido.Add(producto);
+        }
+
+        return productosPorPedido;
+    }
 }
