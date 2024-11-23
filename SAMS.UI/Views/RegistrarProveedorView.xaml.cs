@@ -71,6 +71,7 @@ namespace SAMS.UI.Views
             {
                 Debug.WriteLine(ex.Message);
                 InformationControl.Show("Error al registrar proveedor", "No se pudo conectar a la red del supermercado, inténtelo de nuevo más tarde", "Aceptar");
+                this.Close();
             }
         }
 

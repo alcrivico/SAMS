@@ -23,10 +23,21 @@ namespace SAMS.UI.DAO
 
         public static V_Proveedores ObtenerProveedorPorRfc(string rfc) => _sams.V_Proveedores.FirstOrDefault(p => p.rfc == rfc);
 
-        public static void RegistrarProveedor(Proveedor proveedor)
+        public static void EditarProveedor(V_Proveedores proveedor)
         {
-            _sams.Proveedor.Add(proveedor);
-            _sams.SaveChanges();
+            Proveedor proveedorConId = _sams.Proveedor.FirstOrDefault(p => p.rfc == proveedor.rfc);
+            if (proveedorConId != null)
+            {
+                proveedorConId.nombre = proveedor.nombre;
+                proveedorConId.correo = proveedor.correo;
+                proveedorConId.telefono = proveedor.telefono;
+                _sams.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException("El proveedor no existe.");
+            }
+            
         }
 
         public static void RegistrarProveedorYProductos(Proveedor proveedor, string[] productos)

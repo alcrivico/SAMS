@@ -162,17 +162,22 @@ namespace SAMS.UI.Views
             V_Proveedores proveedor = (V_Proveedores)actionBar.DataContext;
 
             DetalleProveedorView detalleProveedorView = new DetalleProveedorView(proveedor);
-            detalleProveedorView.Show();
+            detalleProveedorView.ShowDialog();
         }
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
         {
-            Debug.Print("Editar");
+            ActionsControl actionBar = (ActionsControl)sender;
+            V_Proveedores proveedor = (V_Proveedores)actionBar.DataContext;
+
+            EditarProveedorView editarProveedorView = new EditarProveedorView(proveedor);
+            editarProveedorView.ShowDialog();
+            ObtenerProveedores();
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
-            Debug.Print("Eliminar");
+            ObtenerProveedores();
         }
 
         private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
