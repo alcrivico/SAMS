@@ -941,7 +941,7 @@ CREATE TYPE TipoProducto AS TABLE (
 GO
 
 -- Procedimiento para reigstrar proveedor y productos
-CREATE PROCEDURE SP_RegistrarProveedorYProductos
+CREATE PROCEDURE T_RegistrarProveedorYProductos
     @RFC NVARCHAR(13),
     @Nombre NVARCHAR(100),
     @Correo NVARCHAR(100),

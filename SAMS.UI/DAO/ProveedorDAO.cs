@@ -81,7 +81,7 @@ namespace SAMS.UI.DAO
                 }
             };
 
-            _sams.Database.ExecuteSqlRaw("EXEC SP_RegistrarProveedorYProductos @rfc, @nombre, @correo, @telefono, @productos", parametros);
+            _sams.Database.ExecuteSqlRaw("EXEC T_RegistrarProveedorYProductos @rfc, @nombre, @correo, @telefono, @productos", parametros);
         }
 
     }
