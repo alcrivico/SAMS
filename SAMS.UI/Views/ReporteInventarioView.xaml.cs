@@ -16,11 +16,11 @@ public partial class ReporteInventarioView : Window
     ObservableCollection<Object> _reportes;
     private EmpleadoLoginDTO empleado;
     private SideBarControl SideBarControl_MenuLateral;
-    public ReporteInventarioView(EmpleadoLoginDTO? empleado = null)
+    public ReporteInventarioView(EmpleadoLoginDTO empleado)
     {
 
         _reportes = new ObservableCollection<Object>();
-        this.empleado = empleado ?? new EmpleadoLoginDTO() { tipoEmpleado = "Administrador" }; 
+        this.empleado = empleado; 
         InitializeComponent();
 
         SideBarControl_MenuLateral = new SideBarControl(empleado);
