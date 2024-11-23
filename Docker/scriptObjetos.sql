@@ -203,7 +203,8 @@ CREATE VIEW V_Empleados AS
 SELECT
     CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombre,
     e.rfc,
-    p.nombre AS puesto
+    p.nombre AS puesto,
+    e.correo
 FROM
     Empleado e
 INNER JOIN

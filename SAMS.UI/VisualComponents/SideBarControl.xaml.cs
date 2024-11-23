@@ -955,6 +955,8 @@ namespace SAMS.UI.VisualComponents
             switch (Employee)
             {
                 case "Administrador":
+                    VerEmpleadosView verEmpleadosView = new VerEmpleadosView(empleado);
+                    verEmpleadosView.Show();
                     break;
                 case "Cajero":
 

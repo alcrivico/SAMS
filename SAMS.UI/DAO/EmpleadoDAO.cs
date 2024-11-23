@@ -55,5 +55,6 @@ namespace SAMS.UI.DAO
             };
         }
 
+        public static IEnumerable<V_Empleados> ObtenerEmpleados() => _sams.V_Empleados.ToList();
     }
 }
