@@ -40,6 +40,20 @@ namespace SAMS.UI.DAO
             
         }
 
+        public static void EliminarProveedor(V_Proveedores proveedor)
+        {
+            Proveedor proveedorConId = _sams.Proveedor.FirstOrDefault(p => p.rfc == proveedor.rfc);
+            if (proveedorConId != null)
+            {
+                _sams.Proveedor.Remove(proveedorConId);
+                _sams.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException("El proveedor no existe.");
+            }
+        }
+
         public static void RegistrarProveedorYProductos(Proveedor proveedor, string[] productos)
         {
             RegistrarProveedorDTO registrarProveedorDTO = new RegistrarProveedorDTO();

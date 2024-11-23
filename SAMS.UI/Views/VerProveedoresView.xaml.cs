@@ -96,7 +96,7 @@ namespace SAMS.UI.Views
                     { "Width", "*" },
                     { "Detalles", "True" },
                     { "Editar", "True" },
-                    { "Eliminar", "False" }
+                    { "Eliminar", "True" }
 
                 }
 
@@ -177,6 +177,11 @@ namespace SAMS.UI.Views
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
+            if(ConfirmationControl.Show("Confirmar", "¿Está seguro de que desea eliminar a este proveedor?\n Esta acción no se puede deshacer", "Aceptar", "Cancelar"))
+            {
+                ProveedorDAO.EliminarProveedor((V_Proveedores)((ActionsControl)sender).DataContext);
+            }
+
             ObtenerProveedores();
         }
 
