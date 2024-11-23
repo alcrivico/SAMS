@@ -93,7 +93,6 @@ public partial class EditarPromocionView : Window
                     { "Eliminar", "True" }
 
                 }
-                //Aqui agregar la columna de editar modificar y eliminar hasta que lo termine cristoff
             };
 
         TablaPromociones.DefineColumns(columnas);
