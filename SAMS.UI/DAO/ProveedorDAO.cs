@@ -45,7 +45,7 @@ namespace SAMS.UI.DAO
             Proveedor proveedorConId = _sams.Proveedor.FirstOrDefault(p => p.rfc == proveedor.rfc);
             if (proveedorConId != null)
             {
-                _sams.Proveedor.Remove(proveedorConId);
+                proveedorConId.estadoProveedor = false;
                 _sams.SaveChanges();
             }
             else
