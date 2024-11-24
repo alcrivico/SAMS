@@ -181,7 +181,11 @@ namespace SAMS.UI.Views
 
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
+            ActionsControl actionBar = (ActionsControl)sender;
+            PedidosDTO pedido = (PedidosDTO)actionBar.DataContext;
             
+            VerDetallesPedidoView verDetallesPedidoView = new VerDetallesPedidoView(pedido);
+            verDetallesPedidoView.ShowDialog();
         }
 
         private void botonEditarClick(object sender, RoutedEventArgs e)

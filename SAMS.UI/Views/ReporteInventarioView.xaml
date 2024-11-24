@@ -76,7 +76,6 @@
                                             Text="Reporte Inventario" />
                                     </Grid>
                                 </Viewbox>
-
                             </Grid>
 
                             <Grid Name="Contenido" Grid.Row="1">

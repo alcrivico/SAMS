@@ -31,8 +31,9 @@ GO
 
 -- 5. Promocion
 INSERT INTO Promocion (nombre, porcentajeDescuento, cantMaxima, cantMinima) VALUES
-('2 X 1', 100, 2, 2),
-('M   itad de precio', 50, 1000, 1);
+('2 X 1', 50, 2, 2),
+('Mitad de precio', 50, 1000, 1),
+('3 x 2', 33, 3, 3);
 GO
 
 -- 6. Monedero
@@ -147,10 +148,10 @@ INSERT INTO Merma (cantidad, descripcion, fechaRegistro, productoInventarioId) V
 GO
 
 -- 16. Venta
-INSERT INTO Venta (noVenta, fechaRegistro, iva, totalEfectivo, totalTarjeta, totalMonedero, cajaId, monederoId, empleadoId) VALUES
-(1001, '2024-10-15 10:30:00', 0.50, 5.00, 0.00, 0.50, 1, 1, 1),
-(1002, '2024-10-15 12:45:00', 0.70, 6.00, 1.70, 0.00, 2, 2, 2),
-(1003, '2024-10-15 15:00:00', 1.00, 5.00, 6.00, 0.00, 3, 3, 3);
+INSERT INTO Venta (noVenta, fechaRegistro, iva, totalEfectivo, totalTarjeta, totalMonedero, cajaId, monederoId, empleadoId, tieneRedondeo) VALUES
+(1001, '2024-10-15 10:30:00', 0.50, 5.00, 0.00, 0.50, 1, 1, 1, 1),
+(1002, '2024-10-15 12:45:00', 0.70, 6.00, 1.70, 0.00, 2, 2, 2, 0),
+(1003, '2024-10-15 15:00:00', 1.00, 5.00, 6.00, 0.00, 3, 3, 3, 1);
 GO
 
 -- 17. DetalleVenta

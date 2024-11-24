@@ -133,6 +133,16 @@ namespace SAMS.UI.DAO
             return (_sams.Monedero.Any(m => m.telefono == monedero.telefono)) ? true : false;
         }
 
+        public static bool ConfirmarExistencia(string codigoDeBarras)
+        {
+            return (_sams.Monedero.Any(m => m.codigoDeBarras == codigoDeBarras)) ? true : false;
+        }
+
+        public static decimal ObtenerSaldo(string codigoDeBarras)
+        {
+            return _sams.Monedero.Where(m => m.codigoDeBarras == codigoDeBarras).Select(m => m.saldo).FirstOrDefault();
+        }
+
     }
 
 }
