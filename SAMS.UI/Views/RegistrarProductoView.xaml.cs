@@ -83,7 +83,7 @@ namespace SAMS.UI.Views
             
             if (!MostrarErrorEnProductoInvalido(ObtenerProductoConValoresPorDefecto()))
             {
-                RegistrarProductosEnInventario();
+                RegistrarProductosEnInventarioYEnPedido();
             }
         }
 
@@ -532,15 +532,21 @@ namespace SAMS.UI.Views
             }
         }
 
-        private async void RegistrarProductosEnInventario()
+        private async void RegistrarProductosEnInventarioYEnPedido()
         {
             try
             {
                 bool resultado = await ProductoInventarioDAO.RegistrarProductosInventario(productosInventario);
-
-                if (resultado)
+                bool resultadoPedido = await PedidoDAO.ActualizarEstadoPedido(new ActualizarEstadoPedidoDTO
                 {
-                    InformationControl.Show("Éxito", "Productos registrados correctamente.", "Aceptar");
+                    noPedido = productosInventario[0].noPedido,
+                    fechaEntrega = DateTime.Now
+                });
+
+                if (resultado && resultadoPedido)
+                {
+                    InformationControl.Show("Éxito", "Los productos del pedido se registraron correctamente.", "Aceptar");
+                    CerrarVentana();
                 }
                 else
                 {
