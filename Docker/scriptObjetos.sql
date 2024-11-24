@@ -211,6 +211,7 @@ INNER JOIN
     Puesto p
     ON
     e.puestoId = p.id
+WHERE e.estado = 1
 GO
 
 CREATE VIEW V_EmpleadoDetalle AS
@@ -1042,8 +1043,8 @@ BEGIN
         SET @Password = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @RFC), 1);
 
         -- Insertar el empleado en la tabla
-        INSERT INTO Empleado ( RFC, noEmpleado, Nombre, apellidoPaterno, apellidoMaterno, Correo, Telefono, Password, puestoId)
-        VALUES (@RFC, @NumeroEmpleado, @Nombre, @ApellidoP, @ApellidoM, @Correo, @Telefono, @Password, @PuestoID);
+        INSERT INTO Empleado ( RFC, noEmpleado, Nombre, apellidoPaterno, apellidoMaterno, Correo, Telefono, Password, estado, puestoId)
+        VALUES (@RFC, @NumeroEmpleado, @Nombre, @ApellidoP, @ApellidoM, @Correo, @Telefono, @Password, 1, @PuestoID);
 
         COMMIT TRANSACTION;
     END TRY

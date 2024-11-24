@@ -116,6 +116,7 @@ CREATE TABLE [dbo].[Empleado] (
   [correo] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
   [password] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
   [telefono] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
+  [estado] bit  NOT NULL,
   [puestoId] int  NOT NULL
 )
 GO
