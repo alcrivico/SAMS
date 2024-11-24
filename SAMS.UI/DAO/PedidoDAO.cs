@@ -15,6 +15,6 @@ namespace SAMS.UI.DAO
 
         public static IEnumerable<PedidosDTO> ObtenerPedidos() => _sams.V_Pedidos.ToList();
 
-        public static PedidosDTO ObtenerPedidoPorProveedor(string nombreProveedor) => _sams.V_Pedidos.FirstOrDefault(p => p.nombreProveedor == nombreProveedor);
+        public static PedidosDTO ObtenerPedidoPorNoPedido(string noPedido) => _sams.V_Pedidos.FirstOrDefault(p => p.noPedido == noPedido);
     }
 }
