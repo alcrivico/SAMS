@@ -1371,4 +1371,105 @@
     </DrawingGroup>
     <DrawingImage x:Key="icon_CargarArchivo" Drawing="{StaticResource Vector_CargarArchivo}" />
 
+    <DrawingGroup x:Key="Vector_Circulo">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0.0,0.0,24.0,24.0" />
+        </DrawingGroup.ClipGeometry>
+        <GeometryDrawing>
+            <GeometryDrawing.Pen>
+                <Pen
+                    Brush="{StaticResource SolidColorBrush_DodgerBlue}"
+                    DashCap="Round"
+                    EndLineCap="Round"
+                    LineJoin="Round"
+                    StartLineCap="Round"
+                    Thickness="2.0" />
+            </GeometryDrawing.Pen>
+            <GeometryDrawing.Geometry>
+                <PathGeometry Figures="M 21 12 C 21 16.9706 16.9706 21 12 21 C 7.02944 21 3 16.9706 3 12 C 3 7.02944 7.02944 3 12 3 C 16.9706 3 21 7.02944 21 12 Z" FillRule="Nonzero" />
+            </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_Circulo" Drawing="{StaticResource Vector_Circulo}" />
+
+    <DrawingGroup x:Key="Vector_Buscar">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0.0,0.0,24.0,24.0" />
+        </DrawingGroup.ClipGeometry>
+        <GeometryDrawing>
+            <GeometryDrawing.Pen>
+                <Pen
+                    Brush="{StaticResource SolidColorBrush_DodgerBlue}"
+                    DashCap="Round"
+                    EndLineCap="Round"
+                    LineJoin="Round"
+                    StartLineCap="Round"
+                    Thickness="2.0" />
+            </GeometryDrawing.Pen>
+            <GeometryDrawing.Geometry>
+                <PathGeometry Figures="M 14.9536 14.9458 L 21 21 M 17 10 C 17 13.866 13.866 17 10 17 C 6.13401 17 3 13.866 3 10 C 3 6.13401 6.13401 3 10 3 C 13.866 3 17 6.13401 17 10 Z" FillRule="Nonzero" />
+            </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_Buscar" Drawing="{StaticResource Vector_Buscar}" />
+
+    <DrawingGroup x:Key="Vector_Equis">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0.0,0.0,24.0,24.0" />
+        </DrawingGroup.ClipGeometry>
+        <GeometryDrawing Brush="{StaticResource SolidColorBrush_PantoneOrange}">
+            <GeometryDrawing.Geometry>
+                <PathGeometry Figures="M 6.99486 7.00636 C 6.60433 7.39689 6.60433 8.03005 6.99486 8.42058 L 10.58 12.0057 L 6.99486 15.5909 C 6.60433 15.9814 6.60433 16.6146 6.99486 17.0051 C 7.38538 17.3956 8.01855 17.3956 8.40907 17.0051 L 11.9942 13.4199 L 15.5794 17.0051 C 15.9699 17.3956 16.6031 17.3956 16.9936 17.0051 C 17.3841 16.6146 17.3841 15.9814 16.9936 15.5909 L 13.4084 12.0057 L 16.9936 8.42059 C 17.3841 8.03007 17.3841 7.3969 16.9936 7.00638 C 16.603 6.61585 15.9699 6.61585 15.5794 7.00638 L 11.9942 10.5915 L 8.40907 7.00636 C 8.01855 6.61584 7.38538 6.61584 6.99486 7.00636 Z" FillRule="Nonzero" />
+            </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_Equis" Drawing="{StaticResource Vector_Equis}" />
+
+    <DrawingGroup x:Key="Vector_Info">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0.0,0.0,24.0,24.0" />
+        </DrawingGroup.ClipGeometry>
+        <GeometryDrawing>
+            <GeometryDrawing.Pen>
+                <Pen
+                    Brush="{StaticResource SolidColorBrush_EerieBlack}"
+                    DashCap="Round"
+                    EndLineCap="Round"
+                    LineJoin="Round"
+                    StartLineCap="Round"
+                    Thickness="2.0" />
+            </GeometryDrawing.Pen>
+            <GeometryDrawing.Geometry>
+                <PathGeometry Figures="M 12 8 H 12.01 M 12 11 V 16 M 21 12 C 21 16.9706 16.9706 21 12 21 C 7.02944 21 3 16.9706 3 12 C 3 7.02944 7.02944 3 12 3 C 16.9706 3 21 7.02944 21 12 Z" FillRule="Nonzero" />
+            </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_Info" Drawing="{StaticResource Vector_Info}" />
+
+    <DrawingGroup x:Key="Vector_Check">
+        <DrawingGroup.ClipGeometry>
+            <RectangleGeometry Rect="0.0,0.0,24.0,24.0" />
+        </DrawingGroup.ClipGeometry>
+        <GeometryDrawing>
+            <GeometryDrawing.Pen>
+                <Pen
+                    Brush="{StaticResource SolidColorBrush_DodgerBlue}"
+                    DashCap="Round"
+                    EndLineCap="Round"
+                    LineJoin="Round"
+                    StartLineCap="Round"
+                    Thickness="2.0" />
+            </GeometryDrawing.Pen>
+            <GeometryDrawing.Geometry>
+                <PathGeometry Figures="M 4 12.6111 L 8.92308 17.5 L 20 6.5" FillRule="Nonzero" />
+            </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+    </DrawingGroup>
+
+    <DrawingImage x:Key="Icon_Check" Drawing="{StaticResource Vector_Check}" />
+
 </ResourceDictionary>

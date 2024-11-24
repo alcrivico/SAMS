@@ -903,10 +903,11 @@ namespace SAMS.UI.VisualComponents
             {
                 case "Administrador":
                     VerProductosView productosView = new VerProductosView(empleado);
-                    productosView.Show();
-                    Window.GetWindow(this).Close();
+                    productosView.Show(); 
                     break;
                 case "Cajero":
+                    VentaView ventaView = new(empleado, 1);
+                    ventaView.Show();
                     break;
                 case "Paqueteria":
                     break;
@@ -915,7 +916,9 @@ namespace SAMS.UI.VisualComponents
                 default:
                     break;
             }
-            
+
+            Window.GetWindow(this).Close();
+
         }
 
         //fila 2

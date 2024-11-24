@@ -7,7 +7,7 @@
 
         public string nombre { get; set; }
 
-        public decimal precio { get; set; }
+        public decimal precioActual { get; set; }
 
         public int cantidadExhibicion { get; set; }
 
@@ -15,7 +15,11 @@
 
         public string promocion { get; set; }
 
-        public int porcentajeDescuento { get; set; }
+        public decimal porcentajeDescuento { get; set; }
+
+        public int cantMinima { get; set; }
+
+        public int cantMaxima { get; set; }
 
     }
 
