@@ -16,4 +16,6 @@ public class V_EmpleadoDetalle
     public string correo { get; set; }
 
     public string puesto { get; set; }
+
+    public string telefono { get; set; }
 }

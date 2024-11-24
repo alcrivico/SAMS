@@ -203,13 +203,15 @@ CREATE VIEW V_Empleados AS
 SELECT
     CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombre,
     e.rfc,
-    p.nombre AS puesto
+    p.nombre AS puesto,
+    e.correo
 FROM
     Empleado e
 INNER JOIN
     Puesto p
     ON
     e.puestoId = p.id
+WHERE e.estado = 1
 GO
 
 CREATE VIEW V_EmpleadoDetalle AS
@@ -929,6 +931,129 @@ BEGIN
     END CATCH
 END;
 GO
+
+-- CU-07 Registrar proveedor
+--Tipo Tabla para meter una lista de productos
+CREATE TYPE TipoProducto AS TABLE (
+    Codigo NVARCHAR(50),
+    Descripcion NVARCHAR(255),
+    EsDevolvible NVARCHAR(10),
+    EsPerecedero NVARCHAR(10),
+    Nombre NVARCHAR(100),
+    UnidadDeMedida NVARCHAR(50)
+);
+GO
+
+-- Procedimiento para reigstrar proveedor y productos
+CREATE PROCEDURE T_RegistrarProveedorYProductos
+    @RFC NVARCHAR(13),
+    @Nombre NVARCHAR(100),
+    @Correo NVARCHAR(100),
+    @Telefono NVARCHAR(20),
+    @Productos TipoProducto READONLY
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Insertar proveedor
+        DECLARE @ProveedorId INT;
+
+        INSERT INTO Proveedor (RFC, Nombre, Correo, Telefono, estadoProveedor)
+        VALUES (@RFC, @Nombre, @Correo, @Telefono, 1);
+
+        -- Obtener el ID del proveedor recién insertado
+        SET @ProveedorId = SCOPE_IDENTITY();
+
+        -- Insertar productos asociados
+        INSERT INTO Producto (Codigo, Descripcion, EsDevolvible, EsPerecedero, Nombre, ProveedorId, UnidadDeMedidaId)
+        SELECT 
+            p.Codigo,
+            p.Descripcion,
+            CASE 
+                WHEN p.EsDevolvible = 'no' THEN 0
+                ELSE 1 
+            END AS EsDevolvible,
+            CASE 
+                WHEN p.EsPerecedero = 'no' THEN 0
+                ELSE 1 
+            END AS EsPerecedero,
+            p.Nombre,
+            @ProveedorId,
+            (SELECT Id FROM UnidadDeMedida WHERE Nombre = p.UnidadDeMedida)
+        FROM @Productos p;
+
+        -- Confirmar transacción
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Revertir transacción en caso de error
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+-- CU-11 Registrar empleado
+CREATE PROCEDURE T_RegistrarEmpleado
+    @RFC NVARCHAR(13),
+    @Nombre NVARCHAR(255),
+    @ApellidoP NVARCHAR(255),
+    @ApellidoM NVARCHAR(255),
+    @Correo NVARCHAR(100),
+    @Telefono NVARCHAR(10),
+    @Puesto NVARCHAR(100)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        -- Declarar variables locales
+        DECLARE @NumeroEmpleado NVARCHAR(10);
+        DECLARE @Password NVARCHAR(MAX);
+        DECLARE @UltimoNumero INT;
+        DECLARE @PuestoID INT;
+        
+        -- Buscamos el ID del puesto correspondiente en la tabla Puesto
+        SELECT @PuestoID = ID
+        FROM Puesto
+        WHERE Nombre = @Puesto;
+
+        -- Si no se encuentra el puesto, se sale y se lanza un error
+        IF @PuestoID IS NULL
+        BEGIN
+            RAISERROR('El puesto especificado no existe.', 16, 1);
+            RETURN;
+        END
+        
+        -- Validar si el RFC ya está registrado
+        IF EXISTS (SELECT 1 FROM Empleado WHERE RFC = @RFC)
+        BEGIN
+            THROW 50001, 'El RFC proporcionado ya está registrado.', 1;
+        END
+
+        -- Generar el número de empleado
+        SELECT @UltimoNumero = ISNULL(MAX(CAST(SUBSTRING(noEmpleado, 2, LEN(noEmpleado)) AS INT)), 0)
+        FROM Empleado;
+
+        SET @NumeroEmpleado = CONCAT('E', FORMAT(@UltimoNumero + 1, '000000'));
+
+        -- Generar contraseña
+        SET @Password = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @RFC), 1);
+
+        -- Insertar el empleado en la tabla
+        INSERT INTO Empleado ( RFC, noEmpleado, Nombre, apellidoPaterno, apellidoMaterno, Correo, Telefono, Password, estado, puestoId)
+        VALUES (@RFC, @NumeroEmpleado, @Nombre, @ApellidoP, @ApellidoM, @Correo, @Telefono, @Password, 1, @PuestoID);
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
 -- 4. disparadores
 
 -- 5. jobs

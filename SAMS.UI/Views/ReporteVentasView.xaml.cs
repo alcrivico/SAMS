@@ -1,5 +1,6 @@
 ﻿using SAMS.UI.DAO;
 using SAMS.UI.DTO;
+using SAMS.UI.Utils;
 using SAMS.UI.VisualComponents;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -14,10 +15,19 @@ public partial class ReporteVentasView : Window
 {
     List<ReporteVentaDTO> listaReporteVenta;
     ObservableCollection<Object> _reportes;
-    public ReporteVentasView()
+    private EmpleadoLoginDTO empleado;
+    private SideBarControl SideBarControl_MenuLateral;
+
+    public ReporteVentasView(EmpleadoLoginDTO empleado)
     {
         _reportes = new ObservableCollection<Object>();
+        this.empleado = empleado;
         InitializeComponent();
+
+        SideBarControl_MenuLateral = new SideBarControl(empleado);
+        MenuLateral.Children.Add(SideBarControl_MenuLateral);
+        SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
+
         DefinirColumnas();
         ObtenerReporte();
     }
@@ -140,6 +150,6 @@ public partial class ReporteVentasView : Window
 
     private void Imprimir_ButtonControlClick(object sender, RoutedEventArgs e)
     {
-
+        ReportePDFGenerator generator = new(listaReporteVenta, "01/11/2024 - 30/11/2024");
     }
 }
