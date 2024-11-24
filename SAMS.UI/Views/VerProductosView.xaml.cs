@@ -105,7 +105,7 @@ namespace SAMS.UI.Views
                     { "Width", "*" },
                     { "Detalles", "True" },
                     { "Editar", "True" },
-                    { "Eliminar", "False" }
+                    { "Eliminar", "True" }
 
                 }
 
