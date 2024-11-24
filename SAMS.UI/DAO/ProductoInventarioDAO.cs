@@ -217,4 +217,36 @@ public class ProductoInventarioDAO
 
         return productosPorPedido;
     }
+
+    public static async Task<bool> RegistrarProductosInventario(List<RegistrarProductoInventarioDTO> productosInventario)
+    {
+        bool resultado = true;
+
+        foreach (var producto in productosInventario)
+        {
+            var parameters = new[]
+            {
+            new SqlParameter("@noPedido", producto.noPedido),
+            new SqlParameter("@codigoProducto", producto.codigoProducto),
+            new SqlParameter("@nombreCategoria", producto.nombreCategoria),
+            new SqlParameter("@precioActual", producto.precioActual),
+            new SqlParameter("@fechaCaducidad", producto.fechaCaducidad)
+        };
+
+            try
+            {
+                await _sams.Database.ExecuteSqlRawAsync(
+                    @"EXEC [dbo].[T_RegistrarProductoInventario] 
+                @noPedido, @codigoProducto, @nombreCategoria, @precioActual, @fechaCaducidad",
+                    parameters);
+            }
+            catch
+            {
+                resultado = false;
+                break;
+            }
+        }
+
+        return resultado;
+    }
 }

@@ -268,10 +268,6 @@ CREATE TABLE [dbo].[ProductoInventario] (
 )
 GO
 
-ALTER TABLE [dbo].[ProductoInventario] SET (LOCK_ESCALATION = TABLE)
-GO
-
-
 -- ----------------------------
 -- Table structure for Promocion
 -- ----------------------------

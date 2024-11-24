@@ -244,7 +244,7 @@
                                                     FontSize="14"
                                                     FontWeight="Bold"
                                                     Foreground="{StaticResource SolidColorBrush_EerieBlack}"
-                                                    Text="Datos a registrar del producto: "
+                                                    Text=""
                                                     TextAlignment="Left"
                                                     TextWrapping="Wrap" />
                                             </Viewbox>
@@ -255,10 +255,11 @@
                                                 VerticalAlignment="Bottom">
                                                 <components:TextBoxControl
                                                     x:Name="TextBoxControl_PrecioVenta"
-                                                    Width="314"
+                                                    Width="320"
                                                     Height="53"
                                                     VerticalAlignment="Center"
-                                                    FieldName="Precio de venta" />
+                                                    FieldName="Precio de venta"
+                                                    IsEnabled="false" />
                                             </Viewbox>
                                             <Viewbox
                                                 Grid.Row="2"
@@ -276,7 +277,8 @@
                                                     FontWeight="Bold"
                                                     Foreground="{StaticResource SolidColorBrush_Red}"
                                                     Text="Ingresa un precio válido"
-                                                    TextAlignment="Left" />
+                                                    TextAlignment="Left"
+                                                    Visibility="Hidden" />
                                             </Viewbox>
                                             <Viewbox
                                                 Grid.Row="3"
@@ -290,7 +292,7 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
                                                     FieldName="Fecha de caducidad:"
-                                                    IsEnabled="False" />
+                                                    IsEnabled="false" />
                                             </Viewbox>
                                             <Viewbox
                                                 Grid.Row="4"
@@ -299,7 +301,7 @@
                                                 VerticalAlignment="Top">
                                                 <TextBlock
                                                     x:Name="TextBlock_MensajeFechaInvalida"
-                                                    Width="198"
+                                                    Width="219"
                                                     Height="29"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
@@ -308,7 +310,8 @@
                                                     FontWeight="Bold"
                                                     Foreground="{StaticResource SolidColorBrush_Red}"
                                                     Text="Ingresa una fecha valida"
-                                                    TextAlignment="Left" />
+                                                    TextAlignment="Left"
+                                                    Visibility="Hidden" />
                                             </Viewbox>
                                             <Viewbox
                                                 Grid.Row="5"
@@ -317,10 +320,11 @@
                                                 VerticalAlignment="Top">
                                                 <components:ComboBoxControl
                                                     x:Name="ComboBoxControl_Categorias"
-                                                    Width="242"
+                                                    Width="215"
                                                     Height="37"
                                                     HorizontalAlignment="Left"
-                                                    FieldName="Categorías" />
+                                                    FieldName="Categorías"
+                                                    IsEnabled="False" />
                                             </Viewbox>
                                         </Grid>
                                     </Border>
@@ -333,11 +337,12 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid Grid.Column="1" Margin="20,20,30,20">
                                         <components:ButtonControl
-                                            x:Name="Button_Entrar"
+                                            x:Name="Button_Registrar"
                                             HorizontalAlignment="Right"
                                             ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
                                             ButtonControlClick="Button_Registrar_ButtonControlClick"
                                             FontSize="24"
+                                            IsButtonEnabled="False"
                                             Text="Registrar" />
                                     </Grid>
                                     <Grid Grid.Column="2" Margin="20,20,20,20">
