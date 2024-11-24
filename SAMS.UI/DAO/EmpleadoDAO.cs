@@ -101,5 +101,28 @@ namespace SAMS.UI.DAO
                 throw new ArgumentException("El empleado no existe.");
             }
         }
+
+        public static void EditarEmpleado(V_EmpleadoDetalle empleado)
+        {
+            int puestoId = ObtenerPuestoPorNombre(empleado.puesto).id;
+
+            Empleado empleadoConId = _sams.Empleado.FirstOrDefault(e => e.rfc == empleado.rfc);
+            if(empleadoConId != null)
+            {
+                empleadoConId.nombre = empleado.nombre;
+                empleadoConId.apellidoPaterno = empleado.apellidoPaterno;
+                empleadoConId.apellidoMaterno = empleado.apellidoMaterno;
+                empleadoConId.correo = empleado.correo;
+                empleadoConId.telefono = empleado.telefono;
+                empleadoConId.puestoId = puestoId;
+                _sams.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException("El empleado no existe.");
+            }
+        }
+
+        public static Puesto ObtenerPuestoPorNombre(string nombre) => _sams.Puesto.FirstOrDefault(p => p.nombre == nombre);
     }
 }

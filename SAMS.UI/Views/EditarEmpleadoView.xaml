@@ -1,0 +1,280 @@
+﻿<Window
+    x:Class="SAMS.UI.Views.EditarEmpleadoView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Registrar proveedor"
+    Width="600"
+    Height="600"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Grid>
+        <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20">
+            <Border
+                Margin="30"
+                Background="{StaticResource SolidColorBrush_AntiFlashWhite}"
+                CornerRadius="20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.1*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="0.16*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource Font_Nunito}"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Text="Editar empleado" />
+
+                    <!--Grid para el ingreso de datos-->
+                    <Grid Grid.Row="1" Margin="35,0,35,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!--Grid para el RFC-->
+                        <Grid Grid.Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.51*" />
+                            </Grid.RowDefinitions>
+
+                            <components:TextBoxControl
+                                x:Name="campoRfc"
+                                Grid.Row="0"
+                                Width="350"
+                                HorizontalAlignment="Left"
+                                FieldName="RFC"
+                                MaxLengthTextBox="13"
+                                EnableTextBox="False"
+                                VerticalAlignment="Bottom"/>
+                        </Grid>
+
+                        <!--Grid para el nombre-->
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.51*" />
+                            </Grid.RowDefinitions>
+
+                            <components:TextBoxControl
+                                x:Name="campoNombre"
+                                Grid.Row="0"
+                                Width="470"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                TextBoxControlTextChanged="campoNombre_TextBoxControlTextChanged"
+                                FieldName="Nombre" />
+
+                            <Label
+                                x:Name="mensajeErrorNombre"
+                                Grid.Row="1"
+                                Content="*"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                VerticalAlignment="Top"
+                                Visibility="Hidden"
+                                FontFamily="{StaticResource Font_Nunito}"
+                                Foreground="{StaticResource SolidColorBrush_Red}" />
+                        </Grid>
+
+                        <!--Grid para el apellido paterno-->
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.51*" />
+                            </Grid.RowDefinitions>
+
+                            <components:TextBoxControl
+                                x:Name="campoApellidoPaterno"
+                                Grid.Row="0"
+                                Width="470"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                TextBoxControlTextChanged="campoApellidoPaterno_TextBoxControlTextChanged"
+                                FieldName="Apellido paterno" />
+
+                            <Label
+                                x:Name="mensajeErrorApellidoPaterno"
+                                Grid.Row="1"
+                                Content="*"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                VerticalAlignment="Top"
+                                Visibility="Hidden"
+                                FontFamily="{StaticResource Font_Nunito}"
+                                Foreground="{StaticResource SolidColorBrush_Red}" />
+                        </Grid>
+
+                        <!--Grid para el apellido materno-->
+                        <Grid Grid.Row="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.51*" />
+                            </Grid.RowDefinitions>
+
+                            <components:TextBoxControl
+                                x:Name="campoApellidoMaterno"
+                                Grid.Row="0"
+                                Width="470"
+                                MaxLengthTextBox="10"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                TextBoxControlTextChanged="campoApellidoMaterno_TextBoxControlTextChanged"
+                                FieldName="Apellido materno" />
+
+                            <Label
+                                x:Name="mensajeErrorApellidoMaterno"
+                                Grid.Row="1"
+                                Content="*"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                VerticalAlignment="Top"
+                                Visibility="Hidden"
+                                FontFamily="{StaticResource Font_Nunito}"
+                                Foreground="{StaticResource SolidColorBrush_Red}" />
+                        </Grid>
+
+                        <!--Grid para el correo-->
+                        <Grid Grid.Row="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.51*" />
+                            </Grid.RowDefinitions>
+
+                            <components:TextBoxControl
+                                x:Name="campoCorreo"
+                                Grid.Row="0"
+                                Width="470"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                TextBoxControlTextChanged="campoCorreo_TextBoxControlTextChanged"
+                                FieldName="Correo electrónico" />
+
+                            <Label
+                                x:Name="mensajeErrorCorreo"
+                                Grid.Row="1"
+                                Content="*"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                VerticalAlignment="Top"
+                                Visibility="Hidden"
+                                FontFamily="{StaticResource Font_Nunito}"
+                                Foreground="{StaticResource SolidColorBrush_Red}" />
+                        </Grid>
+
+                        <Grid Grid.Row="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--Grid para el telefono-->
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="0.51*" />
+                                </Grid.RowDefinitions>
+
+                                <components:TextBoxControl
+                                    x:Name="campoTelefono"
+                                    Grid.Column="0"
+                                    Width="200"
+                                    MaxLengthTextBox="10"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    TextBoxControlTextChanged="campoTelefono_TextBoxControlTextChanged"
+                                    FieldName="Teléfono" />
+
+                                <Label
+                                    x:Name="mensajeErrorTelefono"
+                                    Grid.Row="1"
+                                    Content="*"
+                                    FontSize="12"
+                                    FontWeight="Bold"
+                                    VerticalAlignment="Top"
+                                    Visibility="Hidden"
+                                    FontFamily="{StaticResource Font_Nunito}"
+                                    Foreground="{StaticResource SolidColorBrush_Red}" />
+                            </Grid>
+
+                            <!--Grid para el puesto-->
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="0.51*" />
+                                </Grid.RowDefinitions>
+
+                                <components:ComboBoxControl
+                                    x:Name="campoPuesto"
+                                    Grid.Row="0"
+                                    Width="200"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    FieldName="Puesto"
+                                    SelectedItemChanged="campoPuesto_SelectedItemChanged"/>
+
+                                <Label
+                                    x:Name="mensajeErrorPuesto"
+                                    Grid.Row="1"
+                                    Content="*"
+                                    FontSize="12"
+                                    FontWeight="Bold"
+                                    VerticalAlignment="Top"
+                                    Visibility="Hidden"
+                                    FontFamily="{StaticResource Font_Nunito}"
+                                    Foreground="{StaticResource SolidColorBrush_Red}" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Grid.Row="3" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                        </Grid.ColumnDefinitions>
+
+                        <components:ButtonControl
+                            x:Name="botonGuardar"
+                            Grid.Column="0"
+                            Margin="0,0,0,10"
+                            IsButtonEnabled="False"
+                            ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                            ButtonControlClick="botonGuardar_ButtonControlClick"
+                            ButtonForegroundColor="{StaticResource SolidColorBrush_White}"
+                            ButtonWidth="160"
+                            FontSize="18"
+                            Text="Guardar" />
+                        <components:ButtonControl
+                            x:Name="botonCancelar"
+                            Grid.Column="1"
+                            Margin="0,0,0,10"
+                            ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                            ButtonControlClick="botonCancelar_ButtonControlClick"
+                            ButtonForegroundColor="{StaticResource SolidColorBrush_White}"
+                            ButtonWidth="160"
+                            FontSize="18"
+                            Text="Cancelar" />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</Window>
+
