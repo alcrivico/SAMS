@@ -187,10 +187,12 @@ namespace SAMS.UI.Views
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
-            //if (ConfirmationControl.Show("Confirmar", "¿Está seguro de que desea eliminar a este proveedor?\n Esta acción no se puede deshacer", "Aceptar", "Cancelar"))
-            //{
-            //    ProveedorDAO.EliminarProveedor((V_Proveedores)((ActionsControl)sender).DataContext);
-            //}
+            if(ConfirmationControl.Show("Eliminar", "¿Está seguro que desea eliminar este empleado?", "Aceptar", "Cancelar"))
+            {
+                ActionsControl actionBar = (ActionsControl)sender;
+                V_Empleados empleado = (V_Empleados)actionBar.DataContext;
+                EmpleadoDAO.EliminarEmpleado(empleado.rfc);
+            }
 
             ObtenerEmpleados();
         }

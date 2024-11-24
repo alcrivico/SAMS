@@ -87,5 +87,19 @@ namespace SAMS.UI.DAO
 
             _sams.Database.ExecuteSqlRaw("EXEC T_RegistrarEmpleado @RFC, @Nombre, @ApellidoP, @ApellidoM, @Correo, @Telefono, @Puesto", parametros);
         }
+
+        public static void EliminarEmpleado(String rfc)
+        {
+            Empleado empleadoConId = _sams.Empleado.FirstOrDefault(e => e.rfc == rfc);
+            if (empleadoConId != null)
+            {
+                empleadoConId.estado = false;
+                _sams.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException("El empleado no existe.");
+            }
+        }
     }
 }
