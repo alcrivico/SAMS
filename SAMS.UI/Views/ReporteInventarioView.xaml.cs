@@ -1,5 +1,6 @@
 ﻿using SAMS.UI.DAO;
 using SAMS.UI.DTO;
+using SAMS.UI.Utils;
 using SAMS.UI.VisualComponents;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -139,6 +140,13 @@ public partial class ReporteInventarioView : Window
 
     private void Imprimir_ButtonControlClick(object sender, RoutedEventArgs e)
     {
-
+        if(TablaReporte != null)
+        {
+            ReportePDFGenerator generator = new ReportePDFGenerator(listaReporteInventario, DateTime.Now.ToString("dd/MM/yyyy"));
+        }
+        else
+            InformationControl.Show("Error", "No hay datos para imprimir", "Aceptar");
+        
     }
+
 }

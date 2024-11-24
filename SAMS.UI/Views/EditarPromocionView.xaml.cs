@@ -29,6 +29,9 @@ public partial class EditarPromocionView : Window
 
         DefinirColumnas();
         ObtenerPromociones();
+
+        TablaPromociones.OnEditarClickedHandler += botonEditarClick;
+        TablaPromociones.OnEliminarClickedHandler += botonEliminarClick;
     }
 
     private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -142,7 +145,53 @@ public partial class EditarPromocionView : Window
     private void Registrar_ButtonControlClick(object sender, RoutedEventArgs e)
     {
         RegistrarPromocionView registrarPromocionView = new(empleado);
-        registrarPromocionView.ShowDialog();
-        this.Close();
+        registrarPromocionView.Show();
+        Close();
+    }
+
+    private void botonEditarClick(object sender, RoutedEventArgs e)
+    {
+
+        ActionsControl actionBar = (ActionsControl)sender;
+        PromocionesDTO promocion = (PromocionesDTO)actionBar.DataContext;
+        EditarPromocionDTO editarPromocionDTO = new()
+        {
+            promocionId = promocion.id,
+            nombre = promocion.nombre,
+            porcentajeDescuento = promocion.porcentajeDescuento,
+            cantMaxima = promocion.cantMaxima,
+            cantMinima = promocion.cantMinima,
+            fechaInicio = promocion.fechaInicio,
+            fechaFin = promocion.fechaFin
+        };
+
+        FormularioPromocionView formularioPromocionView = new(null,this,empleado, editarPromocionDTO);
+        formularioPromocionView.Show();
+
+    }
+
+    private async void botonEliminarClick(object sender, RoutedEventArgs e )
+    {
+        ActionsControl actionBar = (ActionsControl)sender;
+        PromocionesDTO promocion = (PromocionesDTO)actionBar.DataContext;
+
+        bool resultado = ConfirmationControl.Show(
+            promocion.nombre,
+            "¿Estas seguro de finalizar la promocion?",
+            "Aceptar", "Cancelar");
+        
+        if (resultado) {
+            bool finalizado = await PromocionDAO.FinalizarPromocion(promocion.id);
+            
+            if (finalizado)
+            {
+                InformationControl.Show("Éxito", "Promoción finalizada correctamente.", "Aceptar");
+                ObtenerPromociones();
+            }
+            else
+            {
+                InformationControl.Show("Error", "No se pudo conectar a la red de la empresa, por favor revise su conexión.", "Aceptar");
+            }
+        }
     }
 }

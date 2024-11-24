@@ -1,5 +1,6 @@
 ﻿using SAMS.UI.DAO;
 using SAMS.UI.DTO;
+using SAMS.UI.Utils;
 using SAMS.UI.VisualComponents;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -16,18 +17,22 @@ public partial class ReportePedidosView : Window
     ObservableCollection<Object> _reportes;
     private EmpleadoLoginDTO empleado;
     private SideBarControl SideBarControl_MenuLateral;
+    private ObservableCollection<Object> _rangoFechas;
+    private const int MAXIMO_DIAS = -7;
+    private RangoFechasDTO rango;
 
     public ReportePedidosView(EmpleadoLoginDTO empleado)
     {
         _reportes = new ObservableCollection<Object>();
         this.empleado = empleado;
+        _rangoFechas = new ObservableCollection<Object>();
         InitializeComponent();
 
         SideBarControl_MenuLateral = new SideBarControl(empleado);
         MenuLateral.Children.Add(SideBarControl_MenuLateral);
         SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
         DefinirColumnas();
-        ObtenerPedidos();
+        DefinirFechas();
     }
 
     private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -108,7 +113,8 @@ public partial class ReportePedidosView : Window
     {
         try
         {
-            listaReportePedido = ReportesDAO.ReportePedidos();
+            rango = (RangoFechasDTO)ComboboxFechas.SelectedItem;
+            listaReportePedido = ReportesDAO.ReportePedidos(rango.FechaInicio,rango.FechaFin);
             _reportes.Clear();
             _reportes = new ObservableCollection<Object>(listaReportePedido);
             TablaReporte.SetItemsSource(_reportes);
@@ -146,6 +152,46 @@ public partial class ReportePedidosView : Window
 
     private void Imprimir_ButtonControlClick(object sender, RoutedEventArgs e)
     {
+        if (TablaReporte != null)
+        {
+            ReportePDFGenerator generator = new(listaReportePedido, rango.Rango);
+        }
+    }
 
+    private void comboboxFechas_SelectedItemChanged(object sender, RoutedEventArgs e)
+    {
+        ObtenerPedidos();
+    }
+
+    private void DefinirFechas()
+    {
+        DateTime fechaLimite = new DateTime(2024, 8, 1);
+        DateTime fechaFin = DateTime.Today;
+        List<RangoFechasDTO> rangos = new();
+
+        while (true)
+        {
+            DateTime fechaInicio = fechaFin.AddDays(MAXIMO_DIAS);
+
+            // Si la fecha de inicio es menor al 1 de agosto, ajustarla y salir del bucle
+            if (fechaInicio < fechaLimite)
+            {
+                fechaInicio = fechaLimite;
+                rangos.Add(new RangoFechasDTO { FechaInicio = fechaInicio, FechaFin = fechaFin });
+                break;
+            }
+
+            rangos.Add(new RangoFechasDTO { FechaInicio = fechaInicio, FechaFin = fechaFin });
+            fechaFin = fechaInicio.AddDays(-1);
+        }
+
+        _rangoFechas.Clear();
+        foreach (var rango in rangos)
+            _rangoFechas.Add(rango);
+
+        ComboboxFechas.SetItemsSource(_rangoFechas, "Rango");
+
+        if (_rangoFechas.Count > 0)
+            ComboboxFechas.SelectDefaultItem(0);
     }
 }

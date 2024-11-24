@@ -10,14 +10,12 @@ public class ReportesDAO
 {
     private static SAMSContext _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
 
-    public static List<ReporteVentaDTO> ReporteVentas(DateTime? fechaRegistro = null)
+    public static List<ReporteVentaDTO> ReporteVentas(DateTime fechaRegistro)
     {
-        // Si no se proporciona la fecha de ingreso, por defecto se usa la fecha de hoy
-        fechaRegistro = fechaRegistro ?? DateTime.Now.Date;
 
         // Obtener el inicio y fin del día para la fecha proporcionada
-        DateTime inicioDelDia = fechaRegistro.Value.Date;
-        DateTime finDelDia = fechaRegistro.Value.Date.AddDays(1).AddMilliseconds(-1);
+        DateTime inicioDelDia = fechaRegistro.Date;
+        DateTime finDelDia = fechaRegistro.Date.AddDays(1).AddMilliseconds(-1);
 
         // Ejecutar la consulta sobre la vista con la fecha de ingreso proporcionada
         return _sams.Set<ReporteVentaDTO>()
@@ -33,16 +31,15 @@ public class ReportesDAO
         // Si no se proporcionan fechas se aplica un rango predeterminado
         if (fechaInicio == null && fechaFin == null)
         {
-            fechaInicio = DateTime.Now.AddMonths(-3);
+            fechaInicio = DateTime.Now.AddDays(-8);
             fechaFin = DateTime.Now;
         }
 
         // Ejecuta la consulta sobre la vista con las fechas proporcionadas
         return _sams.Set<ReportePedidoDTO>()
             .FromSqlRaw("SELECT * FROM dbo.V_ReportePedido WHERE fechaPedido BETWEEN @fechaInicio AND @fechaFin",
-                new SqlParameter("@fechaInicio", fechaInicio ?? DateTime.Now.AddMonths(-3)),
-                new SqlParameter("@fechaFin", fechaFin ?? DateTime.Now))
-            .AsNoTracking()
+                new SqlParameter("@fechaInicio", fechaInicio),
+                new SqlParameter("@fechaFin", fechaFin ))
             .ToList();
     }
 
