@@ -41,9 +41,10 @@ namespace SAMS.UI.Views
 
             InitializeComponent();
             DefinirColumnas();
+            ObtenerPedidos();
 
             SideBarControl_MenuLateral = new SideBarControl(_empleado);
-            SideBarControl_MenuLateral.SideElementSelected = 2;
+            SideBarControl_MenuLateral.SideElementSelected = 5;
             MenuLateral.Children.Add(SideBarControl_MenuLateral);
             SideBarControl_MenuLateral.Employee = _empleado.tipoEmpleado;
 
@@ -101,7 +102,7 @@ namespace SAMS.UI.Views
                     { "Type", "Text" },
                     { "Name", "Fecha de registro" },
                     { "Width", "*" },
-                    { "BindingName", "fechaEntrega" }
+                    { "BindingName", "FechaPedido" }
 
                 },
                 new Dictionary<string, string> {
@@ -112,8 +113,20 @@ namespace SAMS.UI.Views
                     { "BindingName", "nombreEstado" }
 
                 },
-                
+                new Dictionary<string, string> {
+
+                    { "Type", "Actions" },
+                    { "Name", "Acciones" },
+                    { "Width", "*" },
+                    { "Detalles", "True" },
+                    { "Editar", "True" },
+                    { "Eliminar", "True" }
+
+                }
+
             };
+
+            TablaPedidos.DefineColumns(columnas);
 
         }
 
@@ -168,20 +181,22 @@ namespace SAMS.UI.Views
 
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
-            InformationControl.Show("Informacion", "Cada vez mas cerca", "Aceptar");
-            this.Close();
+            
         }
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
         {
-            InformationControl.Show("Informacion", "Si lo termino", "Aceptar");
-            this.Close();
+            
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
-            InformationControl.Show("Informacion", "Este no es mio", "Aceptar");
-            this.Close();
+            
+        }
+
+        private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
