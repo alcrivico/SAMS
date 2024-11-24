@@ -15,7 +15,7 @@
 
         public string promocion { get; set; }
 
-        public decimal porcentajeDescuento { get; set; }
+        public int porcentajeDescuento { get; set; }
 
         public int cantMinima { get; set; }
 

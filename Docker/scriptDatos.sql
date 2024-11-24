@@ -31,8 +31,9 @@ GO
 
 -- 5. Promocion
 INSERT INTO Promocion (nombre, porcentajeDescuento, cantMaxima, cantMinima) VALUES
-('2 X 1', 0.50, 2, 2),
-('Mitad de precio', 0.50, 1000, 1);
+('2 X 1', 50, 2, 2),
+('Mitad de precio', 50, 1000, 1),
+('3 x 2', 33, 3, 3);
 GO
 
 -- 6. Monedero

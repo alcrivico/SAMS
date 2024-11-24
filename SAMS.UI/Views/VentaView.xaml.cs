@@ -523,7 +523,7 @@ namespace SAMS.UI.Views
                                 _detalleVenta.nombreDetalleVenta = producto.nombre;
                                 _detalleVenta.precio = producto.precioActual;
                                 _detalleVenta.promocion = producto.promocion;
-                                _detalleVenta.porcentajeDescuento = producto.porcentajeDescuento;
+                                _detalleVenta.porcentajeDescuento = (decimal) producto.porcentajeDescuento / 100.0m;
                                 _detalleVenta.cantidadMinima = producto.cantMinima;
                                 _detalleVenta.cantidadMaxima = producto.cantMaxima;
 
