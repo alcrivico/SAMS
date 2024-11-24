@@ -59,6 +59,7 @@
                 FontSize="18"
                 FontWeight="Bold"
                 Foreground="{StaticResource SolidColorBrush_DavysGrey}"
+                IsReadOnly="{Binding IsReadOnly, ElementName=TextBox}"
                 MaxLength="{Binding MaxLengthTextBox, ElementName=TextBox}"
                 Text="{Binding Text, ElementName=TextBox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextAlignment="Left"

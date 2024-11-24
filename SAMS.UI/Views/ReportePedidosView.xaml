@@ -89,8 +89,8 @@
                                 <Grid Grid.Row="0">
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.75*" />
-                                        <ColumnDefinition Width="0.25*" />
+                                        <ColumnDefinition Width="0.60*" />
+                                        <ColumnDefinition Width="0.40*" />
                                     </Grid.ColumnDefinitions>
 
                                     <Viewbox Grid.Column="0" HorizontalAlignment="Left">
@@ -101,6 +101,16 @@
                                             HorizontalAlignment="Left"
                                             FieldName="Buscar Pedido:" 
                                             TextBoxControlTextChanged="campoBuscar_TextBoxControlTextChanged" />
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" HorizontalAlignment="Right">
+                                        <components:ComboBoxControl
+                                            x:Name="ComboboxFechas"
+                                            Width="220"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FieldName="Rango de Fechas:"
+                                            Height="38" 
+                                            SelectedItemChanged="comboboxFechas_SelectedItemChanged"/>
                                     </Viewbox>
                                 </Grid>
 

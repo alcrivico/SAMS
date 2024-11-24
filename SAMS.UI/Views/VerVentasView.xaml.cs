@@ -44,10 +44,7 @@ namespace SAMS.UI.Views
 
             InitializeComponent();
 
-            SideBarControl sideBarControl = new SideBarControl(empleado);
-            sideBarControl.Employee = empleado.tipoEmpleado;
-            sideBarControl.SideElementSelected = 2;
-            MenuLateral.Children.Add(sideBarControl);
+            ConfigurarSideBar();
 
             DefinirColumnas();
 
@@ -150,6 +147,25 @@ namespace SAMS.UI.Views
 
         }
 
+        private void ConfigurarSideBar()
+        {
+
+            SideBarControl sideBarControl = new SideBarControl(_empleado);
+            sideBarControl.Employee = _empleado.tipoEmpleado;
+
+            if (_empleado.tipoEmpleado == "Cajero")
+            {
+                sideBarControl.SideElementSelected = 2;
+            }
+            else
+            {
+                sideBarControl.SideElementSelected = 4;
+            }
+
+            MenuLateral.Children.Add(sideBarControl);
+
+        }
+
         private void ObtenerVentas()
         {
             try
@@ -181,12 +197,32 @@ namespace SAMS.UI.Views
 
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
+
             ActionsControl actionBar = (ActionsControl)sender;
+
+            VentasDTO venta = (VentasDTO) actionBar.DataContext;
+
+            VentaView ventaView = new VentaView(_empleado, 3);
+
+            ventaView.Show();
+
+            this.Close();
+
         }
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
         {
+
             ActionsControl actionBar = (ActionsControl)sender;
+
+            VentasDTO venta = (VentasDTO)actionBar.DataContext;
+
+            VentaView ventaView = new VentaView(_empleado, 2);
+
+            ventaView.Show();
+
+            this.Close();
+
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)

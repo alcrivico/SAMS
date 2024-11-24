@@ -29,6 +29,19 @@ namespace SAMS.UI.VisualComponents
                 typeof(TextBoxControl),
                 new PropertyMetadata(string.Empty));
 
+        public bool IsReadOnly
+        {
+            get { return (bool)GetValue(IsReadOnlyProperty); }
+            set { SetValue(IsReadOnlyProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsReadOnlyProperty =
+            DependencyProperty.Register(
+                "IsReadOnly",
+                typeof(bool),
+                typeof(TextBoxControl),
+                new PropertyMetadata(false));
+
         public static readonly DependencyProperty EnableTextBoxProperty =
             DependencyProperty.Register(
                 "EnableTextBox",
@@ -136,7 +149,7 @@ namespace SAMS.UI.VisualComponents
             TextBox_Text.Foreground = (SolidColorBrush)FindResource("SolidColorBrush_DavysGrey");
             TextBox_Text.Opacity = 1;
             TextBox_Text.Focusable = true;
-            TextBox_Text.Cursor = Cursors.Hand;
+            TextBox_Text.Cursor = Cursors.IBeam;
             TextBox_FieldName.Background = (SolidColorBrush)FindResource("SolidColorBrush_White");
 
         }

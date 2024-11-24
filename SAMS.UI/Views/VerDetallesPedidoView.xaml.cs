@@ -87,8 +87,8 @@ namespace SAMS.UI.Views
                 Debug.WriteLine(ex.Message);
                 InformationControl.Show("Error", "No se pudo acceder a la red de la empresa", "Aceptar");
                 this.Close();
-            }
         }
+    }
 
         private void CargarProductosProveedor(string rfc)
         {

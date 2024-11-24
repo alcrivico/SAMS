@@ -22,6 +22,19 @@ namespace SAMS.UI.VisualComponents
                 typeof(CheckBoxControl),
                 new PropertyMetadata(false));
 
+        public bool IsEnabled
+        {
+            get { return (bool)GetValue(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsEnabledProperty =
+            DependencyProperty.Register(
+                "IsEnabled",
+                typeof(bool),
+                typeof(CheckBoxControl),
+                new PropertyMetadata(true, OnIsEnabledChanged));
+
         public string FieldName
         {
             get { return (string)GetValue(FieldNameProperty); }
@@ -56,6 +69,28 @@ namespace SAMS.UI.VisualComponents
         private void CheckBox_Change(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(CheckedChangedEvent));
+        }
+
+        private static void OnIsEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
+            CheckBoxControl checkBoxControl = d as CheckBoxControl;
+
+            if (checkBoxControl.IsEnabled)
+            {
+                checkBoxControl.Check.IsEnabled = true;
+                checkBoxControl.Field.IsEnabled = true;
+                checkBoxControl.Check.Opacity = 1;
+                checkBoxControl.Field.Opacity = 1;
+            }
+            else
+            {
+                checkBoxControl.Check.IsEnabled = false;
+                checkBoxControl.Field.IsEnabled = false;
+                checkBoxControl.Check.Opacity = 0.5;
+                checkBoxControl.Field.Opacity = 0.5;
+            }
+
         }
 
     }

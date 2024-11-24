@@ -111,7 +111,10 @@
                                         <components:TableControl
                                             x:Name="TablaVentas"
                                             Width="935"
-                                            Height="450" />
+                                            Height="450"
+                                            MinWidth="935"
+                                            MinHeight="450"
+                                            MaxHeight="600" />
                                     </Viewbox>
                                 </Grid>
 

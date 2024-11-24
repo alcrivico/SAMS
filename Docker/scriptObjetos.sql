@@ -52,7 +52,9 @@ SELECT
     pi.cantidadExhibicion,
     um.nombre AS unidadDeMedida,
     p.nombre AS promocion,
-    p.porcentajeDescuento
+    p.porcentajeDescuento,
+    p.cantidadMinima,
+    p.cantidadMaxima
 FROM
     ProductoInventario pi
 LEFT JOIN
@@ -656,10 +658,11 @@ GO
 
 -- CU-03 Registrar Producto
 CREATE PROCEDURE T_RegistrarProductoInventario
-    @noPedido NVARCHAR(MAX),    -- Número del pedido
+    @noPedido NVARCHAR(MAX),      -- Número del pedido
     @codigoProducto NVARCHAR(MAX), -- Código del producto
     @nombreCategoria NVARCHAR(MAX), -- Nombre de la categoría
-    @precioActual DECIMAL(18, 2) -- Precio actual del producto
+    @precioActual DECIMAL(18, 2), -- Precio actual del producto
+    @fechaCaducidad DATE          -- Fecha de caducidad proporcionada
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -673,7 +676,6 @@ BEGIN
         DECLARE @idCategoria INT;
         DECLARE @idPedido INT;
         DECLARE @cantidadBodega INT;
-        DECLARE @fechaCaducidad DATE;
 
         -- Obtener el ID del producto desde el código
         SELECT @idProducto = id
@@ -699,14 +701,13 @@ BEGIN
             RETURN;
         END
 
-        -- Obtener la cantidad y la fecha de caducidad desde DetallePedido
+        -- Obtener la cantidad desde DetallePedido
         SELECT 
-            @cantidadBodega = DP.cantidad,
-            @fechaCaducidad = DP.fechaCaducidad
+            @cantidadBodega = DP.cantidad
         FROM DetallePedido DP
         WHERE DP.pedidoId = @idPedido AND DP.productoId = @idProducto;
 
-        IF @cantidadBodega IS NULL OR @fechaCaducidad IS NULL
+        IF @cantidadBodega IS NULL
         BEGIN
             RAISERROR('No se encontró un detalle de pedido válido para el producto en el pedido proporcionado.', 16, 1);
             ROLLBACK TRAN;
@@ -762,7 +763,7 @@ BEGIN
                 @cantidadBodega,         -- Cantidad en bodega del DetallePedido
                 0,                       -- Cantidad en exhibición inicia en 0
                 @precioActual,           -- Precio actual ingresado por el usuario
-                @fechaCaducidad,         -- Fecha de caducidad obtenida del DetallePedido
+                @fechaCaducidad,         -- Fecha de caducidad proporcionada como parámetro
                 P.esPerecedero,
                 P.esDevolvible,
                 P.unidadDeMedidaId,

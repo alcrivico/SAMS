@@ -51,6 +51,7 @@ public class ReportePDFGenerator
         subHeader.Format.Font.Size = 14;
         subHeader.Format.Font.Bold = true;
         subHeader.Format.Alignment = ParagraphAlignment.Center;
+        section.AddParagraph($"Fecha de impresion {DateTime.Now}");
         section.AddParagraph($"Rango de fechas: {_fechas}");
         section.AddParagraph();
 

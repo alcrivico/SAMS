@@ -1,0 +1,507 @@
+﻿<Window
+    x:Class="SAMS.UI.Views.VentaView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="SAMS - Venta"
+    Width="1280"
+    Height="720"
+    MinWidth="800"
+    MinHeight="600"
+    MaxWidth="1920"
+    MaxHeight="1080"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="../Resources/Images/SAMSIsotype.ico"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+
+    <Grid>
+
+        <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20, 20, 5, 20">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <components:TitleBarControl
+                    Grid.Row="0"
+                    MouseLeftButtonDown="TitleBarControl_MouseLeftButtonDown"
+                    WindowStateChangeRequested="TitleBarControl_WindowStateChangeRequested" />
+
+                <Border
+                    Grid.Row="1"
+                    Margin="40,15,40,40"
+                    Background="{StaticResource SolidColorBrush_AntiFlashWhite}"
+                    CornerRadius="40">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.20*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid x:Name="MenuLateral" />
+
+                        <Grid Grid.Column="1" Margin="30,0,30,0">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.1*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="0.1*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Viewbox Grid.Column="0" HorizontalAlignment="Left">
+                                    <Grid>
+                                        <TextBlock
+                                            x:Name="UseCaseTitle"
+                                            Margin="0,12,12,12"
+                                            HorizontalAlignment="Left"
+                                            FontFamily="{StaticResource Font_Nunito}"
+                                            FontSize="24"
+                                            FontWeight="Bold"
+                                            Text="Registrar Venta" />
+                                    </Grid>
+                                </Viewbox>
+
+                            </Grid>
+
+                            <Grid Name="Contenido" Grid.Row="1">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="3.5*" />
+                                    <RowDefinition Height="5*" />
+                                    <RowDefinition Height="1.5*" />
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.6*" />
+                                        <ColumnDefinition Width="0.4*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Viewbox Grid.Column="0" HorizontalAlignment="Left">
+                                        <components:TableControl
+                                            x:Name="TablaProductos"
+                                            Width="700"
+                                            Height="220" />
+                                    </Viewbox>
+
+                                    <Grid Grid.Column="1">
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+
+                                        <Viewbox Grid.Row="0" Grid.ColumnSpan="2">
+                                            <components:TextBoxControl
+                                                x:Name="campoProducto"
+                                                Margin="4"
+                                                FieldName="Producto"
+                                                KeyUp="campoProducto_KeyUp" />
+                                        </Viewbox>
+
+                                        <Viewbox Grid.Row="1" Grid.Column="0">
+                                            <components:TextBoxControl
+                                                x:Name="campoCantidad"
+                                                Width="90"
+                                                Height="50"
+                                                Margin="4"
+                                                FieldName="Cantidad:"
+                                                TextBoxControlTextChanged="campoCantidad_TextBoxControlTextChanged" />
+                                        </Viewbox>
+
+                                        <Grid
+                                            x:Name="elementosDinamicos"
+                                            Grid.Row="1"
+                                            Grid.Column="1">
+                                            <Viewbox>
+                                                <components:ButtonControl
+                                                    x:Name="botonAgregar"
+                                                    Margin="4,0"
+                                                    ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                                    ButtonControlClick="botonAgregar_ButtonControlClick"
+                                                    ButtonHeight="50"
+                                                    ButtonWidth="90"
+                                                    Text="Agregar" />
+                                            </Viewbox>
+                                        </Grid>
+
+                                        <Viewbox
+                                            x:Name="elementoDesechable"
+                                            Grid.Row="1"
+                                            Grid.Column="2">
+                                            <components:ButtonControl
+                                                x:Name="botonBorrar"
+                                                Margin="4,0"
+                                                ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                                                ButtonHeight="50"
+                                                ButtonWidth="90"
+                                                Text="Borrar" />
+                                        </Viewbox>
+
+                                        <Viewbox Grid.Row="2" Grid.Column="0">
+                                            <components:TextBoxControl
+                                                x:Name="campoSubtotal"
+                                                Width="90"
+                                                Height="50"
+                                                Margin="4"
+                                                FieldName="Subtotal $" />
+                                        </Viewbox>
+
+                                        <Viewbox Grid.Row="2" Grid.Column="1">
+                                            <components:TextBoxControl
+                                                x:Name="campoIVA"
+                                                Width="90"
+                                                Height="50"
+                                                Margin="4"
+                                                FieldName="IVA $" />
+                                        </Viewbox>
+
+                                        <Viewbox Grid.Row="2" Grid.Column="2">
+                                            <components:TextBoxControl
+                                                x:Name="campoTotal"
+                                                Width="90"
+                                                Height="50"
+                                                Margin="4"
+                                                FieldName="Total $" />
+                                        </Viewbox>
+
+                                    </Grid>
+
+                                </Grid>
+
+                                <Grid Grid.Row="1">
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.2*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+
+                                    <Grid Grid.Row="0">
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.6*" />
+                                            <ColumnDefinition Width="0.4*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Viewbox Grid.Column="0">
+                                                <components:CheckBoxControl
+                                                    x:Name="checkEfectivo"
+                                                    Margin="0,6"
+                                                    CheckedChanged="checkEfectivo_CheckedChanged"
+                                                    FieldName="Efectivo" />
+                                            </Viewbox>
+
+                                            <Viewbox Grid.Column="1">
+                                                <components:CheckBoxControl
+                                                    x:Name="checkTarjeta"
+                                                    Margin="0,6"
+                                                    CheckedChanged="checkTarjeta_CheckedChanged"
+                                                    FieldName="Tarjeta" />
+                                            </Viewbox>
+
+                                            <Viewbox Grid.Column="2">
+                                                <components:CheckBoxControl
+                                                    x:Name="checkMonedero"
+                                                    Margin="0,6"
+                                                    CheckedChanged="checkMonedero_CheckedChanged"
+                                                    FieldName="Monedero" />
+                                            </Viewbox>
+
+                                        </Grid>
+
+                                        <Grid Grid.Column="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Viewbox Grid.Column="1">
+                                                <components:CheckBoxControl
+                                                    x:Name="checkRedondear"
+                                                    Margin="0,2"
+                                                    FieldName="Redondear" />
+                                            </Viewbox>
+
+                                        </Grid>
+
+                                    </Grid>
+
+                                    <Grid Grid.Row="1">
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.6*" />
+                                            <ColumnDefinition Width="0.4*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+
+                                            <Border
+                                                Grid.Row="0"
+                                                BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                                                BorderThickness="0,4,0,4">
+
+                                                <Grid>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Viewbox Grid.Column="0">
+                                                        <components:TextBoxControl
+                                                            x:Name="campoPagoEfectivo"
+                                                            Margin="0,4,12,4"
+                                                            FieldName="Pago en Efectivo $:"
+                                                            TextBoxControlTextChanged="campoPagoEfectivo_TextBoxControlTextChanged" />
+                                                    </Viewbox>
+
+                                                    <Viewbox Grid.Column="1">
+                                                        <components:TextBoxControl
+                                                            x:Name="campoCambio"
+                                                            Margin="12,4,0,4"
+                                                            Cursor="Arrow"
+                                                            FieldName="Cambio $"
+                                                            IsReadOnly="True"
+                                                            TextBoxControlTextChanged="campoCambio_TextBoxControlTextChanged" />
+                                                    </Viewbox>
+
+                                                </Grid>
+
+                                            </Border>
+
+                                            <Border
+                                                Grid.Row="1"
+                                                BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                                                BorderThickness="0,0,0,4">
+
+                                                <Grid>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Viewbox Grid.Column="0">
+                                                        <components:TextBoxControl
+                                                            x:Name="campoPagoTarjeta"
+                                                            Margin="12,4,12,4"
+                                                            FieldName="Pago con Tarjeta $:"
+                                                            TextBoxControlTextChanged="campoPagoTarjeta_TextBoxControlTextChanged" />
+                                                    </Viewbox>
+
+                                                </Grid>
+
+                                            </Border>
+
+                                            <Border
+                                                Grid.Row="2"
+                                                BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                                                BorderThickness="0,0,0,4">
+
+                                                <Grid>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="0.4*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Viewbox Grid.Column="0">
+                                                        <components:TextBoxControl
+                                                            x:Name="campoMonedero"
+                                                            Height="54"
+                                                            Margin="12,4,12,4"
+                                                            FieldName="Monedero:" />
+                                                    </Viewbox>
+
+                                                    <Grid Grid.Column="1">
+
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Viewbox Grid.Column="0">
+
+                                                            <Border
+                                                                x:Name="buscarMonedero"
+                                                                Width="20"
+                                                                Height="20"
+                                                                Margin="2,6"
+                                                                BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                                                                BorderThickness="1.5"
+                                                                CornerRadius="6"
+                                                                MouseLeftButtonUp="buscarMonedero_MouseLeftButtonUp">
+
+                                                                <Border
+                                                                    Width="12"
+                                                                    Height="12"
+                                                                    Margin="1.5">
+                                                                    <Border.Background>
+                                                                        <ImageBrush ImageSource="{StaticResource Icon_Buscar}" />
+                                                                    </Border.Background>
+                                                                </Border>
+
+                                                            </Border>
+
+                                                        </Viewbox>
+
+                                                        <Viewbox Grid.Column="1">
+
+                                                            <Border
+                                                                x:Name="verificarMonedero"
+                                                                Width="20"
+                                                                Height="20"
+                                                                Margin="2,6"
+                                                                BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                                                                BorderThickness="1.5"
+                                                                CornerRadius="6">
+
+                                                                <Border
+                                                                    Width="12"
+                                                                    Height="12"
+                                                                    Margin="1.5">
+                                                                    <Border.Background>
+                                                                        <ImageBrush x:Name="verificarMonederoImage" ImageSource="{StaticResource Icon_Circulo}" />
+                                                                    </Border.Background>
+                                                                </Border>
+
+                                                            </Border>
+
+                                                        </Viewbox>
+
+                                                    </Grid>
+
+                                                    <Viewbox Grid.Column="2">
+                                                        <components:TextBoxControl
+                                                            x:Name="campoPagoMonedero"
+                                                            Height="54"
+                                                            Margin="12,4,12,4"
+                                                            FieldName="Pago con Monedero $:"
+                                                            TextBoxControlTextChanged="campoPagoMonedero_TextBoxControlTextChanged" />
+                                                    </Viewbox>
+
+                                                </Grid>
+
+                                            </Border>
+
+                                        </Grid>
+
+                                        <Grid Grid.Column="1">
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+
+                                            <Viewbox
+                                                Grid.Row="0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Bottom">
+                                                <components:TextBoxControl
+                                                    x:Name="campoMontoPagado"
+                                                    Margin="15,50,15,5"
+                                                    FieldName="Monto Pagado $"
+                                                    TextBoxControlTextChanged="campoMontoPagado_TextBoxControlTextChanged" />
+                                            </Viewbox>
+
+                                            <Viewbox
+                                                Grid.Row="1"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Top">
+                                                <components:TextBoxControl
+                                                    x:Name="campoSaldoRestante"
+                                                    Margin="15,5,15,50"
+                                                    FieldName="Saldo Restante $"
+                                                    TextBoxControlTextChanged="campoSaldoRestante_TextBoxControlTextChanged" />
+                                            </Viewbox>
+
+                                        </Grid>
+
+                                    </Grid>
+
+                                </Grid>
+
+                                <Grid Grid.Row="2">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Viewbox Grid.Column="0">
+                                        <components:ButtonControl
+                                            x:Name="botonAccion"
+                                            Margin="10"
+                                            ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                            ButtonWidth="120"
+                                            Text="Registrar" />
+                                    </Viewbox>
+
+                                    <Viewbox x:Name="contenedorBotonCancelar" Grid.Column="1">
+                                        <components:ButtonControl
+                                            x:Name="botonCancelar"
+                                            Margin="10"
+                                            ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                                            ButtonWidth="120"
+                                            Text="Volver" />
+                                    </Viewbox>
+
+                                </Grid>
+
+                            </Grid>
+
+                        </Grid>
+
+                    </Grid>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</Window>

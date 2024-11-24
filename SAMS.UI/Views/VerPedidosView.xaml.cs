@@ -183,7 +183,7 @@ namespace SAMS.UI.Views
         {
             ActionsControl actionBar = (ActionsControl)sender;
             PedidosDTO pedido = (PedidosDTO)actionBar.DataContext;
-
+            
             VerDetallesPedidoView verDetallesPedidoView = new VerDetallesPedidoView(pedido);
             verDetallesPedidoView.ShowDialog();
         }

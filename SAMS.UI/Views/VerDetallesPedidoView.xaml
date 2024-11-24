@@ -30,6 +30,11 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
+                <components:TitleBarControl
+                    Grid.Row="0"
+                    MouseLeftButtonDown="TitleBarControl_MouseLeftButtonDown"
+                    WindowStateChangeRequested="TitleBarControl_WindowStateChangeRequested" />
+
                 <Border
                     Grid.Row="1"
                     Margin="40,15,40,40"
@@ -37,6 +42,7 @@
                     CornerRadius="40">
 
                     <Grid>
+
 
                         <Grid Grid.Column="1" Margin="30,0,30,0">
 
@@ -142,7 +148,7 @@
                                             IsEnabled="False" />
                                     </Viewbox>
                                 </Grid>
-
+                                    
                                 <Grid Grid.Row="4">
                                     <Viewbox Grid.ColumnSpan="2">
                                         <components:TableControl

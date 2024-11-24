@@ -28,6 +28,8 @@ public partial class ReporteVentasView : Window
         MenuLateral.Children.Add(SideBarControl_MenuLateral);
         SideBarControl_MenuLateral.Employee = empleado.tipoEmpleado;
 
+        campoFecha.SelectedDate = DateTime.Now;
+
         DefinirColumnas();
         ObtenerReporte();
     }
@@ -110,7 +112,10 @@ public partial class ReporteVentasView : Window
     {
         try
         {
-            listaReporteVenta = ReportesDAO.ReporteVentas();
+
+            DateTime fecha = campoFecha.SelectedDate.Value;
+
+            listaReporteVenta = ReportesDAO.ReporteVentas(fecha);
             _reportes.Clear();
             _reportes = new ObservableCollection<Object>(listaReporteVenta);
             TablaReporte.SetItemsSource(_reportes);
@@ -150,6 +155,16 @@ public partial class ReporteVentasView : Window
 
     private void Imprimir_ButtonControlClick(object sender, RoutedEventArgs e)
     {
-        ReportePDFGenerator generator = new(listaReporteVenta, "01/11/2024 - 30/11/2024");
+        if(TablaReporte != null)
+        {
+            ReportePDFGenerator generator = 
+                new(listaReporteVenta, campoFecha.SelectedDate.Value.ToString("dd/MM/yyyy"));
+        }
+        else
+            InformationControl.Show("Error", "No hay datos para imprimir", "Aceptar");
+
     }
+
+    private void campoFecha_SelectedDateChanged(object sender, RoutedEventArgs e) 
+        => ObtenerReporte();
 }
