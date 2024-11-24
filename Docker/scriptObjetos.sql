@@ -52,7 +52,9 @@ SELECT
     pi.cantidadExhibicion,
     um.nombre AS unidadDeMedida,
     p.nombre AS promocion,
-    p.porcentajeDescuento
+    p.porcentajeDescuento,
+    p.cantidadMinima,
+    p.cantidadMaxima
 FROM
     ProductoInventario pi
 LEFT JOIN
@@ -203,13 +205,15 @@ CREATE VIEW V_Empleados AS
 SELECT
     CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombre,
     e.rfc,
-    p.nombre AS puesto
+    p.nombre AS puesto,
+    e.correo
 FROM
     Empleado e
 INNER JOIN
     Puesto p
     ON
     e.puestoId = p.id
+WHERE e.estado = 1
 GO
 
 CREATE VIEW V_EmpleadoDetalle AS
@@ -220,7 +224,8 @@ SELECT
     e.rfc,
     e.noempleado,
     e.correo,
-    p.nombre AS puesto
+    p.nombre AS puesto,
+    e.telefono
 FROM 
     Empleado e
 INNER JOIN
@@ -653,10 +658,11 @@ GO
 
 -- CU-03 Registrar Producto
 CREATE PROCEDURE T_RegistrarProductoInventario
-    @noPedido NVARCHAR(MAX),    -- Número del pedido
+    @noPedido NVARCHAR(MAX),      -- Número del pedido
     @codigoProducto NVARCHAR(MAX), -- Código del producto
     @nombreCategoria NVARCHAR(MAX), -- Nombre de la categoría
-    @precioActual DECIMAL(18, 2) -- Precio actual del producto
+    @precioActual DECIMAL(18, 2), -- Precio actual del producto
+    @fechaCaducidad DATE          -- Fecha de caducidad proporcionada
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -670,7 +676,6 @@ BEGIN
         DECLARE @idCategoria INT;
         DECLARE @idPedido INT;
         DECLARE @cantidadBodega INT;
-        DECLARE @fechaCaducidad DATE;
 
         -- Obtener el ID del producto desde el código
         SELECT @idProducto = id
@@ -696,14 +701,13 @@ BEGIN
             RETURN;
         END
 
-        -- Obtener la cantidad y la fecha de caducidad desde DetallePedido
+        -- Obtener la cantidad desde DetallePedido
         SELECT 
-            @cantidadBodega = DP.cantidad,
-            @fechaCaducidad = DP.fechaCaducidad
+            @cantidadBodega = DP.cantidad
         FROM DetallePedido DP
         WHERE DP.pedidoId = @idPedido AND DP.productoId = @idProducto;
 
-        IF @cantidadBodega IS NULL OR @fechaCaducidad IS NULL
+        IF @cantidadBodega IS NULL
         BEGIN
             RAISERROR('No se encontró un detalle de pedido válido para el producto en el pedido proporcionado.', 16, 1);
             ROLLBACK TRAN;
@@ -759,7 +763,7 @@ BEGIN
                 @cantidadBodega,         -- Cantidad en bodega del DetallePedido
                 0,                       -- Cantidad en exhibición inicia en 0
                 @precioActual,           -- Precio actual ingresado por el usuario
-                @fechaCaducidad,         -- Fecha de caducidad obtenida del DetallePedido
+                @fechaCaducidad,         -- Fecha de caducidad proporcionada como parámetro
                 P.esPerecedero,
                 P.esDevolvible,
                 P.unidadDeMedidaId,
@@ -988,6 +992,65 @@ BEGIN
     END TRY
     BEGIN CATCH
         -- Revertir transacción en caso de error
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+-- CU-11 Registrar empleado
+CREATE PROCEDURE T_RegistrarEmpleado
+    @RFC NVARCHAR(13),
+    @Nombre NVARCHAR(255),
+    @ApellidoP NVARCHAR(255),
+    @ApellidoM NVARCHAR(255),
+    @Correo NVARCHAR(100),
+    @Telefono NVARCHAR(10),
+    @Puesto NVARCHAR(100)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        -- Declarar variables locales
+        DECLARE @NumeroEmpleado NVARCHAR(10);
+        DECLARE @Password NVARCHAR(MAX);
+        DECLARE @UltimoNumero INT;
+        DECLARE @PuestoID INT;
+        
+        -- Buscamos el ID del puesto correspondiente en la tabla Puesto
+        SELECT @PuestoID = ID
+        FROM Puesto
+        WHERE Nombre = @Puesto;
+
+        -- Si no se encuentra el puesto, se sale y se lanza un error
+        IF @PuestoID IS NULL
+        BEGIN
+            RAISERROR('El puesto especificado no existe.', 16, 1);
+            RETURN;
+        END
+        
+        -- Validar si el RFC ya está registrado
+        IF EXISTS (SELECT 1 FROM Empleado WHERE RFC = @RFC)
+        BEGIN
+            THROW 50001, 'El RFC proporcionado ya está registrado.', 1;
+        END
+
+        -- Generar el número de empleado
+        SELECT @UltimoNumero = ISNULL(MAX(CAST(SUBSTRING(noEmpleado, 2, LEN(noEmpleado)) AS INT)), 0)
+        FROM Empleado;
+
+        SET @NumeroEmpleado = CONCAT('E', FORMAT(@UltimoNumero + 1, '000000'));
+
+        -- Generar contraseña
+        SET @Password = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @RFC), 1);
+
+        -- Insertar el empleado en la tabla
+        INSERT INTO Empleado ( RFC, noEmpleado, Nombre, apellidoPaterno, apellidoMaterno, Correo, Telefono, Password, estado, puestoId)
+        VALUES (@RFC, @NumeroEmpleado, @Nombre, @ApellidoP, @ApellidoM, @Correo, @Telefono, @Password, 1, @PuestoID);
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
         ROLLBACK TRANSACTION;
         THROW;
     END CATCH

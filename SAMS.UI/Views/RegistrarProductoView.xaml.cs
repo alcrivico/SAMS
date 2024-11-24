@@ -6,7 +6,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SAMS.UI.Views
 {
@@ -22,6 +24,7 @@ namespace SAMS.UI.Views
         ObservableCollection<Object> _productos;
         List<CategoriaDTO> categorias;
         private ObservableCollection<object> _categorias;
+        ProductosPorPedidoDTO productoSeleccionadoAnterior;
         List<RegistrarProductoInventarioDTO> productosInventario;
 
         public RegistrarProductoView(EmpleadoLoginDTO empleado)
@@ -76,12 +79,41 @@ namespace SAMS.UI.Views
 
         private void Button_Registrar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-
+            RegistrarOActualizarListaDeProductosInventario();
+            
+            if (!MostrarErrorEnProductoInvalido(ObtenerProductoConValoresPorDefecto()))
+            {
+                RegistrarProductosEnInventarioYEnPedido();
+            }
         }
 
         private void Button_Cancelar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
+            if (productosInventario.Count != 0)
+            {
+                bool result = ConfirmationControl.Show(
+                    "Confirmación",
+                    "¿Estás seguro de cancelar la operación? se perderán los cambios",
+                    "Aceptar",
+                    "Cancelar"
+                );
 
+                if (result)
+                {
+                    CerrarVentana();
+                }
+            }
+            else
+            {
+                CerrarVentana();
+            }
+        }
+
+        private void CerrarVentana()
+        {
+            VerProductosView verProductosView = new VerProductosView(empleado);
+            verProductosView.Show();
+            this.Close();
         }
 
         private void DefinirColumnasPedidos()
@@ -114,7 +146,7 @@ namespace SAMS.UI.Views
 
                 }
             };
-            
+
             TableControl_TablaPedidos.DefineColumns(columnas);
 
         }
@@ -195,10 +227,10 @@ namespace SAMS.UI.Views
             }
             catch (Exception ex)
             {
-                
+
                 InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
                     " inténtelo de nuevo más tarde", "Aceptar");
-                
+
                 PrincipalView principalView = new PrincipalView(empleado);
                 principalView.Show();
                 this.Close();
@@ -207,11 +239,16 @@ namespace SAMS.UI.Views
 
         private void TableControl_TablaPedidos_SelectedItemChanged(object sender, RoutedEventArgs e)
         {
+            
             if (TableControl_TablaPedidos.GetSelectedItem() is PedidosPendientesDTO pedidoSeleccionado)
             {
                 string noPedido = pedidoSeleccionado.noPedido;
                 ObtenerProductosPorPedido(noPedido);
+                productosInventario.Clear();
+                LimpiarApartadoRegistro();
+                VerificarYActivarBotonRegistrarYCamposRellenables();
             }
+            
         }
 
         private void ObtenerCategorias()
@@ -234,82 +271,292 @@ namespace SAMS.UI.Views
 
         private void TableControl_TablaProductos_SelectedItemChanged(object sender, RoutedEventArgs e)
         {
-            ProductosPorPedidoDTO productoSeleccionado = (ProductosPorPedidoDTO)TableControl_TablaProductos.GetSelectedItem();
-
-            // Validar si el producto seleccionado ya tiene un precio y una categoría registrados
-            if (ProductoTieneDatosRegistrados(productoSeleccionado))
-            {
-                // Cargar los datos del producto seleccionado
-                CargarDatosProducto(productoSeleccionado);
-            }
-            else
-            {
-                // Guardar los datos ingresados anteriormente
-                GuardarDatosProducto();
-
-                // No actualizar los controles si no tiene datos registrados
-            }
-
+            RegistrarOActualizarListaDeProductosInventario();
+            VerificarYActivarBotonRegistrarYCamposRellenables();
         }
 
-        private bool ProductoTieneDatosRegistrados(ProductosPorPedidoDTO productoSeleccionado)
+        private void RegistrarOActualizarListaDeProductosInventario()
         {
-            var productoInventario = productosInventario
-                        .FirstOrDefault(p => p.codigoProducto == productoSeleccionado.codigoProducto);
+            ProductosPorPedidoDTO productoSelecionadoActual = (ProductosPorPedidoDTO)TableControl_TablaProductos.GetSelectedItem();
+            List<ProductosPorPedidoDTO> productosSeleccionados = _productos.OfType<ProductosPorPedidoDTO>().ToList();
 
-            return productoInventario != null;
-        }
-
-        private void GuardarDatosProducto()
-        {
-            if (TableControl_TablaProductos.GetSelectedItem() is ProductosPorPedidoDTO productoSeleccionado)
+            if (productoSelecionadoActual != null)
             {
-                // Validar si hay datos ingresados en los controles
-                if (!string.IsNullOrEmpty(TextBoxControl_PrecioVenta.Text) && ComboBoxControl_Categorias.SelectedItem != null)
+                ModificarEtiquetaDeProducto(productoSelecionadoActual);
+                
+                if (YaFueRegistrado(productoSeleccionadoAnterior) && productoSeleccionadoAnterior != null)
                 {
-                    var productoInventario = productosInventario
-                                .FirstOrDefault(p => p.codigoProducto == productoSeleccionado.codigoProducto);
+                    if (!productoSeleccionadoAnteriorSinCambios(productoSeleccionadoAnterior) || !CamposVacios())
+                    {
+                        ModificarProductoARegistrar(productoSeleccionadoAnterior);
+                    }
+                }
+                else
+                {
+                    GuardarProductosARegistrar(productosSeleccionados);
+                }
 
-                    if (productoInventario == null)
+                if (YaFueRegistrado(productoSelecionadoActual))
+                {
+                    LlenarCamposConProducto(productoSelecionadoActual);
+                }
+                else
+                {
+                    LimpiarCampos();
+                }
+
+                productoSeleccionadoAnterior = productoSelecionadoActual;
+
+            }
+            
+        }
+
+        private bool YaFueRegistrado(ProductosPorPedidoDTO productoSeleccionado)
+        {
+            foreach (var productoInventario in productosInventario)
+            {
+                if (productoSeleccionado != null && productoInventario.codigoProducto == productoSeleccionado.codigoProducto)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void GuardarProductosARegistrar(List<ProductosPorPedidoDTO> productosSeleccionados)
+        {
+            if (productosSeleccionados != null && productosSeleccionados.Count > 0)
+            {
+                foreach (var productoSeleccionado in productosSeleccionados)
+                {
+                    decimal precioPorDefecto = 0.0m;
+                    DateTime fechaCaducidadPorDefecto = DateTime.MinValue;
+
+                    RegistrarProductoInventarioDTO productoInventario = new RegistrarProductoInventarioDTO
                     {
-                        productoInventario = new RegistrarProductoInventarioDTO
-                        {
-                            noPedido = productoSeleccionado.numeroPedido,
-                            codigoProducto = productoSeleccionado.codigoProducto,
-                            nombreCategoria = ComboBoxControl_Categorias.SelectedItem?.ToString(),
-                            precioActual = decimal
-                                .TryParse(TextBoxControl_PrecioVenta.Text, out decimal precio) ? precio : 0
-                        };
-                        productosInventario.Add(productoInventario);
-                    }
-                    else
-                    {
-                        productoInventario.nombreCategoria = ComboBoxControl_Categorias.SelectedItem?.ToString();
-                        productoInventario.precioActual = decimal
-                            .TryParse(TextBoxControl_PrecioVenta.Text, out decimal precio) ? precio : 0;
-                    }
+                        noPedido = productoSeleccionado.numeroPedido,
+                        codigoProducto = productoSeleccionado.codigoProducto,
+                        nombreCategoria = ((CategoriaDTO)ComboBoxControl_Categorias.SelectedItem)?.nombre,
+                        precioActual = decimal.TryParse(TextBoxControl_PrecioVenta.Text.Trim(), out decimal precio) ? precio : precioPorDefecto,
+                        fechaCaducidad = DatePicker_FechaCaducidad.SelectedDate ?? fechaCaducidadPorDefecto,
+                    };
+
+                    productosInventario.Add(productoInventario);
                 }
             }
         }
 
-        private void CargarDatosProducto(ProductosPorPedidoDTO productoSeleccionado)
+        private void ModificarProductoARegistrar(ProductosPorPedidoDTO productoSeleccionado)
         {
-            var productoInventario = productosInventario.FirstOrDefault(p => p.codigoProducto == productoSeleccionado.codigoProducto);
+            DateTime fechaCaducidadPorDefecto = DateTime.MinValue;
 
-            if (productoInventario != null)
+            foreach (RegistrarProductoInventarioDTO productoInventario in productosInventario)
             {
-                ComboBoxControl_Categorias.SelectedItem = productoInventario.nombreCategoria;
-                TextBoxControl_PrecioVenta.Text = productoInventario.precioActual.ToString();
-            }
-            else
-            {
-                LimpiarControles();
+                if (productoInventario.codigoProducto == productoSeleccionadoAnterior.codigoProducto)
+                {
+                    productoInventario.precioActual = decimal
+                        .TryParse(TextBoxControl_PrecioVenta.Text, out decimal precio) ? precio : 0;
+                    productoInventario.nombreCategoria = ((CategoriaDTO)ComboBoxControl_Categorias.SelectedItem)?.nombre;
+                    productoInventario.fechaCaducidad = DatePicker_FechaCaducidad.SelectedDate ?? fechaCaducidadPorDefecto;
+                }
             }
         }
 
-        private void LimpiarControles()
+        private void LimpiarCampos()
         {
             TextBoxControl_PrecioVenta.Text = string.Empty;
+            DatePicker_FechaCaducidad.SelectedDate = null;
+            ComboBoxControl_Categorias.SelectedItem = 1;
+            ReiniciarMensajesError();
+        }
+
+        private void LimpiarApartadoRegistro()
+        {
+            TextBoxControl_PrecioVenta.Text = string.Empty;
+            DatePicker_FechaCaducidad.SelectedDate = null;
+            ComboBoxControl_Categorias.SelectedItem = 1;
+            TextBlock_NombreProducto.Text = "";
+            ReiniciarMensajesError();
+        }
+
+        private bool CamposVacios()
+        {
+            return string.IsNullOrWhiteSpace(TextBoxControl_PrecioVenta.Text) ||
+                !DatePicker_FechaCaducidad.SelectedDate.HasValue;
+        }
+
+        private void LlenarCamposConProducto(ProductosPorPedidoDTO productoSeleccionado)
+        {
+            foreach (RegistrarProductoInventarioDTO productoInventario in productosInventario)
+            {
+                if (productoInventario.codigoProducto == productoSeleccionado.codigoProducto)
+                {
+                    TextBoxControl_PrecioVenta.Text = productoInventario.precioActual.ToString();
+                    var categoriaSeleccionada = _categorias
+                        .FirstOrDefault(c => ((CategoriaDTO)c).nombre == productoInventario.nombreCategoria);
+                    ComboBoxControl_Categorias.ComboBoxControlType.SelectedItem = categoriaSeleccionada;
+                    DatePicker_FechaCaducidad.SelectedDate = productoInventario.fechaCaducidad;
+                    LimpiarCamposSiNoSeRegistraron();
+                    break;
+                }
+            }
+        }
+
+        private void ModificarEtiquetaDeProducto(ProductosPorPedidoDTO productoSelecionadoActual)
+        {
+            if (productoSelecionadoActual != null)
+            {
+                TextBlock_NombreProducto.Inlines.Clear();
+                TextBlock_NombreProducto.Inlines
+                        .Add(new Run("Datos a registrar del producto: ")
+                        { Foreground = Brushes.Black });
+                TextBlock_NombreProducto.Inlines
+                        .Add(new Run(productoSelecionadoActual.nombreProducto)
+                        { Foreground = (Brush)Application.Current.Resources["SolidColorBrush_DodgerBlue"] });
+
+            }
+        }
+
+        private bool productoSeleccionadoAnteriorSinCambios(ProductosPorPedidoDTO productoSeleccionado)
+        {
+            bool sonIguales = false;
+
+            foreach (RegistrarProductoInventarioDTO productoInventario in productosInventario)
+            {
+                if (productoInventario.codigoProducto == productoSeleccionado.codigoProducto)
+                {
+                    if (TextBoxControl_PrecioVenta.Text == productoInventario.precioActual.ToString() &&
+                            DatePicker_FechaCaducidad.SelectedDate == productoInventario.fechaCaducidad &&
+                            productoInventario.nombreCategoria ==
+                            ((CategoriaDTO)ComboBoxControl_Categorias.SelectedItem)?.nombre)
+                    {
+                        return sonIguales = true;
+                    }
+                }
+            }
+            return sonIguales;
+        }
+
+        private void LimpiarCamposSiNoSeRegistraron()
+        {
+            if (decimal.TryParse(TextBoxControl_PrecioVenta.Text, out decimal precio) && precio == 0.0m
+                        || TextBoxControl_PrecioVenta.Text == null)
+            {
+                TextBoxControl_PrecioVenta.Text = null;
+            }
+            if (DatePicker_FechaCaducidad.SelectedDate == DateTime.MinValue
+                        || DatePicker_FechaCaducidad.SelectedDate == null)
+            {
+                DatePicker_FechaCaducidad.SelectedDate = null;
+            }
+
+        }
+
+        private RegistrarProductoInventarioDTO ObtenerProductoConValoresPorDefecto()
+        {
+            decimal precioPorDefecto = 0.0m;
+            DateTime fechaCaducidadPorDefecto = DateTime.MinValue;
+            string codigoFallido;
+
+            foreach (RegistrarProductoInventarioDTO productoInventario in productosInventario)
+            {
+                if (productoInventario.precioActual == precioPorDefecto &&
+                    productoInventario.fechaCaducidad == fechaCaducidadPorDefecto || productoInventario.precioActual <= 0)
+                {
+                    return productoInventario;
+                }
+
+                if (productoInventario.fechaCaducidad == fechaCaducidadPorDefecto)
+                {
+                    return productoInventario;
+                }
+            }
+
+            return null;
+        }
+
+
+        private bool MostrarErrorEnProductoInvalido(RegistrarProductoInventarioDTO productoInvalido)
+        {
+            ReiniciarMensajesError();
+            bool productoInvalidoEncontrado = false;
+            List<ProductosPorPedidoDTO> productosCargadosEnTablaproductos = _productos.OfType<ProductosPorPedidoDTO>().ToList();
+            decimal precioPorDefecto = 0.0m; //Esto deberian ser constantes
+            DateTime fechaCaducidadPorDefecto = DateTime.MinValue;
+            if (productoInvalido != null)
+            {
+                foreach (ProductosPorPedidoDTO producto in productosCargadosEnTablaproductos)
+                {
+                    if (producto.codigoProducto == productoInvalido.codigoProducto)
+                    {
+                        TableControl_TablaProductos.SetSelectedItem(producto);
+
+                        if (productoInvalido.fechaCaducidad == fechaCaducidadPorDefecto)
+                        {
+                            TextBlock_MensajeFechaInvalida.Visibility = Visibility.Visible;
+                            productoInvalidoEncontrado = true;
+                        }
+
+                        if (productoInvalido.precioActual == precioPorDefecto)
+                        {
+                            TextBlock_MensajePrecioInvalido.Visibility = Visibility.Visible;
+                            productoInvalidoEncontrado = true;
+                        }
+
+                    }
+                }
+            }
+            return productoInvalidoEncontrado;
+        }
+
+        private void ReiniciarMensajesError()
+        {
+            TextBlock_MensajeFechaInvalida.Visibility = Visibility.Hidden;
+            TextBlock_MensajePrecioInvalido.Visibility = Visibility.Hidden;
+        }
+        private void VerificarYActivarBotonRegistrarYCamposRellenables()
+        {
+            if (TableControl_TablaProductos.SelectedItem != null)
+            {
+                Button_Registrar.IsButtonEnabled = true;
+                TextBoxControl_PrecioVenta.IsEnabled = true;
+                DatePicker_FechaCaducidad.IsEnabled = true;
+                ComboBoxControl_Categorias.IsEnabled = true;
+            }
+            else
+            {
+                Button_Registrar.IsButtonEnabled = false;
+                TextBoxControl_PrecioVenta.IsEnabled = false;
+                DatePicker_FechaCaducidad.IsEnabled = false;
+                ComboBoxControl_Categorias.IsEnabled = false;
+            }
+        }
+
+        private async void RegistrarProductosEnInventarioYEnPedido()
+        {
+            try
+            {
+                bool resultado = await ProductoInventarioDAO.RegistrarProductosInventario(productosInventario);
+                bool resultadoPedido = await PedidoDAO.ActualizarEstadoPedido(new ActualizarEstadoPedidoDTO
+                {
+                    noPedido = productosInventario[0].noPedido,
+                    fechaEntrega = DateTime.Now
+                });
+
+                if (resultado && resultadoPedido)
+                {
+                    InformationControl.Show("Éxito", "Los productos del pedido se registraron correctamente.", "Aceptar");
+                    CerrarVentana();
+                }
+                else
+                {
+                    InformationControl.Show("Error", "Ocurrió un error al registrar los productos. Intenta de nuevo.", "Aceptar");
+                }
+            }
+            catch (Exception ex)
+            {
+                InformationControl.Show("Error", $"Error al registrar los productos: {ex.Message}", "Aceptar");
+            }
         }
     }
 }

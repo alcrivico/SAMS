@@ -24,6 +24,12 @@ namespace SAMS.UI.DAO
 
         }
 
+        public static ProductoInventarioVentaDTO ObtenerProductoInventarioVenta(string codigoProducto)
+        {
+            ProductoInventarioVentaDTO producto = _sams.V_ProductoInventarioVenta.Where(p => p.codigo == codigoProducto).FirstOrDefault();
+            return producto;
+        }
+
     }
 
 }

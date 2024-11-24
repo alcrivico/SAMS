@@ -116,6 +116,7 @@ CREATE TABLE [dbo].[Empleado] (
   [correo] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
   [password] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
   [telefono] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
+  [estado] bit  NOT NULL,
   [puestoId] int  NOT NULL
 )
 GO
@@ -268,10 +269,6 @@ CREATE TABLE [dbo].[ProductoInventario] (
 )
 GO
 
-ALTER TABLE [dbo].[ProductoInventario] SET (LOCK_ESCALATION = TABLE)
-GO
-
-
 -- ----------------------------
 -- Table structure for Promocion
 -- ----------------------------
@@ -282,7 +279,7 @@ GO
 CREATE TABLE [dbo].[Promocion] (
   [id] int  IDENTITY(1,1) NOT NULL,
   [nombre] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
-  [porcentajeDescuento] int  NOT NULL,
+  [porcentajeDescuento] decimal(18,2)  NOT NULL,
   [cantMaxima] int  NOT NULL,
   [cantMinima] int  NOT NULL
 )
@@ -381,6 +378,7 @@ CREATE TABLE [dbo].[Venta] (
   [totalEfectivo] decimal(18,2)  NOT NULL,
   [totalTarjeta] decimal(18,2)  NOT NULL,
   [totalMonedero] decimal(18,2)  NOT NULL,
+  [tieneRedondeo] BIT NOT NULL,
   [cajaId] int  NOT NULL,
   [monederoId] int  NOT NULL,
   [empleadoId] int  NOT NULL

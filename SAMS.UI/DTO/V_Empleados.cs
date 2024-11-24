@@ -8,4 +8,6 @@ public class V_Empleados
     public string rfc { get; set; }
 
     public string puesto { get; set; }
+
+    public string correo { get; set; }
 }

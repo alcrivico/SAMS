@@ -31,8 +31,8 @@ GO
 
 -- 5. Promocion
 INSERT INTO Promocion (nombre, porcentajeDescuento, cantMaxima, cantMinima) VALUES
-('2 X 1', 100, 2, 2),
-('M   itad de precio', 50, 1000, 1);
+('2 X 1', 0.50, 2, 2),
+('Mitad de precio', 0.50, 1000, 1);
 GO
 
 -- 6. Monedero
@@ -80,13 +80,13 @@ DECLARE @hash4 NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @pas
 DECLARE @hash5 NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @password5), 1);
 
 -- Insertar los valores con las contraseñas hasheadas
-INSERT INTO Empleado (rfc, noEmpleado, nombre, apellidoPaterno, apellidoMaterno, correo, password, telefono, puestoId) 
+INSERT INTO Empleado (rfc, noEmpleado, nombre, apellidoPaterno, apellidoMaterno, correo, password, telefono, estado, puestoId) 
 VALUES
-('MOCM840214HNL', 'E001', 'Miguel Angel', 'Morales', 'Cruz', 'miguel@gmail.com', @hash1, '5551234567', 1),
-('MALO920512HNL', 'E002', 'Raul', 'Hernadez', 'Olivares', 'raul@gmail.com', @hash2, '5552345678', 1),
-('VICA950814HNL', 'E003', 'Albhieri Cristoff', 'Villa', 'Contreras', 'alcrivico@gmail.com', @hash3, '5553456789', 2),
-('GOLC950814HNL', 'E004', 'Cesar', 'Gonzalez', 'Lopez', 'cesar@gmail.com', @hash4, '5553456781', 1),
-('MOAV950814HNL', 'E005', 'Victoria', 'Moyano', 'Arguelles', 'victoria@gmail.com', @hash5, '5553456721', 3);
+('MOCM840214HNL', 'E001', 'Miguel Angel', 'Morales', 'Cruz', 'miguel@gmail.com', @hash1, '5551234567', 1, 1),
+('MALO920512HNL', 'E002', 'Raul', 'Hernadez', 'Olivares', 'raul@gmail.com', @hash2, '5552345678', 1, 1),
+('VICA950814HNL', 'E003', 'Albhieri Cristoff', 'Villa', 'Contreras', 'alcrivico@gmail.com', @hash3, '5553456789', 1,2),
+('GOLC950814HNL', 'E004', 'Cesar', 'Gonzalez', 'Lopez', 'cesar@gmail.com', @hash4, '5553456781', 1, 1),
+('MOAV950814HNL', 'E005', 'Victoria', 'Moyano', 'Arguelles', 'victoria@gmail.com', @hash5, '5553456721', 1, 3);
 GO
 
 -- 10. Caja
@@ -119,10 +119,10 @@ INSERT INTO Producto (codigo, descripcion, esDevolvible, esPerecedero, nombre, p
 GO
 
 -- 12. ProductoInventario
-INSERT INTO ProductoInventario (codigo, nombre, descripcion, cantidadBodega, cantidadExhibicion, precioActual, esPerecedero, esDevolvible, ubicacion, unidadDeMedidaId, categoriaId, estadoProductoId, promocionId) VALUES
-('7501000111110', 'Leche Entera Alpura 1L', 'Leche entera pasteurizada Alpura', 150, 200, 18.50, 1, 1, 1, 1, 1, 1, 1),
-('7501000122223', 'Pan Blanco Bimbo 680g', 'Pan de caja blanco Bimbo', 120, 50, 32.00, 0, 1, 1, 4, 2, 1, 2),
-('7501000133336', 'Coca-Cola 2L', 'Refresco Coca-Cola 2 litros', 200, 100, 29.00, 0, 1, 1, 1, 3, 1, 1);
+INSERT INTO ProductoInventario (codigo, nombre, descripcion, cantidadBodega, cantidadExhibicion, precioActual, esPerecedero, esDevolvible, unidadDeMedidaId, categoriaId, estadoProductoId, promocionId) VALUES
+('7501000111110', 'Leche Entera Alpura 1L', 'Leche entera pasteurizada Alpura', 150, 200, 18.50, 1, 1, 1, 1, 1, 1),
+('7501000122223', 'Pan Blanco Bimbo 680g', 'Pan de caja blanco Bimbo', 120, 50, 32.00, 0, 1, 4, 2, 1, 2),
+('7501000133336', 'Coca-Cola 2L', 'Refresco Coca-Cola 2 litros', 200, 100, 29.00, 0, 1, 1, 3, 1, 1);
 GO
 
 -- 13. Pedido
@@ -147,10 +147,10 @@ INSERT INTO Merma (cantidad, descripcion, fechaRegistro, productoInventarioId) V
 GO
 
 -- 16. Venta
-INSERT INTO Venta (noVenta, fechaRegistro, iva, totalEfectivo, totalTarjeta, totalMonedero, cajaId, monederoId, empleadoId) VALUES
-(1001, '2024-10-15 10:30:00', 0.50, 5.00, 0.00, 0.50, 1, 1, 1),
-(1002, '2024-10-15 12:45:00', 0.70, 6.00, 1.70, 0.00, 2, 2, 2),
-(1003, '2024-10-15 15:00:00', 1.00, 5.00, 6.00, 0.00, 3, 3, 3);
+INSERT INTO Venta (noVenta, fechaRegistro, iva, totalEfectivo, totalTarjeta, totalMonedero, cajaId, monederoId, empleadoId, tieneRedondeo) VALUES
+(1001, '2024-10-15 10:30:00', 0.50, 5.00, 0.00, 0.50, 1, 1, 1, 1),
+(1002, '2024-10-15 12:45:00', 0.70, 6.00, 1.70, 0.00, 2, 2, 2, 0),
+(1003, '2024-10-15 15:00:00', 1.00, 5.00, 6.00, 0.00, 3, 3, 3, 1);
 GO
 
 -- 17. DetalleVenta
