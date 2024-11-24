@@ -112,7 +112,7 @@ namespace SAMS.UI.Views
             {
                 listaProveedores = ProveedorDAO.ObtenerProveedores().ToList();
                 _proveedores.Clear();
-                _proveedores = new ObservableCollection<Object>(listaProveedores);
+                _proveedores = new ObservableCollection<Object>(listaProveedores.OrderBy(p => p.estado));
                 TablaProveedores.SetItemsSource(_proveedores);
             }
             catch (Exception ex)
