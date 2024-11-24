@@ -1,0 +1,137 @@
+﻿<Window
+    x:Class="SAMS.UI.Views.VerDetallesPedidoView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Pedidos a Proveedor"
+    Width="1280"
+    Height="720"
+    MinWidth="800"
+    MinHeight="600"
+    MaxWidth="1920"
+    MaxHeight="1080"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Grid>
+
+        <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20, 20, 5, 20">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <components:TitleBarControl
+                    Grid.Row="0"
+                    MouseLeftButtonDown="TitleBarControl_MouseLeftButtonDown"
+                    WindowStateChangeRequested="TitleBarControl_WindowStateChangeRequested" />
+
+                <Border
+                    Grid.Row="1"
+                    Margin="40,15,40,40"
+                    Background="{StaticResource SolidColorBrush_AntiFlashWhite}"
+                    CornerRadius="40">
+
+                    <Grid>
+
+
+                        <Grid Grid.Column="1" Margin="30,0,30,0">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.1*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="0.1*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Viewbox Grid.Column="0" HorizontalAlignment="Left">
+                                    <Grid>
+                                        <TextBlock
+                                            x:Name="UseCaseTitle"
+                                            Margin="0,12,12,12"
+                                            HorizontalAlignment="Left"
+                                            FontFamily="{StaticResource Font_Nunito}"
+                                            FontSize="24"
+                                            FontWeight="Bold"
+                                            Text="Pedidos a proveedor" />
+                                    </Grid>
+                                </Viewbox>
+
+                            </Grid>
+
+                            <!--  Grid para el espacio del contenido  -->
+                            <Grid Name="Contenido" Grid.Row="1">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.1*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Grid para el boton de Registrar y Buscar-->
+                                <Grid Grid.Row="0">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.50*" />
+                                        <ColumnDefinition Width="0.50*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Viewbox Grid.Column="0" HorizontalAlignment="Left">
+                                        <components:ComboBoxControl
+                                            x:Name="comboProveedores"
+                                            Width="400"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            FieldName="Proveedor:" />
+                                    </Viewbox>
+
+                                    <Viewbox Grid.Column="1" HorizontalAlignment="Left">
+                                        <components:ComboBoxControl
+                                            x:Name="comboProductos"
+                                            Width="400"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            FieldName="Productos:" />
+                                    </Viewbox>
+
+                                    
+                                </Grid>
+
+                                <Grid Grid.Row="1">
+                                    <Viewbox>
+                                        <components:TableControl
+                                            x:Name="TablaPedidos"
+                                            Width="900"
+                                            Height="300" />
+                                    </Viewbox>
+                                </Grid>
+
+                            </Grid>
+
+                        </Grid>
+
+                    </Grid>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</Window>
+
