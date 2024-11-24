@@ -30,11 +30,6 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <components:TitleBarControl
-                    Grid.Row="0"
-                    MouseLeftButtonDown="TitleBarControl_MouseLeftButtonDown"
-                    WindowStateChangeRequested="TitleBarControl_WindowStateChangeRequested" />
-
                 <Border
                     Grid.Row="1"
                     Margin="40,15,40,40"

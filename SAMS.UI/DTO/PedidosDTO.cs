@@ -8,7 +8,7 @@ namespace SAMS.UI.DTO
 {
     public class PedidosDTO
     {
-        public int id {  get; set; }
+        public int idPedido {  get; set; }
         public string noPedido {  get; set; }
         public string nombreProveedor { get; set; }
         public DateTime fechaPedido { get; set; }

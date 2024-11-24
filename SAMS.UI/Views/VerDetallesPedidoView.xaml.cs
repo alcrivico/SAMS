@@ -35,6 +35,7 @@ namespace SAMS.UI.Views
             InitializeComponent();
             DefinirColumnas();
             LlenarDatosDetallesPedido(pedido.noPedido);
+            CargarProductosProveedor(_pedido.idPedido);
         }
 
         private void botonVolver_ButtonControlClick(object sender, RoutedEventArgs e)
@@ -90,19 +91,19 @@ namespace SAMS.UI.Views
         }
     }
 
-        private void CargarProductosProveedor(string rfc)
+        private void CargarProductosProveedor(int idPedido)
         {
-            /*try
+            try
             {
-                _productos = new ObservableCollection<Object>(ProductoProveedorDAO.ObtenerListaProductosPorRfc(rfc));
+                _productos = new ObservableCollection<Object>(PedidoDAO.ObtenerDetallesPedidoPorId(idPedido));
                 TablaProductosPedidos.SetItemsSource(_productos);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                InformationControl.Show("Error", "Ocurrió un error al obtener los productos del proveedor", "Aceptar");
+                InformationControl.Show("Error", "Ocurrió un error al obtener los productos del pedido", "Aceptar");
                 this.Close();
-            }*/
+            }
         }
 
     }
