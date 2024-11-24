@@ -995,6 +995,65 @@ BEGIN
 END;
 GO
 
+-- CU-11 Registrar empleado
+CREATE PROCEDURE T_RegistrarEmpleado
+    @RFC NVARCHAR(13),
+    @Nombre NVARCHAR(255),
+    @ApellidoP NVARCHAR(255),
+    @ApellidoM NVARCHAR(255),
+    @Correo NVARCHAR(100),
+    @Telefono NVARCHAR(10),
+    @Puesto NVARCHAR(100)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        -- Declarar variables locales
+        DECLARE @NumeroEmpleado NVARCHAR(10);
+        DECLARE @Password NVARCHAR(MAX);
+        DECLARE @UltimoNumero INT;
+        DECLARE @PuestoID INT;
+        
+        -- Buscamos el ID del puesto correspondiente en la tabla Puesto
+        SELECT @PuestoID = ID
+        FROM Puesto
+        WHERE Nombre = @Puesto;
+
+        -- Si no se encuentra el puesto, se sale y se lanza un error
+        IF @PuestoID IS NULL
+        BEGIN
+            RAISERROR('El puesto especificado no existe.', 16, 1);
+            RETURN;
+        END
+        
+        -- Validar si el RFC ya está registrado
+        IF EXISTS (SELECT 1 FROM Empleado WHERE RFC = @RFC)
+        BEGIN
+            THROW 50001, 'El RFC proporcionado ya está registrado.', 1;
+        END
+
+        -- Generar el número de empleado
+        SELECT @UltimoNumero = ISNULL(MAX(CAST(SUBSTRING(noEmpleado, 2, LEN(noEmpleado)) AS INT)), 0)
+        FROM Empleado;
+
+        SET @NumeroEmpleado = CONCAT('E', FORMAT(@UltimoNumero + 1, '000000'));
+
+        -- Generar contraseña
+        SET @Password = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @RFC), 1);
+
+        -- Insertar el empleado en la tabla
+        INSERT INTO Empleado ( RFC, noEmpleado, Nombre, apellidoPaterno, apellidoMaterno, Correo, Telefono, Password, puestoId)
+        VALUES (@RFC, @NumeroEmpleado, @Nombre, @ApellidoP, @ApellidoM, @Correo, @Telefono, @Password, @PuestoID);
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
 -- 4. disparadores
 
 -- 5. jobs

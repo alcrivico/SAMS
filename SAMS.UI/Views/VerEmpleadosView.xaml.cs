@@ -197,8 +197,8 @@ namespace SAMS.UI.Views
 
         private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            //RegistrarProveedorView registrarProveedorView = new RegistrarProveedorView();
-            //registrarProveedorView.ShowDialog();
+            RegistrarEmpleadoView registrarEmpleadoView = new RegistrarEmpleadoView();
+            registrarEmpleadoView.ShowDialog();
             ObtenerEmpleados();
         }
     }
