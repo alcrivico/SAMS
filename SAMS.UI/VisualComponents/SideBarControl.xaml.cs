@@ -1013,6 +1013,8 @@ namespace SAMS.UI.VisualComponents
                 case "Administrador":
                     break;
                 case "Paqueteria":
+                    VerPedidosView verPedidosView = new VerPedidosView(empleado);
+                    verPedidosView.Show();
                     break;
                 default:
                     break;
