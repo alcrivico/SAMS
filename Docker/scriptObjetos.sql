@@ -222,7 +222,8 @@ SELECT
     e.rfc,
     e.noempleado,
     e.correo,
-    p.nombre AS puesto
+    p.nombre AS puesto,
+    e.telefono
 FROM 
     Empleado e
 INNER JOIN
