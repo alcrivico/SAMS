@@ -120,17 +120,16 @@ namespace SAMS.UI.Views
 
             try
             {
-                listaProductos = ProductoInventarioDAO.ObtenerProductosRegistrados();
+                listaProductos = ProductoInventarioDAO.ObtenerProductosRegistrados().ToList();
                 _productos.Clear();
 
                 _productos = new ObservableCollection<Object>(listaProductos);
-
                 TableControl_TablaProductos.SetItemsSource(_productos);
 
             }
             catch (Exception ex)
             {
-                //Debug.WriteLine(ex.ToString());
+                Debug.WriteLine(ex.ToString());
                 InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
                     " inténtelo de nuevo más tarde", "Aceptar");
                 this.Close();
@@ -162,7 +161,15 @@ namespace SAMS.UI.Views
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
+            if (ConfirmationControl.Show("Eliminar", "¿Está seguro que desea eliminar este empleado?", "Aceptar", "Cancelar"))
+            {
+                ActionsControl actionBar = (ActionsControl)sender;
+                ProductosRegistradosDTO productoSeleccionado = (ProductosRegistradosDTO)actionBar.DataContext;
+                ProductoInventarioDAO.CambiarEstadoProductoAgotado(productoSeleccionado.codigoProducto);
+                ObtenerProductos();
+            }
 
+            
         }
 
         private void Button_AgregarProductos_ButtonControlClick(object sender, RoutedEventArgs e)
@@ -205,6 +212,19 @@ namespace SAMS.UI.Views
 
             }
 
+        }
+
+        private async void CambiarEstadoProducto(string codigoProducto)
+        {
+            try
+            {
+                bool resultado = await ProductoInventarioDAO.CambiarEstadoProductoAgotado(codigoProducto);
+            }
+            catch (Exception ex)
+            {
+                InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
+                    " inténtelo de nuevo más tarde", "Aceptar");
+            }
         }
     }
 }

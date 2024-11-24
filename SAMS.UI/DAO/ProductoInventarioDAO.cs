@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
 using SAMS.UI.VisualComponents;
+using System.Diagnostics;
 
 namespace SAMS.UI.DAO;
 
@@ -14,39 +15,12 @@ public class ProductoInventarioDAO
     public static List<ProductoInventarioPromocionDTO> OptenerProductosSinPromocion() =>
             _sams.V_ProductoInventarioPromocion.ToList();
 
-    public static List<ProductosRegistradosDTO> ObtenerProductosRegistrados()
+    public static IEnumerable<ProductosRegistradosDTO> ObtenerProductosRegistrados()
     {
-        List<ProductosRegistradosDTO> productos = new List<ProductosRegistradosDTO>();
-
-        var productosData = from p in _sams.V_ProductosRegistrados
-                            select new
-                            {
-                                p.codigoProducto,
-                                p.nombreProducto,
-                                p.cantidad,
-                                p.precioActual,
-                                p.nombreCategoria
-                            };
-
-        if (productosData == null)
+        using (var context = new SAMSContext(App.ServiceProvider.GetRequiredService<DbContextOptions<SAMSContext>>()))
         {
-            return null;
+            return context.V_ProductosRegistrados.ToList();
         }
-
-        foreach (var productoData in productosData)
-        {
-            ProductosRegistradosDTO producto = new ProductosRegistradosDTO
-            {
-                codigoProducto = productoData.codigoProducto,
-                nombreProducto = productoData.nombreProducto,
-                cantidad = productoData.cantidad,
-                precioActual = productoData.precioActual,
-                nombreCategoria = productoData.nombreCategoria
-            };
-
-            productos.Add(producto);
-        }
-        return productos;
     }
 
     public static DetalleProductoDTO ObtenerDetalleProductoInventario(string codigoProducto)
@@ -248,5 +222,28 @@ public class ProductoInventarioDAO
         }
 
         return resultado;
+    }
+
+    public static async Task<bool> CambiarEstadoProductoAgotado(string codigoProducto)
+    {
+        var parameters = new[]
+        {
+            new SqlParameter("@codigoProducto", codigoProducto)
+        };
+
+        try
+        {
+            await _sams.Database.ExecuteSqlRawAsync(
+                @"EXEC [dbo].[SP_CambiarEstadoProductoAgotado] 
+                @codigoProducto",
+                parameters);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.ToString());
+            return false;
+        }
     }
 }

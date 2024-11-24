@@ -353,20 +353,23 @@ INNER JOIN
 GO
 
 -- CU-04 Ver productos
-CREATE VIEW V_ProductosRegistrados
-AS
+CREATE VIEW V_ProductosRegistrados AS
 SELECT 
     PI.codigo AS CodigoProducto,                            -- Código del producto
-    PI.nombre AS NombreProducto,                              -- Nombre del producto
+    PI.nombre AS NombreProducto,                           -- Nombre del producto
     CONCAT(PI.cantidadBodega + PI.cantidadExhibicion, ' ', UM.nombre) AS Cantidad, -- Total cantidad con unidad
-    PI.precioActual AS PrecioActual,                         -- Precio actual del producto
-    CAT.nombre AS NombreCategoria                            -- Nombre de la categoría
+    PI.precioActual AS PrecioActual,                       -- Precio actual del producto
+    CAT.nombre AS NombreCategoria                          -- Nombre de la categoría
 FROM 
     ProductoInventario PI
 INNER JOIN 
-    UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id         -- Relación con unidad de medida
+    UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id        -- Relación con unidad de medida
 INNER JOIN 
-    Categoria CAT ON PI.categoriaId = CAT.id;               -- Relación con categoría
+    Categoria CAT ON PI.categoriaId = CAT.id               -- Relación con categoría
+INNER JOIN 
+    EstadoProducto EP ON PI.estadoProductoId = EP.id       -- Relación con estado de producto
+WHERE 
+    EP.nombre = 'Disponible';                              -- Solo productos con estado "Disponible"
 GO
 
 -- CU-04 Ver producto
