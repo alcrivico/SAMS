@@ -60,7 +60,7 @@ namespace SAMS.UI.DAO
 
         public static IEnumerable<V_Empleados> ObtenerEmpleados() => _sams.V_Empleados.ToList();
 
-        public static V_Empleados ObtenerEmpleadoPorRfc(string rfc) => _sams.V_Empleados.FirstOrDefault(e => e.rfc == rfc);
+        public static V_EmpleadoDetalle ObtenerEmpleadoPorRfc(string rfc) => _sams.V_EmpleadoDetalle.FirstOrDefault(e => e.rfc == rfc);
 
         public static List<String> ObtenerPuestos()
         {

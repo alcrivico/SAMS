@@ -16,9 +16,9 @@
     WindowStyle="None"
     mc:Ignorable="d">
     <Grid>
-        <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20 20 5 20">
+        <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20">
             <Border
-                Margin="30,30,30,30"
+                Margin="30"
                 Background="{StaticResource SolidColorBrush_AntiFlashWhite}"
                 CornerRadius="20">
                 <Grid>

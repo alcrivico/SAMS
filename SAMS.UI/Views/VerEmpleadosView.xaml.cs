@@ -168,11 +168,11 @@ namespace SAMS.UI.Views
 
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
-            //ActionsControl actionBar = (ActionsControl)sender;
-            //V_Proveedores proveedor = (V_Proveedores)actionBar.DataContext;
+            ActionsControl actionBar = (ActionsControl)sender;
+            V_Empleados empleado = (V_Empleados)actionBar.DataContext;
 
-            //DetalleProveedorView detalleProveedorView = new DetalleProveedorView(proveedor);
-            //detalleProveedorView.ShowDialog();
+            DetalleEmpleadoView detalleEmpleadoView = new DetalleEmpleadoView(empleado);
+            detalleEmpleadoView.ShowDialog();
         }
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
