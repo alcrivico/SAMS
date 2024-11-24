@@ -82,14 +82,14 @@
                             Grid.Row="4"
                             Width="160"
                             FieldName="Fecha de inicio:" 
-                            />
+                            SelectedDateChanged="validarFecha_SelectedDateChanged"/>
 
                         <components:DatePickerControl
                             x:Name="campofechaFin"
                             Grid.Row="5"
                             Width="160"
                             FieldName="Fecha de finalizacion:" 
-                            />
+                            SelectedDateChanged="validarFecha_SelectedDateChanged"/>
 
                     </Grid>
 

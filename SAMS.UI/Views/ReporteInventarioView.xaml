@@ -103,6 +103,14 @@
                                             FieldName="Buscar Producto:" 
                                             TextBoxControlTextChanged="campoBuscar_TextBoxControlTextChanged" />
                                     </Viewbox>
+                                    <Viewbox Grid.Column="1" HorizontalAlignment="Right">
+                                        <components:DatePickerControl
+                                            x:Name="campofechaInicio"
+                                            Grid.Row="4"
+                                            Width="160"
+                                            FieldName="Rango de Fecha:" 
+                                            />
+                                    </Viewbox>
                                 </Grid>
 
                                 <Grid Grid.Row="1">

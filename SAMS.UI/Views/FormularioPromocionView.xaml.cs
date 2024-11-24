@@ -10,13 +10,13 @@ namespace SAMS.UI.Views;
 /// </summary>
 public partial class FormularioPromocionView : Window
 {
-    private int productoInventarioId;
+    private int? productoInventarioId;
     private Window ventanaPrincipal; 
     private EmpleadoLoginDTO empleado;
     private EditarPromocionDTO editarPromocion;
 
     public FormularioPromocionView(
-            int productoInventarioId, 
+            int? productoInventarioId, 
             Window ventanaPrincipal, 
             EmpleadoLoginDTO empleado, 
             EditarPromocionDTO? editarPromocionDTO = null)
@@ -121,7 +121,7 @@ public partial class FormularioPromocionView : Window
     private void validarCampo_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         => Button_Registrar.IsButtonEnabled = ValidarCampos();
 
-    private void validarCampo_DatePickerControlSelectedDateChanged(object sender, RoutedEventArgs e)
+    private void validarFecha_SelectedDateChanged(object sender, RoutedEventArgs e)
         => Button_Registrar.IsButtonEnabled = ValidarCampos();
 
     private bool ValidarCampos()
