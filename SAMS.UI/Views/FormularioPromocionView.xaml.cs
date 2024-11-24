@@ -47,49 +47,57 @@ public partial class FormularioPromocionView : Window
             return;
         }
 
-        // Validar que la fecha de inicio no sea posterior a la fecha de fin
-        DateTime fechaInicio = campofechaInicio.SelectedDate.Value;
-        DateTime fechaFin = campofechaFin.SelectedDate.Value;
-
-        if (fechaInicio > fechaFin)
-        {
-            InformationControl.Show("Error", "La fecha de inicio no puede ser posterior a la fecha de finalización.", "Aceptar");
-            return;
-        }
-
-        CrearPromocionVigenciaDTO promocion = new CrearPromocionVigenciaDTO
-        {
-            nombre = campoNombre.Text,
-            porcentajeDescuento = porcentajeDescuento,
-            cantMaxima = cantMaxima,
-            cantMinima = cantMinima,
-            fechaInicio = fechaInicio,
-            fechaFin = fechaFin,
-            productoInventarioId = productoInventarioId 
-        };
-
         try
         {
-            bool resultado = await PromocionDAO.CrearPromocionConVigencia(promocion);
+            bool resultado;
 
-            if (resultado)
+            if (editarPromocion != null)
             {
-                InformationControl.Show("Éxito", "Promoción registrada correctamente.", "Aceptar");
+                editarPromocion.nombre = campoNombre.Text;
+                editarPromocion.porcentajeDescuento = porcentajeDescuento;
+                editarPromocion.cantMaxima = cantMaxima;
+                editarPromocion.cantMinima = cantMinima;
+                editarPromocion.fechaInicio = campofechaInicio.SelectedDate.Value;
+                editarPromocion.fechaFin = campofechaFin.SelectedDate.Value;
 
-                this.Close();
-                this.ventanaPrincipal.Close();
-
-                PrincipalView ventanaPrincipal = new(empleado);
-                ventanaPrincipal.Show();
+                resultado = await PromocionDAO.EditarPromocion(editarPromocion);
             }
             else
             {
-                InformationControl.Show("Error", "Ocurrió un error al registrar la promoción. Intenta de nuevo.", "Aceptar");
+                CrearPromocionVigenciaDTO promocion = new CrearPromocionVigenciaDTO
+                {
+                    nombre = campoNombre.Text,
+                    porcentajeDescuento = porcentajeDescuento,
+                    cantMaxima = cantMaxima,
+                    cantMinima = cantMinima,
+                    fechaInicio = campofechaInicio.SelectedDate.Value,
+                    fechaFin = campofechaFin.SelectedDate.Value,
+                    productoInventarioId = productoInventarioId
+                };
+
+                resultado = await PromocionDAO.CrearPromocionConVigencia(promocion);
+            }
+
+            if (resultado)
+            {
+                InformationControl.Show( "Éxito",
+                    editarPromocion != null ? "Promoción modificada correctamente." : "Promoción registrada correctamente.",
+                    "Aceptar");
+
+                PrincipalView ventanaPrincipal = new(empleado);
+                ventanaPrincipal.Show();
+
+                this.ventanaPrincipal.Close();
+                Close();
+            }
+            else
+            {
+                InformationControl.Show("Error", "No se pudo conectar a la red de la empresa, por favor revise su conexión.", "Aceptar");
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            InformationControl.Show("Error", $"Error al registrar la promoción: {ex.Message}", "Aceptar");
+            InformationControl.Show("Error", "No se pudo conectar a la red de la empresa, por favor revise su conexión", "Aceptar");
         }
     }
 
@@ -111,24 +119,10 @@ public partial class FormularioPromocionView : Window
     }
 
     private void validarCampo_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
-    {
-        Button_Registrar.IsEnabled = ValidarCampos();
-    }
+        => Button_Registrar.IsButtonEnabled = ValidarCampos();
 
-    private void campoPorcentajeDescuento_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
-    {
-        Button_Registrar.IsEnabled = ValidarCampos();
-    }
-
-    private void campoCantMaxima_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
-    {
-        Button_Registrar.IsEnabled = ValidarCampos();
-    }
-
-    private void campoCantMinima_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
-    {
-        Button_Registrar.IsButtonEnabled = ValidarCampos();
-    }
+    private void validarCampo_DatePickerControlSelectedDateChanged(object sender, RoutedEventArgs e)
+        => Button_Registrar.IsButtonEnabled = ValidarCampos();
 
     private bool ValidarCampos()
     {

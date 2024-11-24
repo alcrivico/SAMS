@@ -958,6 +958,8 @@ namespace SAMS.UI.VisualComponents
             switch (Employee)
             {
                 case "Administrador":
+                    VerEmpleadosView verEmpleadosView = new VerEmpleadosView(empleado);
+                    verEmpleadosView.Show();
                     break;
                 case "Cajero":
 
@@ -1014,6 +1016,8 @@ namespace SAMS.UI.VisualComponents
                 case "Administrador":
                     break;
                 case "Paqueteria":
+                    VerPedidosView verPedidosView = new VerPedidosView(empleado);
+                    verPedidosView.Show();
                     break;
                 default:
                     break;
@@ -1030,7 +1034,7 @@ namespace SAMS.UI.VisualComponents
             switch (Employee)
             {
                 case "Administrador":
-                    ReporteInventarioView reporteInventarioView = new(empleado);
+                    ReporteVentasView reporteInventarioView = new(empleado);
                     reporteInventarioView.Show();
                     Window.GetWindow(this).Close();
                     break;

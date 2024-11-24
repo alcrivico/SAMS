@@ -180,4 +180,73 @@ public class ProductoInventarioDAO
 
         return pedidosPendientes;
     }
+
+    public static List<ProductosPorPedidoDTO> ObtenerProductosPorPedido(string noPedido)
+    {
+        List<ProductosPorPedidoDTO> productosPorPedido = new List<ProductosPorPedidoDTO>();
+
+        var productosData = from p in _sams.V_ProductosPorPedido
+                            where p.numeroPedido == noPedido
+                            select new
+                            {
+                                p.numeroPedido,
+                                p.codigoProducto,
+                                p.nombreProducto,
+                                p.cantidad,
+                                p.precioCompra
+                            };
+
+        if (productosData == null)
+        {
+            return null;
+        }
+
+        foreach (var productoData in productosData)
+        {
+            ProductosPorPedidoDTO producto = new ProductosPorPedidoDTO
+            {
+                numeroPedido = productoData.numeroPedido,
+                codigoProducto = productoData.codigoProducto,
+                nombreProducto = productoData.nombreProducto,
+                cantidad = productoData.cantidad,
+                precioCompra = productoData.precioCompra
+            };
+
+            productosPorPedido.Add(producto);
+        }
+
+        return productosPorPedido;
+    }
+
+    public static async Task<bool> RegistrarProductosInventario(List<RegistrarProductoInventarioDTO> productosInventario)
+    {
+        bool resultado = true;
+
+        foreach (var producto in productosInventario)
+        {
+            var parameters = new[]
+            {
+            new SqlParameter("@noPedido", producto.noPedido),
+            new SqlParameter("@codigoProducto", producto.codigoProducto),
+            new SqlParameter("@nombreCategoria", producto.nombreCategoria),
+            new SqlParameter("@precioActual", producto.precioActual),
+            new SqlParameter("@fechaCaducidad", producto.fechaCaducidad)
+        };
+
+            try
+            {
+                await _sams.Database.ExecuteSqlRawAsync(
+                    @"EXEC [dbo].[T_RegistrarProductoInventario] 
+                @noPedido, @codigoProducto, @nombreCategoria, @precioActual, @fechaCaducidad",
+                    parameters);
+            }
+            catch
+            {
+                resultado = false;
+                break;
+            }
+        }
+
+        return resultado;
+    }
 }

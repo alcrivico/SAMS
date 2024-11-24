@@ -19,6 +19,7 @@
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
+    KeyUp="Window_KeyUp"
     mc:Ignorable="d">
 
     <Grid>

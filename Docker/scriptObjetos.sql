@@ -205,13 +205,15 @@ CREATE VIEW V_Empleados AS
 SELECT
     CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombre,
     e.rfc,
-    p.nombre AS puesto
+    p.nombre AS puesto,
+    e.correo
 FROM
     Empleado e
 INNER JOIN
     Puesto p
     ON
     e.puestoId = p.id
+WHERE e.estado = 1
 GO
 
 CREATE VIEW V_EmpleadoDetalle AS
@@ -222,7 +224,8 @@ SELECT
     e.rfc,
     e.noempleado,
     e.correo,
-    p.nombre AS puesto
+    p.nombre AS puesto,
+    e.telefono
 FROM 
     Empleado e
 INNER JOIN
@@ -371,14 +374,14 @@ GO
 -- CU-04 Ver producto
 CREATE VIEW V_DetalleProducto
 AS
-SELECT 
+SELECT
     PI.codigo AS CodigoProducto,                            -- Código del producto
     PI.nombre AS NombreProducto,                           -- Nombre del producto
     PI.descripcion AS Descripcion,                        -- Descripción
     PI.cantidadBodega AS CantidadBodega,                  -- Cantidad en bodega
     PI.cantidadExhibicion AS CantidadExhibicion,          -- Cantidad en exhibición
     PI.precioActual AS PrecioActual,                      -- Precio actual
-    DP.fechaCaducidad AS FechaCaducidad,                  -- Fecha de caducidad (de DetallePedido)
+    PI.fechaCaducidad AS FechaCaducidad,                  -- Fecha de caducidad (de ProductoInventario)
     CAT.nombre AS NombreCategoria,                        -- Nombre de la categoría
     UM.nombre AS NombreUnidadMedida,                      -- Nombre de la unidad de medida
     PI.esPerecedero AS EsPerecedero,                      -- Perecedero (BIT)
@@ -389,8 +392,6 @@ INNER JOIN
     UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id       -- Relación con unidad de medida
 INNER JOIN 
     Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
-LEFT JOIN 
-    DetallePedido DP ON DP.productoId = PI.id;            -- Relación con DetallePedido (puede no existir)
 GO
 
 -- 3. procedimientos almacenados
@@ -657,10 +658,11 @@ GO
 
 -- CU-03 Registrar Producto
 CREATE PROCEDURE T_RegistrarProductoInventario
-    @noPedido NVARCHAR(MAX),   -- Número del pedido
+    @noPedido NVARCHAR(MAX),      -- Número del pedido
     @codigoProducto NVARCHAR(MAX), -- Código del producto
-    @idCategoria INT,          -- ID de la categoría
-    @precioActual DECIMAL(18, 2) -- Precio actual del producto
+    @nombreCategoria NVARCHAR(MAX), -- Nombre de la categoría
+    @precioActual DECIMAL(18, 2), -- Precio actual del producto
+    @fechaCaducidad DATE          -- Fecha de caducidad proporcionada
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -669,24 +671,57 @@ BEGIN
     BEGIN TRAN;
 
     BEGIN TRY
-        -- Verificar que el pedido y producto estén relacionados en DetallePedido
+        -- Declarar variables locales
+        DECLARE @idProducto INT;
+        DECLARE @idCategoria INT;
+        DECLARE @idPedido INT;
         DECLARE @cantidadBodega INT;
 
+        -- Obtener el ID del producto desde el código
+        SELECT @idProducto = id
+        FROM Producto
+        WHERE codigo = @codigoProducto;
+
+        IF @idProducto IS NULL
+        BEGIN
+            RAISERROR('El producto con el código proporcionado no existe.', 16, 1);
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        -- Obtener el ID del pedido desde el número de pedido
+        SELECT @idPedido = id
+        FROM Pedido
+        WHERE noPedido = @noPedido;
+
+        IF @idPedido IS NULL
+        BEGIN
+            RAISERROR('El pedido con el número proporcionado no existe.', 16, 1);
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        -- Obtener la cantidad desde DetallePedido
         SELECT 
             @cantidadBodega = DP.cantidad
-        FROM 
-            DetallePedido DP
-        INNER JOIN 
-            Pedido PED ON DP.pedidoId = PED.id
-        INNER JOIN 
-            Producto P ON DP.productoId = P.id
-        WHERE 
-            PED.noPedido = @noPedido AND P.codigo = @codigoProducto;
+        FROM DetallePedido DP
+        WHERE DP.pedidoId = @idPedido AND DP.productoId = @idProducto;
 
-        -- Si no se encuentra cantidad, abortar
         IF @cantidadBodega IS NULL
         BEGIN
-            RAISERROR('El producto no está asociado al pedido proporcionado.', 16, 1);
+            RAISERROR('No se encontró un detalle de pedido válido para el producto en el pedido proporcionado.', 16, 1);
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        -- Obtener el ID de la categoría desde el nombre
+        SELECT @idCategoria = id
+        FROM Categoria
+        WHERE nombre = @nombreCategoria;
+
+        IF @idCategoria IS NULL
+        BEGIN
+            RAISERROR('La categoría proporcionada no existe.', 16, 1);
             ROLLBACK TRAN;
             RETURN;
         END
@@ -699,7 +734,8 @@ BEGIN
             SET 
                 cantidadBodega = cantidadBodega + @cantidadBodega, -- Sumar a la cantidad existente
                 precioActual = @precioActual,                      -- Actualizar el precio
-                categoriaId = @idCategoria                         -- Actualizar la categoría
+                categoriaId = @idCategoria,                        -- Actualizar la categoría
+                fechaCaducidad = @fechaCaducidad                   -- Actualizar la fecha de caducidad
             WHERE 
                 codigo = @codigoProducto;
         END
@@ -713,6 +749,7 @@ BEGIN
                 cantidadBodega, 
                 cantidadExhibicion, 
                 precioActual, 
+                fechaCaducidad, 
                 esPerecedero, 
                 esDevolvible, 
                 unidadDeMedidaId, 
@@ -726,20 +763,21 @@ BEGIN
                 @cantidadBodega,         -- Cantidad en bodega del DetallePedido
                 0,                       -- Cantidad en exhibición inicia en 0
                 @precioActual,           -- Precio actual ingresado por el usuario
+                @fechaCaducidad,         -- Fecha de caducidad proporcionada como parámetro
                 P.esPerecedero,
                 P.esDevolvible,
                 P.unidadDeMedidaId,
-                @idCategoria,            -- Categoría ingresada por el usuario
+                @idCategoria,            -- ID de la categoría obtenida dinámicamente
                 1                        -- Estado inicial por defecto
             FROM Producto P
-            WHERE P.codigo = @codigoProducto;
+            WHERE P.id = @idProducto;
         END
 
         -- Confirmar transacción
         COMMIT TRAN;
     END TRY
     BEGIN CATCH
-        -- Manejar errores y revertir cambios
+        -- Manejar errores y revertir transacción
         IF @@TRANCOUNT > 0
             ROLLBACK TRAN;
 
@@ -805,16 +843,16 @@ GO
 
 -- CU-05 Editar Producto
 CREATE PROCEDURE T_EditarProductoInventario
-    @codigoProducto NVARCHAR(MAX),
-    @descripcion NVARCHAR(MAX),
-    @cantidadBodega INT,
-    @cantidadExhibicion INT,
-    @precioActual DECIMAL(18, 2),
-    @fechaCaducidad NVARCHAR(MAX), -- Recibimos como string para validar
-    @nombreCategoria NVARCHAR(MAX),
-    @nombreUnidadMedida NVARCHAR(MAX),
-    @esPerecedero BIT,
-    @esDevolvible BIT
+    @codigoProducto NVARCHAR(MAX),      -- Código del producto
+    @descripcion NVARCHAR(MAX),         -- Descripción actualizada
+    @cantidadBodega INT,                -- Nueva cantidad en bodega
+    @cantidadExhibicion INT,            -- Nueva cantidad en exhibición
+    @precioActual DECIMAL(18, 2),       -- Nuevo precio actual
+    @fechaCaducidad NVARCHAR(MAX),      -- Nueva fecha de caducidad (como string para validar)
+    @nombreCategoria NVARCHAR(MAX),     -- Nueva categoría (nombre)
+    @nombreUnidadMedida NVARCHAR(MAX),  -- Nueva unidad de medida (nombre)
+    @esPerecedero BIT,                  -- Indicador si es perecedero
+    @esDevolvible BIT                   -- Indicador si es devolvible
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -823,10 +861,10 @@ BEGIN
     BEGIN TRAN;
 
     BEGIN TRY
-        -- Validar formato de fecha
+        -- Validar formato de la fecha de caducidad
         DECLARE @fechaValida DATE;
         BEGIN TRY
-            SET @fechaValida = CAST(@fechaCaducidad AS DATE); -- Validar conversión
+            SET @fechaValida = CAST(@fechaCaducidad AS DATE); -- Validar conversión de fecha
         END TRY
         BEGIN CATCH
             RAISERROR('La fecha de caducidad proporcionada no es válida.', 16, 1);
@@ -834,7 +872,7 @@ BEGIN
             RETURN;
         END CATCH
 
-        -- Verificar si el producto existe
+        -- Verificar si el producto existe en ProductoInventario
         IF NOT EXISTS (SELECT 1 FROM ProductoInventario WHERE codigo = @codigoProducto)
         BEGIN
             RAISERROR('El producto no existe en ProductoInventario.', 16, 1);
@@ -842,7 +880,7 @@ BEGIN
             RETURN;
         END
 
-        -- Obtener el ID de la categoría
+        -- Obtener el ID de la categoría desde su nombre
         DECLARE @idCategoria INT;
         SELECT @idCategoria = id 
         FROM Categoria
@@ -855,7 +893,7 @@ BEGIN
             RETURN;
         END
 
-        -- Obtener el ID de la unidad de medida
+        -- Obtener el ID de la unidad de medida desde su nombre
         DECLARE @idUnidadMedida INT;
         SELECT @idUnidadMedida = id 
         FROM UnidadDeMedida
@@ -868,40 +906,152 @@ BEGIN
             RETURN;
         END
 
-        -- Actualizar ProductoInventario
+        -- Actualizar ProductoInventario con los nuevos datos
         UPDATE ProductoInventario
         SET 
             descripcion = @descripcion,
             cantidadBodega = @cantidadBodega,
             cantidadExhibicion = @cantidadExhibicion,
             precioActual = @precioActual,
-            categoriaId = @idCategoria,
-            unidadDeMedidaId = @idUnidadMedida,
-            esPerecedero = @esPerecedero,
-            esDevolvible = @esDevolvible
+            fechaCaducidad = @fechaValida,  -- Actualizamos la fecha de caducidad
+            categoriaId = @idCategoria,     -- ID de la nueva categoría
+            unidadDeMedidaId = @idUnidadMedida, -- ID de la nueva unidad de medida
+            esPerecedero = @esPerecedero,   -- Indicador perecedero
+            esDevolvible = @esDevolvible    -- Indicador devolvible
         WHERE 
             codigo = @codigoProducto;
-
-        -- Verificar si hay un DetallePedido relacionado
-        IF EXISTS (SELECT 1 FROM DetallePedido DP
-                   INNER JOIN ProductoInventario PI ON DP.productoId = PI.id
-                   WHERE PI.codigo = @codigoProducto)
-        BEGIN
-            UPDATE DP
-            SET fechaCaducidad = @fechaValida -- Usamos la fecha validada
-            FROM DetallePedido DP
-            INNER JOIN ProductoInventario PI ON DP.productoId = PI.id
-            WHERE PI.codigo = @codigoProducto;
-        END
 
         -- Confirmar transacción
         COMMIT TRAN;
     END TRY
     BEGIN CATCH
-        -- Revertir transacción en caso de error
+        -- Revertir cambios en caso de error
         IF @@TRANCOUNT > 0
             ROLLBACK TRAN;
 
+        -- Propagar error
+        THROW;
+    END CATCH
+END;
+GO
+
+-- CU-07 Registrar proveedor
+--Tipo Tabla para meter una lista de productos
+CREATE TYPE TipoProducto AS TABLE (
+    Codigo NVARCHAR(50),
+    Descripcion NVARCHAR(255),
+    EsDevolvible NVARCHAR(10),
+    EsPerecedero NVARCHAR(10),
+    Nombre NVARCHAR(100),
+    UnidadDeMedida NVARCHAR(50)
+);
+GO
+
+-- Procedimiento para reigstrar proveedor y productos
+CREATE PROCEDURE T_RegistrarProveedorYProductos
+    @RFC NVARCHAR(13),
+    @Nombre NVARCHAR(100),
+    @Correo NVARCHAR(100),
+    @Telefono NVARCHAR(20),
+    @Productos TipoProducto READONLY
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Insertar proveedor
+        DECLARE @ProveedorId INT;
+
+        INSERT INTO Proveedor (RFC, Nombre, Correo, Telefono, estadoProveedor)
+        VALUES (@RFC, @Nombre, @Correo, @Telefono, 1);
+
+        -- Obtener el ID del proveedor recién insertado
+        SET @ProveedorId = SCOPE_IDENTITY();
+
+        -- Insertar productos asociados
+        INSERT INTO Producto (Codigo, Descripcion, EsDevolvible, EsPerecedero, Nombre, ProveedorId, UnidadDeMedidaId)
+        SELECT 
+            p.Codigo,
+            p.Descripcion,
+            CASE 
+                WHEN p.EsDevolvible = 'no' THEN 0
+                ELSE 1 
+            END AS EsDevolvible,
+            CASE 
+                WHEN p.EsPerecedero = 'no' THEN 0
+                ELSE 1 
+            END AS EsPerecedero,
+            p.Nombre,
+            @ProveedorId,
+            (SELECT Id FROM UnidadDeMedida WHERE Nombre = p.UnidadDeMedida)
+        FROM @Productos p;
+
+        -- Confirmar transacción
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Revertir transacción en caso de error
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+-- CU-11 Registrar empleado
+CREATE PROCEDURE T_RegistrarEmpleado
+    @RFC NVARCHAR(13),
+    @Nombre NVARCHAR(255),
+    @ApellidoP NVARCHAR(255),
+    @ApellidoM NVARCHAR(255),
+    @Correo NVARCHAR(100),
+    @Telefono NVARCHAR(10),
+    @Puesto NVARCHAR(100)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        -- Declarar variables locales
+        DECLARE @NumeroEmpleado NVARCHAR(10);
+        DECLARE @Password NVARCHAR(MAX);
+        DECLARE @UltimoNumero INT;
+        DECLARE @PuestoID INT;
+        
+        -- Buscamos el ID del puesto correspondiente en la tabla Puesto
+        SELECT @PuestoID = ID
+        FROM Puesto
+        WHERE Nombre = @Puesto;
+
+        -- Si no se encuentra el puesto, se sale y se lanza un error
+        IF @PuestoID IS NULL
+        BEGIN
+            RAISERROR('El puesto especificado no existe.', 16, 1);
+            RETURN;
+        END
+        
+        -- Validar si el RFC ya está registrado
+        IF EXISTS (SELECT 1 FROM Empleado WHERE RFC = @RFC)
+        BEGIN
+            THROW 50001, 'El RFC proporcionado ya está registrado.', 1;
+        END
+
+        -- Generar el número de empleado
+        SELECT @UltimoNumero = ISNULL(MAX(CAST(SUBSTRING(noEmpleado, 2, LEN(noEmpleado)) AS INT)), 0)
+        FROM Empleado;
+
+        SET @NumeroEmpleado = CONCAT('E', FORMAT(@UltimoNumero + 1, '000000'));
+
+        -- Generar contraseña
+        SET @Password = CONVERT(NVARCHAR(MAX), HASHBYTES('SHA2_256', @RFC), 1);
+
+        -- Insertar el empleado en la tabla
+        INSERT INTO Empleado ( RFC, noEmpleado, Nombre, apellidoPaterno, apellidoMaterno, Correo, Telefono, Password, estado, puestoId)
+        VALUES (@RFC, @NumeroEmpleado, @Nombre, @ApellidoP, @ApellidoM, @Correo, @Telefono, @Password, 1, @PuestoID);
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
         THROW;
     END CATCH
 END;

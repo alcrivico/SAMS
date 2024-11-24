@@ -28,6 +28,8 @@ public class Empleado
 
     public Puesto puesto { get; set; }
 
+    public bool estado { get; set; }
+
     private string hashedPassword;
 
     // Propiedad para establecer y obtener la contraseña encriptada

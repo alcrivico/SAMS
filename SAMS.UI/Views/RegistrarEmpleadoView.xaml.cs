@@ -1,75 +1,82 @@
-﻿using Microsoft.Win32;
-using SAMS.UI.DAO;
-using SAMS.UI.Models.Entities;
+﻿using SAMS.UI.DAO;
+using SAMS.UI.DTO;
 using SAMS.UI.VisualComponents;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace SAMS.UI.Views
 {
     /// <summary>
-    /// Lógica de interacción para RegistrarProveedorView.xaml
+    /// Lógica de interacción para RegistrarEmpleadoView.xaml
     /// </summary>
-    public partial class RegistrarProveedorView : Window
+    public partial class RegistrarEmpleadoView : Window
     {
-        private string[] productos;
+
         private bool nombreValido = false;
+        private bool apellidoPaternoValido = false;
+        private bool apellidoMaternoValido = false;
         private bool correoValido = false;
-        private bool telefonoValido = false;
-        private bool archivoValido = false;
         private bool rfcValido = false;
-        public RegistrarProveedorView()
+        private bool telefonoValido = false;
+
+        public RegistrarEmpleadoView()
         {
             InitializeComponent();
-            campoRfc.Focus();
+            cargarPuestos();
+            campoRfc.Focus();            
         }
 
-        private void botonSubirArchivo_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void cargarPuestos()
         {
-            OpenFileDialog dialogo = new OpenFileDialog
-            {
-                Filter = "Archivos CSV (*.csv)|*.csv",
-                Title = "Seleccionar archivo CSV"
-            };
-
-            if (dialogo.ShowDialog() == true)
-            {
-                productos = System.IO.File.ReadAllLines(dialogo.FileName);
-                botonSubirArchivoBrush.ImageSource = (DrawingImage)FindResource("Icon_ArchivoCargado");
-                archivoValido = true;
-                ActualizarEstadoBoton();
-            }
+            List<String> puestos = EmpleadoDAO.ObtenerPuestos();
+            campoPuesto.SetItemsSource(new ObservableCollection<Object>(puestos), "");
         }
 
         private void botonRegistrar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
             string rfc = campoRfc.Text.ToUpper().Trim();
             string nombre = campoNombre.Text.Trim();
+            string apellidoPaterno = campoApellidoPaterno.Text.Trim();
+            string apellidoMaterno = campoApellidoMaterno.Text.Trim();
             string correo = campoCorreo.Text.ToLower().Trim();
             string telefono = campoTelefono.Text.Trim();
+            string puesto = campoPuesto.SelectedItem.ToString();
 
-            Proveedor proveedor = new Proveedor
+            V_EmpleadoDetalle empleado = new V_EmpleadoDetalle
             {
                 rfc = rfc,
                 nombre = nombre,
+                apellidoPaterno = apellidoPaterno,
+                apellidoMaterno = apellidoMaterno,
                 correo = correo,
-                telefono = telefono
+                telefono = telefono,
+                puesto = puesto
             };
 
             try
             {
-                ProveedorDAO.RegistrarProveedorYProductos(proveedor, productos);
-                InformationControl.Show("Proveedor registrado", "El registro del proveedor " + campoNombre.Text + " se ha realizado correctamente", "Aceptar");
+                EmpleadoDAO.RegistrarEmpleado(empleado);
+                InformationControl.Show("Éxito", "El empleado se ha realizado exitosamente", "Aceptar");
                 this.Close();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                InformationControl.Show("Error al registrar proveedor", "No se pudo conectar a la red del supermercado, inténtelo de nuevo más tarde", "Aceptar");
+                InformationControl.Show("Error al registrar empleado", "No se pudo conectar a la red del supermercado, inténtelo de nuevo más tarde", "Aceptar");
                 this.Close();
             }
         }
@@ -81,7 +88,7 @@ namespace SAMS.UI.Views
 
         private void campoRfc_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
-            var regexCaracteresEspeciales = new Regex(@"^[a-zA-Z0-9&]+$");
+            var regexCaracteresEspeciales = new Regex(@"^[a-zA-Z0-9]+$");
 
             if (regexCaracteresEspeciales.IsMatch(campoRfc.Text) || string.IsNullOrWhiteSpace(campoNombre.Text))
             {
@@ -89,15 +96,15 @@ namespace SAMS.UI.Views
             }
             else
             {
-                mensajeErrorRfc.Content = "* El RFC solo puede contener letras, números y el carácter '&'";
+                mensajeErrorRfc.Content = "* El RFC solo puede contener letras y números";
                 mensajeErrorRfc.Visibility = Visibility.Visible;
             }
             // Regex para validar el RFC de persona moral
-            var regexRfc = new Regex(@"^[A-Z&]{3}\d{6}[A-Z0-9]{3}$");
+            var regexRfc = new Regex(@"^[A-Z&]{4}\d{6}[A-Z0-9]{3}$");
 
-            if (campoRfc.Text.Length == 12 && regexRfc.IsMatch(campoRfc.Text.ToUpper()))
+            if (campoRfc.Text.Length == 13 && regexRfc.IsMatch(campoRfc.Text.ToUpper()))
             {
-                if (ProveedorDAO.ObtenerProveedorPorRfc(campoRfc.Text) != null)
+                if (EmpleadoDAO.ObtenerEmpleadoPorRfc(campoRfc.Text) != null)
                 {
                     InformationControl.Show("RFC registrado", "El RFC ingresado ya se encuentra registrado", "Aceptar");
                     campoRfc.Text = "";
@@ -108,7 +115,9 @@ namespace SAMS.UI.Views
                     campoNombre.EnableTextBox = true;
                     campoCorreo.EnableTextBox = true;
                     campoTelefono.EnableTextBox = true;
-                    botonSubirArchivo.IsEnabled = true;
+                    campoPuesto.IsEnabled = true;
+                    campoApellidoPaterno.EnableTextBox = true;
+                    campoApellidoMaterno.EnableTextBox = true;
                     campoNombre.Focus();
                     rfcValido = true;
                 }
@@ -118,18 +127,19 @@ namespace SAMS.UI.Views
                 campoNombre.EnableTextBox = false;
                 campoCorreo.EnableTextBox = false;
                 campoTelefono.EnableTextBox = false;
-                botonSubirArchivo.IsEnabled = false;
+                campoApellidoPaterno.EnableTextBox = false;
+                campoApellidoMaterno.EnableTextBox = false;
+                campoPuesto.IsEnabled = false;
                 botonRegistrar.IsButtonEnabled = false;
                 rfcValido = false;
             }
             ActualizarEstadoBoton();
         }
 
-
         private void campoNombre_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
             nombreValido = false;
-            var regex = new Regex(@"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.\-]+$");
+            var regex = new Regex(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$");
 
             if (string.IsNullOrWhiteSpace(campoNombre.Text))
             {
@@ -141,7 +151,7 @@ namespace SAMS.UI.Views
 
             if (!regex.IsMatch(campoNombre.Text))
             {
-                mensajeErrorNombre.Content = "* Solo se permiten letras, números, espacios, puntos y guiones.";
+                mensajeErrorNombre.Content = "* No se permiten numeros ni caracteres especiales";
                 mensajeErrorNombre.Visibility = Visibility.Visible;
                 ActualizarEstadoBoton();
                 return;
@@ -149,6 +159,58 @@ namespace SAMS.UI.Views
 
             mensajeErrorNombre.Visibility = Visibility.Hidden;
             nombreValido = true;
+            ActualizarEstadoBoton();
+        }
+
+        private void campoApellidoPaterno_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
+        {
+            apellidoPaternoValido = false;
+            var regex = new Regex(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$");
+
+            if (string.IsNullOrWhiteSpace(campoApellidoPaterno.Text))
+            {
+                mensajeErrorApellidoPaterno.Content = "* Campo obligatorio";
+                mensajeErrorApellidoPaterno.Visibility = Visibility.Visible;
+                ActualizarEstadoBoton();
+                return;
+            }
+
+            if (!regex.IsMatch(campoApellidoPaterno.Text))
+            {
+                mensajeErrorApellidoPaterno.Content = "* No se permiten numeros ni caracteres especiales";
+                mensajeErrorApellidoPaterno.Visibility = Visibility.Visible;
+                ActualizarEstadoBoton();
+                return;
+            }
+
+            mensajeErrorApellidoPaterno.Visibility = Visibility.Hidden;
+            apellidoPaternoValido = true;
+            ActualizarEstadoBoton();
+        }
+
+        private void campoApellidoMaterno_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
+        {
+            apellidoMaternoValido = false;
+            var regex = new Regex(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$");
+
+            if (string.IsNullOrWhiteSpace(campoApellidoMaterno.Text))
+            {
+                mensajeErrorApellidoMaterno.Content = "* Campo obligatorio";
+                mensajeErrorApellidoMaterno.Visibility = Visibility.Visible;
+                ActualizarEstadoBoton();
+                return;
+            }
+
+            if (!regex.IsMatch(campoApellidoMaterno.Text))
+            {
+                mensajeErrorApellidoMaterno.Content = "* No se permiten numeros ni caracteres especiales";
+                mensajeErrorApellidoMaterno.Visibility = Visibility.Visible;
+                ActualizarEstadoBoton();
+                return;
+            }
+
+            mensajeErrorApellidoMaterno.Visibility = Visibility.Hidden;
+            apellidoMaternoValido = true;
             ActualizarEstadoBoton();
         }
 
@@ -206,7 +268,12 @@ namespace SAMS.UI.Views
 
         private void ActualizarEstadoBoton()
         {
-            if(rfcValido && nombreValido && correoValido && telefonoValido && archivoValido)
+            if (rfcValido 
+                && nombreValido 
+                && apellidoMaternoValido 
+                && apellidoPaternoValido 
+                && correoValido 
+                && telefonoValido)
             {
                 botonRegistrar.IsButtonEnabled = true;
             }
@@ -215,6 +282,5 @@ namespace SAMS.UI.Views
                 botonRegistrar.IsButtonEnabled = false;
             }
         }
-
     }
 }

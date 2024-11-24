@@ -1,41 +1,51 @@
 ﻿using SAMS.UI.DAO;
 using SAMS.UI.DTO;
 using SAMS.UI.VisualComponents;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
-
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace SAMS.UI.Views
 {
     /// <summary>
-    /// Lógica de interacción para VerProveedoresView.xaml
+    /// Lógica de interacción para VerEmpleadosView.xaml
     /// </summary>
-    public partial class VerProveedoresView : Window
+    public partial class VerEmpleadosView : Window
     {
-        List<V_Proveedores> listaProveedores;
-        ObservableCollection<Object> _proveedores;
+        List<V_Empleados> listaEmpleados;
+        ObservableCollection<Object> _empleados;
         EmpleadoLoginDTO _empleado;
         SideBarControl SideBarControl_MenuLateral;
-        public VerProveedoresView(EmpleadoLoginDTO empleado)
+
+        public VerEmpleadosView(EmpleadoLoginDTO empleado)
         {
             _empleado = empleado;
-            listaProveedores = new List<V_Proveedores>();
-            _proveedores = new ObservableCollection<Object>();
+            listaEmpleados = new List<V_Empleados>();
+            _empleados = new ObservableCollection<Object>();
 
             InitializeComponent();
             DefinirColumnas();
-            ObtenerProveedores();
+            ObtenerEmpleados();
 
             SideBarControl_MenuLateral = new SideBarControl(_empleado);
-            SideBarControl_MenuLateral.SideElementSelected = 2;
+            SideBarControl_MenuLateral.SideElementSelected = 3;
             MenuLateral.Children.Add(SideBarControl_MenuLateral);
             SideBarControl_MenuLateral.Employee = _empleado.tipoEmpleado;
 
-            TablaProveedores.OnDetallesClickedHandler += botonDetallesClick;
-            TablaProveedores.OnEditarClickedHandler += botonEditarClick;
-            TablaProveedores.OnEliminarClickedHandler += botonEliminarClick;
+            TablaEmpleados.OnDetallesClickedHandler += botonDetallesClick;
+            TablaEmpleados.OnEditarClickedHandler += botonEditarClick;
+            TablaEmpleados.OnEliminarClickedHandler += botonEliminarClick;
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -85,9 +95,9 @@ namespace SAMS.UI.Views
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Estado" },
+                    { "Name", "Puesto" },
                     { "Width", "*" },
-                    { "BindingName", "estado" }
+                    { "BindingName", "puesto" }
                 },
                 new Dictionary<string, string> {
 
@@ -102,54 +112,54 @@ namespace SAMS.UI.Views
 
             };
 
-            TablaProveedores.DefineColumns(columnas);
+            TablaEmpleados.DefineColumns(columnas);
 
         }
 
-        private void ObtenerProveedores()
+        private void ObtenerEmpleados()
         {
             try
             {
-                listaProveedores = ProveedorDAO.ObtenerProveedores().ToList();
-                _proveedores.Clear();
-                _proveedores = new ObservableCollection<Object>(listaProveedores.OrderBy(p => p.estado));
-                TablaProveedores.SetItemsSource(_proveedores);
+                listaEmpleados = EmpleadoDAO.ObtenerEmpleados().ToList();
+                listaEmpleados.Remove(listaEmpleados.Where(e => e.correo == _empleado.correo).FirstOrDefault());
+                _empleados.Clear();
+                _empleados = new ObservableCollection<Object>(listaEmpleados.OrderBy(e => e.nombre));
+                TablaEmpleados.SetItemsSource(_empleados);
             }
             catch (Exception ex)
             {
-                Debug.Print(ex.Message);
-                InformationControl.Show("Error", "Ocurrió un error al obtener los proveedores", "Aceptar");
+                InformationControl.Show("Error", "Ocurrió un error al obtener los empleados", "Aceptar");
                 this.Close();
             }
         }
 
         private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
-            if (listaProveedores != null)
+            if (listaEmpleados != null)
             {
 
                 if (campoBuscar.Text.Length > 0)
                 {
-                    var proveedoresFiltrados = listaProveedores.Where(
+                    var proveedoresFiltrados = listaEmpleados.Where(
                         p =>
                         p.nombre.ToUpper().Contains(campoBuscar.Text.ToUpper()) ||
                         p.rfc.ToUpper().Contains(campoBuscar.Text.ToUpper())).ToList();//ToUpper() para que no sea case sensitive
 
-                    _proveedores.Clear();
+                    _empleados.Clear();
 
-                    _proveedores = new ObservableCollection<Object>(proveedoresFiltrados);
+                    _empleados = new ObservableCollection<Object>(proveedoresFiltrados);
 
-                    TablaProveedores.SetItemsSource(_proveedores);
+                    TablaEmpleados.SetItemsSource(_empleados);
 
                 }
                 else
                 {
 
-                    _proveedores.Clear();
+                    _empleados.Clear();
 
-                    _proveedores = new ObservableCollection<Object>(listaProveedores);
+                    _empleados = new ObservableCollection<Object>(listaEmpleados);
 
-                    TablaProveedores.SetItemsSource(_proveedores);
+                    TablaEmpleados.SetItemsSource(_empleados);
 
                 }
 
@@ -159,37 +169,39 @@ namespace SAMS.UI.Views
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
             ActionsControl actionBar = (ActionsControl)sender;
-            V_Proveedores proveedor = (V_Proveedores)actionBar.DataContext;
+            V_Empleados empleado = (V_Empleados)actionBar.DataContext;
 
-            DetalleProveedorView detalleProveedorView = new DetalleProveedorView(proveedor);
-            detalleProveedorView.ShowDialog();
+            DetalleEmpleadoView detalleEmpleadoView = new DetalleEmpleadoView(empleado);
+            detalleEmpleadoView.ShowDialog();
         }
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
         {
             ActionsControl actionBar = (ActionsControl)sender;
-            V_Proveedores proveedor = (V_Proveedores)actionBar.DataContext;
+            V_Empleados empleado = (V_Empleados)actionBar.DataContext;
 
-            EditarProveedorView editarProveedorView = new EditarProveedorView(proveedor);
-            editarProveedorView.ShowDialog();
-            ObtenerProveedores();
+            EditarEmpleadoView detalleEmpleadoView = new EditarEmpleadoView(empleado);
+            detalleEmpleadoView.ShowDialog();
+            ObtenerEmpleados();
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
-            if(ConfirmationControl.Show("Confirmar", "¿Está seguro de que desea eliminar a este proveedor?\n Esta acción no se puede deshacer", "Aceptar", "Cancelar"))
+            if(ConfirmationControl.Show("Eliminar", "¿Está seguro que desea eliminar este empleado?", "Aceptar", "Cancelar"))
             {
-                ProveedorDAO.EliminarProveedor((V_Proveedores)((ActionsControl)sender).DataContext);
+                ActionsControl actionBar = (ActionsControl)sender;
+                V_Empleados empleado = (V_Empleados)actionBar.DataContext;
+                EmpleadoDAO.EliminarEmpleado(empleado.rfc);
             }
 
-            ObtenerProveedores();
+            ObtenerEmpleados();
         }
 
         private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            RegistrarProveedorView registrarProveedorView = new RegistrarProveedorView();
-            registrarProveedorView.ShowDialog();
-            ObtenerProveedores();
+            RegistrarEmpleadoView registrarEmpleadoView = new RegistrarEmpleadoView();
+            registrarEmpleadoView.ShowDialog();
+            ObtenerEmpleados();
         }
     }
 }
