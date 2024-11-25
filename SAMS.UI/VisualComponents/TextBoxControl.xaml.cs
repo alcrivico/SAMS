@@ -29,6 +29,19 @@ namespace SAMS.UI.VisualComponents
                 typeof(TextBoxControl),
                 new PropertyMetadata(string.Empty));
 
+        public int TextFontSize
+        {
+            get { return (int)GetValue(TextFontSizeProperty); }
+            set { SetValue(TextFontSizeProperty, value); }
+        }
+
+        public static readonly DependencyProperty TextFontSizeProperty =
+            DependencyProperty.Register(
+                "TextFontSize",
+                typeof(int),
+                typeof(TextBoxControl),
+                new PropertyMetadata(18));
+
         public bool IsReadOnly
         {
             get { return (bool)GetValue(IsReadOnlyProperty); }

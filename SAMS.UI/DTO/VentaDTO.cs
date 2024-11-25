@@ -9,7 +9,7 @@ namespace SAMS.UI.DTO
     public class VentaDTO
     {
 
-        public string noVenta { get; set; }
+        public int noVenta { get; set; }
 
         public DateTime fechaRegistro { get; set; }
 
@@ -21,11 +21,13 @@ namespace SAMS.UI.DTO
 
         public decimal totalMonedero { get; set; }
 
+        public bool tieneRedondeo { get; set; }
+
         public string noCaja { get; set; }
 
         public string nombreEmpleado { get; set; }
 
-        public string codigoMonedero { get; set; }
+        public string? codigoMonedero { get; set; }
 
     }
 

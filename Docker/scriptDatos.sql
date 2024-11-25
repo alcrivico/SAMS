@@ -155,10 +155,10 @@ INSERT INTO Venta (noVenta, fechaRegistro, iva, totalEfectivo, totalTarjeta, tot
 GO
 
 -- 17. DetalleVenta
-INSERT INTO DetalleVenta (cantidad, precioVenta, ventaId, productoInventarioId, ganancia) VALUES
-(2, 37.00, 1, 1, 5.00),
-(1, 32.00, 2, 2, 7.00),
-(3, 87.00, 3, 3, 10.00);
+INSERT INTO DetalleVenta (codigo, cantidad, precioVenta, ventaId, productoInventarioId, ganancia) VALUES
+('7501000111110', 2, 37.00, 1, 1, 5.00),
+('7501000122223', 1, 32.00, 2, 2, 7.00),
+('7501000133336', 3, 87.00, 3, 3, 10.00);
 GO
 
 -- 18. PromocionVigencia
