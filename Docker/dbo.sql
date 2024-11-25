@@ -67,10 +67,10 @@ GO
 CREATE TABLE [dbo].[DetallePedido] (
   [id] int  IDENTITY(1,1) NOT NULL,
   [cantidad] int  NOT NULL,
-  [precioCompra] decimal(18,2)  NOT NULL,
+  [precioCompra] decimal(18,2)  NULL,
   [pedidoId] int  NOT NULL,
   [productoId] int  NOT NULL,
-  [fechaCaducidad] datetime2(7)  NOT NULL
+  [fechaCaducidad] datetime2(7)  NULL
 )
 GO
 
@@ -213,7 +213,7 @@ CREATE TABLE [dbo].[Pedido] (
   [id] int  IDENTITY(1,1) NOT NULL,
   [noPedido] nvarchar(max) COLLATE Modern_Spanish_CI_AS  NULL,
   [fechaPedido] datetime2(7)  NOT NULL,
-  [fechaEntrega] datetime2(7)  NOT NULL,
+  [fechaEntrega] datetime2(7)  NULL,
   [estadoPedidoId] int  NOT NULL
 )
 GO
