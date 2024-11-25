@@ -413,22 +413,29 @@ INNER JOIN
     Pedido PED ON DP.pedidoId = PED.id;  -- Relación con la tabla Pedido
 GO
 
--- CU-04 Ver productos
 CREATE VIEW V_ProductosRegistrados AS
 SELECT 
     PI.codigo AS CodigoProducto,                            -- Código del producto
-    PI.nombre AS NombreProducto,                           -- Nombre del producto
-    CONCAT(PI.cantidadBodega + PI.cantidadExhibicion, ' ', UM.nombre) AS Cantidad, -- Total cantidad con unidad
-    PI.precioActual AS PrecioActual,                       -- Precio actual del producto
+    PI.nombre AS NombreProducto,                            -- Nombre del producto
+    CONCAT(
+        PI.cantidadBodega + PI.cantidadExhibicion,          -- Total cantidad con unidad
+        ' ',
+        UM.nombre,                                          -- Unidad de medida
+        CASE 
+            WHEN PI.cantidadBodega + PI.cantidadExhibicion > 1 THEN 's'  -- Agregar 's' si la cantidad es mayor a 1
+            ELSE ''                                           -- No agregar 's' si la cantidad es 1 o menor
+        END
+    ) AS Cantidad,                                          -- Resultado final con 's' si aplica
+    PI.precioActual AS PrecioActual,                        -- Precio actual del producto
     CAT.nombre AS NombreCategoria                          -- Nombre de la categoría
 FROM 
     ProductoInventario PI
 INNER JOIN 
-    UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id        -- Relación con unidad de medida
+    UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id      -- Relación con unidad de medida
 INNER JOIN 
-    Categoria CAT ON PI.categoriaId = CAT.id               -- Relación con categoría
+    Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
 INNER JOIN 
-    EstadoProducto EP ON PI.estadoProductoId = EP.id       -- Relación con estado de producto
+    EstadoProducto EP ON PI.estadoProductoId = EP.id      -- Relación con estado de producto
 WHERE 
     EP.nombre = 'Disponible';                              -- Solo productos con estado "Disponible"
 GO
