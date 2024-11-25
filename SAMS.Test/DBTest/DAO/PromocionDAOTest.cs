@@ -74,5 +74,40 @@ namespace SAMS.Test.DBTest.DAO
 
             Assert.True(result > 0, "La promoción no pudo ser finalizada.");
         }
+
+        [Fact]
+        public async Task ConsultarPromocionPorId_DeberiaRetornarPromocionEspecifica()
+        {
+            using var context = GetContext();
+
+            int promocionId = 2; // Id de una promoción existente
+            var parameters = new[]
+            {
+                new SqlParameter("@id", promocionId)
+            };
+
+            var promocion = await context.V_Promocion
+                .FromSqlRaw("SELECT * FROM dbo.V_Promocion WHERE id = @id", parameters)
+                .FirstOrDefaultAsync();
+
+            Assert.NotNull(promocion);
+            Assert.Equal(promocionId, promocion.id);
+        }
+
+        [Fact]
+        public async Task VerPromociones_ValidarCamposNoNulos()
+        {
+            using var context = GetContext();
+
+            var promociones = await context.V_Promocion.ToListAsync();
+
+            Assert.NotNull(promociones);
+            Assert.All(promociones, promocion =>
+            {
+                Assert.NotNull(promocion.nombre);
+                Assert.NotNull(promocion.fechaInicio);
+                Assert.NotNull(promocion.fechaFin);
+            });
+        }
     }
 }
