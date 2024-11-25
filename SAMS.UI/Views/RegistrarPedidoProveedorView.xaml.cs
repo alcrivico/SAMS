@@ -128,9 +128,12 @@ namespace SAMS.UI.Views
         {
             var regex = new System.Text.RegularExpressions.Regex("[^0-9]");
             e.Handled = regex.IsMatch(e.Text);
+
+            if (!e.Handled)
+            {
+                campoPrecioCompra.IsEnabled = true;
+            }
         }
-
-
 
         private void botonRegistrar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
@@ -176,6 +179,10 @@ namespace SAMS.UI.Views
 
                 productosPedidos.Add(productoPedido);
                 ActualizarTablaProductosPedidos();
+
+                campoPrecioCompra.Text = string.Empty;
+                campoPrecioCompra.IsEnabled = false;
+
                 comboProducto.SelectedItem = null;
                 campoCantidad.Text = string.Empty;
                 campoCantidad.IsEnabled = false;
@@ -207,5 +214,12 @@ namespace SAMS.UI.Views
                 InformationControl.Show("Informacion", "Debe seleccionar un producto para eliminar", "Aceptar");
             }
         }
+
+        private void campoPrecioCompra_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var regex = new System.Text.RegularExpressions.Regex("[^0-9.]");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
     }
 }
