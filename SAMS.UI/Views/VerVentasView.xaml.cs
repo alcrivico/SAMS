@@ -234,6 +234,26 @@ namespace SAMS.UI.Views
 
             bool confirmacion = ConfirmationControl.Show("Eliminar Venta", "¿Está seguro de eliminar la venta?", "Aceptar", "Cancelar");
 
+            if (confirmacion)
+            {
+
+                try
+                {
+
+                    VentaDAO.CancelarVenta(venta.noVenta);
+
+                    InformationControl.Show("Éxito", "Venta eliminada correctamente", "Aceptar");
+                    
+                    ObtenerVentas();
+
+                }
+                catch (Exception ex)
+                {
+                    InformationControl.Show("Error", ex.Message, "Aceptar");
+                }
+
+            }
+
         }
 
     }

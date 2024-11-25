@@ -95,6 +95,69 @@ namespace SAMS.UI.DAO
 
         }
 
+        public static async Task ActualizarVenta
+                        (
+                int noVenta,
+                decimal pagoEfectivo,
+                decimal pagoTarjeta,
+                decimal pagoMonedero,
+                decimal iva,
+                string codigoMonedero,
+                bool tieneRedondeo,
+                List<DetalleVentaDTO> detalles
+            )
+        {
+
+            var detalleTable = new DataTable();
+
+            detalleTable.Columns.Add("codigo", typeof(string));
+            detalleTable.Columns.Add("cantidad", typeof(int));
+            detalleTable.Columns.Add("precio", typeof(decimal));
+            detalleTable.Columns.Add("total", typeof(decimal));
+
+            foreach (var detalle in detalles)
+            {
+                Debug.WriteLine($"Adding to DataTable: codigo={detalle.codigo}, cantidad={detalle.cantidad}, precio={detalle.precio}, total={detalle.total}");
+                detalleTable.Rows.Add(detalle.codigo, detalle.cantidad, detalle.precio, detalle.total);
+
+            }
+
+            var parameters = new[]
+            {
+
+                new SqlParameter("@noVenta", SqlDbType.Int) { Value = noVenta },
+                new SqlParameter("@pagoEfectivo", SqlDbType.Decimal) { Value = (object?) pagoEfectivo ?? DBNull.Value },
+                new SqlParameter("@pagoTarjeta", SqlDbType.Decimal) { Value = (object?) pagoTarjeta ?? DBNull.Value },
+                new SqlParameter("@pagoMonedero", SqlDbType.Decimal) { Value = (object?) pagoMonedero ?? DBNull.Value },
+                new SqlParameter("@iva", SqlDbType.Decimal) { Value = iva },
+                new SqlParameter("@codigoMonedero", SqlDbType.NVarChar) { Value = (object?)codigoMonedero ?? DBNull.Value },
+                new SqlParameter("@tieneRedondeo", SqlDbType.Bit) { Value = tieneRedondeo },
+                new SqlParameter("@detalles", SqlDbType.Structured)
+                {
+
+                    TypeName = "DetalleVentaType",
+                    Value = detalleTable
+
+                }
+
+            };
+
+            await _sams.Database.ExecuteSqlRawAsync("EXEC T_ActualizarVenta @noVenta, @pagoEfectivo, @pagoTarjeta, @pagoMonedero, @iva, @codigoMonedero, @tieneRedondeo, @detalles", parameters);
+        
+        }
+
+        public static async Task CancelarVenta(int noVenta)
+        {
+
+            var parameters = new[]
+            {
+                new SqlParameter("@noVenta", noVenta)
+            };
+
+            await _sams.Database.ExecuteSqlRawAsync("EXEC T_EliminarVenta @noVenta", parameters);
+
+        }
+
     }
 
 }
