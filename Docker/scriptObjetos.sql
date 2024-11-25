@@ -462,6 +462,50 @@ INNER JOIN
     Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
 GO
 
+--CU 29 "Consultar Pedido a Proveedor"
+CREATE VIEW V_Pedidos 
+AS
+SELECT DISTINCT 
+    p.id AS idPedido, 
+    p.noPedido,
+    prov.nombre AS nombreProveedor,  
+    p.fechaPedido, 
+    p.fechaEntrega,
+    ep.nombre AS nombreEstado
+FROM 
+	Pedido p
+INNER JOIN 
+	EstadoPedido ep ON p.estadoPedidoId = ep.id
+INNER JOIN 
+	DetallePedido dp ON p.id = dp.pedidoId
+INNER JOIN 
+	Producto prod ON dp.productoId = prod.id
+INNER JOIN 
+	Proveedor prov ON prod.proveedorId = prov.id
+WHERE 
+	ep.nombre IN ('Pendiente', 'Entregado'); 
+GO
+
+CREATE VIEW V_DetallesPedido 
+AS
+SELECT 
+	p.id As idPedido,
+	pro.nombre AS nombreProducto,
+	um.nombre AS nombreUnidadMedida,
+	dp.cantidad 
+FROM 
+	DetallePedido dp
+INNER JOIN 
+	Pedido p ON dp.pedidoId = p.id
+INNER JOIN 
+	Producto pro ON dp.productoId = pro.id
+INNER JOIN 
+	EstadoPedido ep ON p.estadoPedidoId = ep.id
+INNER JOIN 
+	UnidadDeMedida um ON pro.unidadDeMedidaId = um.id;
+GO
+
+
 -- 3. procedimientos almacenados
 -- funciones listas
 
@@ -893,6 +937,19 @@ BEGIN
         DECLARE @idCategoria INT;
         DECLARE @idPedido INT;
         DECLARE @cantidadBodega INT;
+        DECLARE @idEstadoDisponible INT;
+
+        -- Obtener el ID del estado "Disponible"
+        SELECT @idEstadoDisponible = id
+        FROM EstadoProducto
+        WHERE nombre = 'Disponible';
+
+        IF @idEstadoDisponible IS NULL
+        BEGIN
+            RAISERROR('El estado "Disponible" no existe en la tabla EstadoProducto.', 16, 1);
+            ROLLBACK TRAN;
+            RETURN;
+        END
 
         -- Obtener el ID del producto desde el código
         SELECT @idProducto = id
@@ -952,7 +1009,8 @@ BEGIN
                 cantidadBodega = cantidadBodega + @cantidadBodega, -- Sumar a la cantidad existente
                 precioActual = @precioActual,                      -- Actualizar el precio
                 categoriaId = @idCategoria,                        -- Actualizar la categoría
-                fechaCaducidad = @fechaCaducidad                   -- Actualizar la fecha de caducidad
+                fechaCaducidad = @fechaCaducidad,                  -- Actualizar la fecha de caducidad
+                estadoProductoId = @idEstadoDisponible             -- Actualizar el estado a "Disponible"
             WHERE 
                 codigo = @codigoProducto;
         END
@@ -985,7 +1043,7 @@ BEGIN
                 P.esDevolvible,
                 P.unidadDeMedidaId,
                 @idCategoria,            -- ID de la categoría obtenida dinámicamente
-                1                        -- Estado inicial por defecto
+                @idEstadoDisponible      -- Estado inicial como "Disponible"
             FROM Producto P
             WHERE P.id = @idProducto;
         END
@@ -1271,6 +1329,66 @@ BEGIN
         ROLLBACK TRANSACTION;
         THROW;
     END CATCH
+END;
+GO
+
+--cu 29 Registrar Pedido a Proveedor
+CREATE TYPE TipoTablaPedidoDetalle AS TABLE
+(
+    NombreProducto NVARCHAR(60), 
+    Cantidad INT    
+);
+GO
+
+CREATE PROCEDURE T_RegistrarPedido
+    @ProductosDetalle TipoTablaPedidoDetalle READONLY 
+AS
+BEGIN
+    BEGIN TRANSACTION; 
+
+    BEGIN TRY
+        DECLARE @PedidoId INT; 
+        DECLARE @NoPedido NVARCHAR(20); 
+        DECLARE @FechaPedido DATE = GETDATE(); 
+        DECLARE @EstadoPedidoId INT = (SELECT TOP 1 id FROM EstadoPedido WHERE nombre = 'Pendiente'); -- Estado por defecto
+
+        -- Insertar en la tabla Pedido
+        INSERT INTO Pedido (fechaPedido, estadoPedidoId)
+        VALUES (@FechaPedido, @EstadoPedidoId);
+
+        -- Recuperar el ID del pedido recién insertado
+        SET @PedidoId = SCOPE_IDENTITY();
+
+        -- Generar el número de pedido concatenando el ID con "PED-"
+        SET @NoPedido = CONCAT('PED', FORMAT(@PedidoId, 'D6')); -- 'D6' asegura siempre 6 dígitos
+
+        -- Actualizar el número de pedido en la tabla
+        UPDATE Pedido
+        SET noPedido = @NoPedido
+        WHERE id = @PedidoId;
+
+        -- Insertar los detalles del pedido
+        INSERT INTO DetallePedido (pedidoId, productoId, cantidad)
+        SELECT 
+            @PedidoId, 
+            p.id AS productoId,
+            pd.Cantidad
+        FROM 
+            @ProductosDetalle pd
+        INNER JOIN 
+            Producto p ON p.nombre = pd.nombreProducto;
+
+        -- Confirmar la transacción
+        COMMIT TRANSACTION;
+
+    END TRY
+    BEGIN CATCH
+        -- Revertir la transacción en caso de error
+        ROLLBACK TRANSACTION;
+
+        -- Opcional: Lanza el error para diagnóstico
+        THROW;
+    END CATCH;
 END;
 GO
 
