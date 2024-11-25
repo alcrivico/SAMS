@@ -1075,25 +1075,28 @@ namespace SAMS.UI.VisualComponents
                 switch (Employee)
                 {
                     case "Administrador":
-                        ReporteInventarioView reporte = new(empleado);
-                        reporte.Show();
-                        Window.GetWindow(this).Close();
+                        MenuReportes menuReportes = new MenuReportes(empleado);
+                        menuReportes.Show();
                         break;
                     case "Paqueteria":
                         EditarPromocionView editarPromocionView = new(empleado);
                         editarPromocionView.Show();
-                        Window.GetWindow(this).Close();
                         break;
                     default:
                         break;
                 }
+
+                Window.GetWindow(this).Close();
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
 
             }
+
         }
+
     }
 
 }
