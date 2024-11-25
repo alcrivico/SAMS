@@ -241,11 +241,11 @@ SELECT
     p.correo,
     p.telefono,
     CASE 
-        WHEN p.estadoProveedor = 1 THEN 'Activo'  -- Si es TRUE
-        ELSE 'Inactivo'                          -- Si es FALSE
+        WHEN p.estadoProveedor = 1 THEN 'Activo'  -- Si es TRUE                        -- Si es FALSE
     END AS estado
 FROM
-    Proveedor p;
+    Proveedor p
+    WHERE p.estadoProveedor = 1;
 GO
 
 CREATE VIEW V_Producto AS
@@ -375,11 +375,10 @@ INNER JOIN
 GO
 
 -- CU-03 Registrar producto
-CREATE VIEW V_PedidosPendientes
-AS
-SELECT 
+CREATE VIEW V_PedidosPendientes AS
+SELECT DISTINCT
     P.noPedido AS NoPedido,
-    P.fechaEntrega AS FechaEntrega,
+    P.fechaPedido AS FechaPedido,
     PR.nombre AS NombreProveedor
 FROM 
     Pedido P
@@ -400,35 +399,42 @@ GO
 CREATE VIEW V_ProductosPorPedido
 AS
 SELECT 
-    PED.noPedido AS NumeroPedido,        -- Número del pedido
-    P.codigo AS CodigoProducto,          -- Código del producto
-    P.nombre AS NombreProducto,          -- Nombre del producto
-    DP.cantidad AS Cantidad,             -- Cantidad del detalle del pedido
-    DP.precioCompra AS PrecioCompra      -- Precio de compra del producto
+    PED.noPedido AS NumeroPedido,
+    P.codigo AS CodigoProducto,
+    P.nombre AS NombreProducto,
+    DP.cantidad AS Cantidad,
+    DP.precioCompra AS PrecioCompra
 FROM 
     DetallePedido DP
 INNER JOIN 
     Producto P ON DP.productoId = P.id
 INNER JOIN 
-    Pedido PED ON DP.pedidoId = PED.id;  -- Relación con la tabla Pedido
+    Pedido PED ON DP.pedidoId = PED.id;
 GO
 
--- CU-04 Ver productos
 CREATE VIEW V_ProductosRegistrados AS
 SELECT 
     PI.codigo AS CodigoProducto,                            -- Código del producto
-    PI.nombre AS NombreProducto,                           -- Nombre del producto
-    CONCAT(PI.cantidadBodega + PI.cantidadExhibicion, ' ', UM.nombre) AS Cantidad, -- Total cantidad con unidad
-    PI.precioActual AS PrecioActual,                       -- Precio actual del producto
+    PI.nombre AS NombreProducto,                            -- Nombre del producto
+    CONCAT(
+        PI.cantidadBodega + PI.cantidadExhibicion,          -- Total cantidad con unidad
+        ' ',
+        UM.nombre,                                          -- Unidad de medida
+        CASE 
+            WHEN PI.cantidadBodega + PI.cantidadExhibicion > 1 THEN 's'  -- Agregar 's' si la cantidad es mayor a 1
+            ELSE ''                                           -- No agregar 's' si la cantidad es 1 o menor
+        END
+    ) AS Cantidad,                                          -- Resultado final con 's' si aplica
+    PI.precioActual AS PrecioActual,                        -- Precio actual del producto
     CAT.nombre AS NombreCategoria                          -- Nombre de la categoría
 FROM 
     ProductoInventario PI
 INNER JOIN 
-    UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id        -- Relación con unidad de medida
+    UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id      -- Relación con unidad de medida
 INNER JOIN 
-    Categoria CAT ON PI.categoriaId = CAT.id               -- Relación con categoría
+    Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
 INNER JOIN 
-    EstadoProducto EP ON PI.estadoProductoId = EP.id       -- Relación con estado de producto
+    EstadoProducto EP ON PI.estadoProductoId = EP.id      -- Relación con estado de producto
 WHERE 
     EP.nombre = 'Disponible';                              -- Solo productos con estado "Disponible"
 GO
@@ -931,6 +937,19 @@ BEGIN
         DECLARE @idCategoria INT;
         DECLARE @idPedido INT;
         DECLARE @cantidadBodega INT;
+        DECLARE @idEstadoDisponible INT;
+
+        -- Obtener el ID del estado "Disponible"
+        SELECT @idEstadoDisponible = id
+        FROM EstadoProducto
+        WHERE nombre = 'Disponible';
+
+        IF @idEstadoDisponible IS NULL
+        BEGIN
+            RAISERROR('El estado "Disponible" no existe en la tabla EstadoProducto.', 16, 1);
+            ROLLBACK TRAN;
+            RETURN;
+        END
 
         -- Obtener el ID del producto desde el código
         SELECT @idProducto = id
@@ -990,7 +1009,8 @@ BEGIN
                 cantidadBodega = cantidadBodega + @cantidadBodega, -- Sumar a la cantidad existente
                 precioActual = @precioActual,                      -- Actualizar el precio
                 categoriaId = @idCategoria,                        -- Actualizar la categoría
-                fechaCaducidad = @fechaCaducidad                   -- Actualizar la fecha de caducidad
+                fechaCaducidad = @fechaCaducidad,                  -- Actualizar la fecha de caducidad
+                estadoProductoId = @idEstadoDisponible             -- Actualizar el estado a "Disponible"
             WHERE 
                 codigo = @codigoProducto;
         END
@@ -1023,7 +1043,7 @@ BEGIN
                 P.esDevolvible,
                 P.unidadDeMedidaId,
                 @idCategoria,            -- ID de la categoría obtenida dinámicamente
-                1                        -- Estado inicial por defecto
+                @idEstadoDisponible      -- Estado inicial como "Disponible"
             FROM Producto P
             WHERE P.id = @idProducto;
         END

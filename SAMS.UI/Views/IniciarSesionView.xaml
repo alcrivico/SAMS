@@ -16,10 +16,10 @@
     AllowsTransparency="True"
     Background="Transparent"
     Icon="../Resources/Images/SAMSIsotype.ico"
+    KeyUp="Window_KeyUp"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
-    KeyUp="Window_KeyUp"
     mc:Ignorable="d">
 
     <Grid>

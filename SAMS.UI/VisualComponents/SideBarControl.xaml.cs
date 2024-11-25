@@ -1,6 +1,7 @@
 ﻿using SAMS.UI.DTO;
 using SAMS.UI.Models.Entities;
 using SAMS.UI.Views;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -898,27 +899,31 @@ namespace SAMS.UI.VisualComponents
         //fila 1
         private void SideElement1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            try{
+                switch (Employee)
+                {
+                    case "Administrador":
+                        VerProductosView productosView = new VerProductosView(empleado);
+                        productosView.Show();
+                        break;
+                    case "Cajero":
+                        VentaView ventaView = new(empleado, 1);
+                        ventaView.Show();
+                        break;
+                    case "Paqueteria":
+                        break;
+                    case "Contador":
+                        break;
+                    default:
+                        break;
+                }
 
-            switch (Employee)
-            {
-                case "Administrador":
-                    VerProductosView productosView = new VerProductosView(empleado);
-                    productosView.Show(); 
-                    break;
-                case "Cajero":
-                    VentaView ventaView = new(empleado, 1);
-                    ventaView.Show();
-                    break;
-                case "Paqueteria":
-                    break;
-                case "Contador":
-                    break;
-                default:
-                    break;
+                Window.GetWindow(this).Close();
             }
-
-            Window.GetWindow(this).Close();
-
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         //fila 2
@@ -926,27 +931,32 @@ namespace SAMS.UI.VisualComponents
         {
 
             SideElementControl element = (SideElementControl)sender;
-
-            switch (Employee)
+            try
             {
-                case "Administrador":
-                    VerProveedoresView proveedoresView = new VerProveedoresView(empleado);
-                    proveedoresView.Show();
-                    break;
-                case "Cajero":
-                    VerVentasView verVentasView = new VerVentasView(empleado);
-                    verVentasView.Show();
-                    break;
-                case "Paqueteria":
-                    break;
-                case "Contador":
-                    break;
-                default:
-                    break;
+                switch (Employee)
+                {
+                    case "Administrador":
+                        VerProveedoresView proveedoresView = new VerProveedoresView(empleado);
+                        proveedoresView.Show();
+                        break;
+                    case "Cajero":
+                        VerVentasView verVentasView = new VerVentasView(empleado);
+                        verVentasView.Show();
+                        break;
+                    case "Paqueteria":
+                        break;
+                    case "Contador":
+                        break;
+                    default:
+                        break;
+                }
+
+                Window.GetWindow(this).Close();
             }
-
-            Window.GetWindow(this).Close();
-
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         //fila 3
@@ -954,28 +964,33 @@ namespace SAMS.UI.VisualComponents
         {
 
             SideElementControl element = (SideElementControl)sender;
-
-            switch (Employee)
+            try
             {
-                case "Administrador":
-                    VerEmpleadosView verEmpleadosView = new VerEmpleadosView(empleado);
-                    verEmpleadosView.Show();
-                    break;
-                case "Cajero":
+                switch (Employee)
+                {
+                    case "Administrador":
+                        VerEmpleadosView verEmpleadosView = new VerEmpleadosView(empleado);
+                        verEmpleadosView.Show();
+                        break;
+                    case "Cajero":
 
-                    VerMonederosView verMonederosView = new VerMonederosView(empleado);
+                        VerMonederosView verMonederosView = new VerMonederosView(empleado);
 
-                    verMonederosView.Show();
+                        verMonederosView.Show();
 
-                    break;
-                case "Paqueteria":
-                    break;
-                default:
-                    break;
+                        break;
+                    case "Paqueteria":
+                        break;
+                    default:
+                        break;
+                }
+
+                Window.GetWindow(this).Close();
             }
-
-            Window.GetWindow(this).Close();
-
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         //fila 4
@@ -983,25 +998,31 @@ namespace SAMS.UI.VisualComponents
         {
 
             SideElementControl element = (SideElementControl)sender;
-
-            switch (Employee)
+            try
             {
-                case "Administrador":
+                switch (Employee)
+                {
+                    case "Administrador":
 
-                    VerVentasView verVentasView = new VerVentasView(empleado);
+                        VerVentasView verVentasView = new VerVentasView(empleado);
 
-                    verVentasView.Show();
+                        verVentasView.Show();
 
-                    break;
-                case "Cajero":
-                    break;
-                case "Paqueteria":
-                    break;
-                default:
-                    break;
+                        break;
+                    case "Cajero":
+                        break;
+                    case "Paqueteria":
+                        break;
+                    default:
+                        break;
+                }
+
+                Window.GetWindow(this).Close();
             }
-
-            Window.GetWindow(this).Close();
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
 
         }
 
@@ -1010,17 +1031,23 @@ namespace SAMS.UI.VisualComponents
         {
 
             SideElementControl element = (SideElementControl)sender;
-
-            switch (Employee)
+            try
             {
-                case "Administrador":
-                    break;
-                case "Paqueteria":
-                    VerPedidosView verPedidosView = new VerPedidosView(empleado);
-                    verPedidosView.Show();
-                    break;
-                default:
-                    break;
+                switch (Employee)
+                {
+                    case "Administrador":
+                        break;
+                    case "Paqueteria":
+                        VerPedidosView verPedidosView = new VerPedidosView(empleado);
+                        verPedidosView.Show();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
 
         }
@@ -1030,25 +1057,30 @@ namespace SAMS.UI.VisualComponents
         {
 
             SideElementControl element = (SideElementControl)sender;
-
-            switch (Employee)
+            try
             {
-                case "Administrador":
-                    ReporteVentasView reporte = new(empleado);
-                    reporte.Show();
-                    Window.GetWindow(this).Close();
-                    break;
-                case "Paqueteria":
-                    EditarPromocionView editarPromocionView = new(empleado);
-                    editarPromocionView.Show();
-                    Window.GetWindow(this).Close();
-                    break;
-                default:
-                    break;
+                switch (Employee)
+                {
+                    case "Administrador":
+                        ReporteInventarioView reporte = new(empleado);
+                        reporte.Show();
+                        Window.GetWindow(this).Close();
+                        break;
+                    case "Paqueteria":
+                        EditarPromocionView editarPromocionView = new(empleado);
+                        editarPromocionView.Show();
+                        Window.GetWindow(this).Close();
+                        break;
+                    default:
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
 
+            }
         }
-
     }
 
 }

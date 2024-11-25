@@ -132,9 +132,9 @@ namespace SAMS.UI.Views
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Fecha de entrega" },
+                    { "Name", "Fecha de pedido" },
                     { "Width", "*" },
-                    { "BindingName", "fechaEntrega" },
+                    { "BindingName", "fechaPedido" },
 
                 },
                 new Dictionary<string, string> {
