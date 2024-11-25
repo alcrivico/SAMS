@@ -53,8 +53,8 @@ SELECT
     um.nombre AS unidadDeMedida,
     p.nombre AS promocion,
     p.porcentajeDescuento,
-    p.cantidadMinima,
-    p.cantidadMaxima
+    p.cantMinima,
+    p.cantMaxima
 FROM
     ProductoInventario pi
 LEFT JOIN
