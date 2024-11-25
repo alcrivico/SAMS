@@ -893,6 +893,19 @@ BEGIN
         DECLARE @idCategoria INT;
         DECLARE @idPedido INT;
         DECLARE @cantidadBodega INT;
+        DECLARE @idEstadoDisponible INT;
+
+        -- Obtener el ID del estado "Disponible"
+        SELECT @idEstadoDisponible = id
+        FROM EstadoProducto
+        WHERE nombre = 'Disponible';
+
+        IF @idEstadoDisponible IS NULL
+        BEGIN
+            RAISERROR('El estado "Disponible" no existe en la tabla EstadoProducto.', 16, 1);
+            ROLLBACK TRAN;
+            RETURN;
+        END
 
         -- Obtener el ID del producto desde el código
         SELECT @idProducto = id
@@ -952,7 +965,8 @@ BEGIN
                 cantidadBodega = cantidadBodega + @cantidadBodega, -- Sumar a la cantidad existente
                 precioActual = @precioActual,                      -- Actualizar el precio
                 categoriaId = @idCategoria,                        -- Actualizar la categoría
-                fechaCaducidad = @fechaCaducidad                   -- Actualizar la fecha de caducidad
+                fechaCaducidad = @fechaCaducidad,                  -- Actualizar la fecha de caducidad
+                estadoProductoId = @idEstadoDisponible             -- Actualizar el estado a "Disponible"
             WHERE 
                 codigo = @codigoProducto;
         END
@@ -985,7 +999,7 @@ BEGIN
                 P.esDevolvible,
                 P.unidadDeMedidaId,
                 @idCategoria,            -- ID de la categoría obtenida dinámicamente
-                1                        -- Estado inicial por defecto
+                @idEstadoDisponible      -- Estado inicial como "Disponible"
             FROM Producto P
             WHERE P.id = @idProducto;
         END
