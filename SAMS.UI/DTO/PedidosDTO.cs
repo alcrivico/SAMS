@@ -15,7 +15,7 @@ namespace SAMS.UI.DTO
         public DateTime? fechaEntrega { get; set; }
         public string nombreEstado { get; set; }
 
-        public string FechaPedido => fechaPedido.ToString("dd/MM/yyyy HH:mm:ss");
+        public string FechaPedido => fechaPedido.ToString("dd/MM/yyyy");
 
     }
 }

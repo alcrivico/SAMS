@@ -41,6 +41,8 @@ namespace SAMS.UI.Views
             DefinirColumnas();
 
             comboProveedor.SetSelectedItem(proveedores);
+            comboProveedor.SelectedItem = null;  // No seleccionar proveedor por defecto
+            comboProducto.SelectedItem = null; //No
         }
 
         private void botonCancelar_ButtonControlClick(object sender, RoutedEventArgs e)
@@ -132,7 +134,16 @@ namespace SAMS.UI.Views
 
         private void botonRegistrar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            if (productosPedidos != null && productosPedidos.Count > 0)
+            {
+                PedidoDAO.RegistrarProductosAlPedido(productosPedidos);
+
+                InformationControl.Show("Información", "Productos registrados correctamente en el pedido.", "Aceptar");
+            }
+            else
+            {
+                InformationControl.Show("Error", "No hay productos para registrar en el pedido.", "Aceptar");
+            }
         }
 
         private void botonAgregarProducto_ButtonControlClick(object sender, RoutedEventArgs e)
@@ -143,6 +154,15 @@ namespace SAMS.UI.Views
 
             if (proveedorSeleccionado != null && productoSeleccionado != null && !string.IsNullOrEmpty(cantidad) && int.TryParse(cantidad, out int cantidadInt))
             {
+
+                bool productoExiste = productosPedidos.Any(p => p.nombreProducto == productoSeleccionado.nombre);
+
+                if (productoExiste)
+                {
+                    InformationControl.Show("Información", "El producto ya ha sido agregado a la tabla.", "Aceptar");
+                    return;
+                }
+
                 var unidadMedida = "Litro";
 
                 DetallesPedidoDTO productoPedido = new DetallesPedidoDTO
@@ -161,9 +181,7 @@ namespace SAMS.UI.Views
             }
             else
             {
-                Debug.Print(ex.Message);
                 InformationControl.Show("Informacion", "Debe llenar todos los campos para agregar un producto", "Aceptar");
-                this.Close();
             }
         }
 
@@ -181,11 +199,9 @@ namespace SAMS.UI.Views
             {
                 productosPedidos.Remove(productoSeleccionado);
                 ActualizarTablaProductosPedidos();
-                MessageBox.Show($"Producto eliminado: {productoSeleccionado.nombreProducto}, Cantidad: {productoSeleccionado.cantidad}");
             }
             else
             {
-                Debug.Print(ex.Message);
                 InformationControl.Show("Informacion", "Debe seleccionar un producto para eliminar", "Aceptar");
                 this.Close();
             }

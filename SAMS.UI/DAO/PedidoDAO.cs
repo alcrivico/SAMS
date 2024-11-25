@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
+using SAMS.UI.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -73,6 +75,29 @@ namespace SAMS.UI.DAO
             {
                 return false;
             }
+        }
+
+        public static void RegistrarProductosAlPedido(List<DetallesPedidoDTO> productosPedidos)
+        {
+            DataTable productosDetalles = new DataTable();
+            productosDetalles.Columns.Add("ProductoNombre", typeof(string)); 
+            productosDetalles.Columns.Add("Cantidad", typeof(int));
+ 
+            foreach (var producto in productosPedidos)
+            {
+                productosDetalles.Rows.Add(producto.nombreProducto, producto.cantidad);
+            }
+
+            var parametros = new List<Microsoft.Data.SqlClient.SqlParameter>
+    {
+        new Microsoft.Data.SqlClient.SqlParameter("@ProductosDetalle", SqlDbType.Structured)
+        {
+            TypeName = "TipoTablaPedidoDetalle", 
+            Value = productosDetalles
+        }
+    };
+
+            _sams.Database.ExecuteSqlRaw("EXEC T_RegistrarPedido @ProductosDetalle", parametros);
         }
     }
 }
