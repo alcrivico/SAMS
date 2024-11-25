@@ -56,7 +56,7 @@
                 BorderThickness="0"
                 CaretBrush="{StaticResource SolidColorBrush_DodgerBlue}"
                 FontFamily="{StaticResource Font_Nunito}"
-                FontSize="18"
+                FontSize="{Binding TextFontSize, ElementName=TextBox}"
                 FontWeight="Bold"
                 Foreground="{StaticResource SolidColorBrush_DavysGrey}"
                 IsReadOnly="{Binding IsReadOnly, ElementName=TextBox}"

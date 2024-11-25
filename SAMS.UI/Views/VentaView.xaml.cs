@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Collections.ObjectModel;
+using SAMS.UI.Models.Entities;
 
 namespace SAMS.UI.Views
 {
@@ -37,6 +38,7 @@ namespace SAMS.UI.Views
         decimal _pagoEfectivo;
         decimal _pagoTarjeta;
         decimal _pagoMonedero;
+        TextBoxControl campoFechaRegistro;
 
         public VentaView()
         {
@@ -62,6 +64,48 @@ namespace SAMS.UI.Views
 
             DefinirColumnas();
 
+        }
+
+        public VentaView(EmpleadoLoginDTO empleado, int opcion, VentasDTO venta)
+        {
+
+            _empleado = empleado;
+            _opcionMenu = opcion;
+            _listaDetalleVentas = new List<DetalleVentaDTO>();
+            _detalleVentas = new ObservableCollection<Object>();
+            _pagoEfectivo = 0;
+            _pagoTarjeta = 0;
+            _pagoMonedero = 0;
+
+            InitializeComponent();
+
+            ConfigurarSideBar(opcion);
+
+            ConfigurarMenu(opcion);
+
+            DefinirColumnas();
+
+            try
+            {
+
+                AgregarDetallesVenta(ObtenerDetallesVenta(venta));
+
+                AgregarInformacionVenta(venta);
+
+            }
+            catch (Exception ex)
+            {
+                InformationControl.Show("Error", ex.Message, "Aceptar");
+            }
+
+            
+
+        }
+
+        private List<DetalleVentaDTO> ObtenerDetallesVenta(VentasDTO venta)
+        {
+            List<DetalleVentaDTO> detalles = VentaDAO.ObtenerDetallesVenta(venta.noVenta);
+            return detalles;
         }
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -251,11 +295,14 @@ namespace SAMS.UI.Views
                     vb.Visibility = Visibility.Hidden;
                     elementoDesechable.Visibility = Visibility.Hidden;
 
-                    TextBoxControl campoFechaRegistro = new TextBoxControl();
+                    campoFechaRegistro = new TextBoxControl();
                     campoFechaRegistro.FieldName = "Fecha de Registro";
                     campoFechaRegistro.Margin = new Thickness(4);
+                    campoFechaRegistro.TextFontSize = 16;
                     campoFechaRegistro.IsReadOnly = true;
                     campoFechaRegistro.Cursor = Cursors.Arrow;
+
+                    campoProducto.TextFontSize = 14;
 
                     Viewbox vbFechaRegistro = new Viewbox();
                     vbFechaRegistro.Child = campoFechaRegistro;
@@ -382,7 +429,7 @@ namespace SAMS.UI.Views
                     campoPagoMonedero.Text = "";
                     checkRedondear.IsChecked = false;
                     checkRedondear.IsEnabled = false;
-                    InformationControl.Show("Error", "No se pudo realizar la operación", "Aceptar");
+                    InformationControl.Show("Error", ex.Message, "Aceptar");
 
                 }
 
@@ -461,6 +508,8 @@ namespace SAMS.UI.Views
 
             }
 
+            campoSaldoRestante.Text = decimal.Parse(campoTotal.Text) - decimal.Parse(campoMontoPagado.Text) + "";
+
         }
 
         private void checkMonedero_CheckedChanged(object sender, RoutedEventArgs e)
@@ -472,8 +521,15 @@ namespace SAMS.UI.Views
             {
 
                 campoMonedero.Visibility = Visibility.Visible;
-                buscarMonedero.Visibility = Visibility.Visible;
-                verificarMonedero.Visibility = Visibility.Visible;
+
+                if (_opcionMenu != 3)
+                {
+
+                    buscarMonedero.Visibility = Visibility.Visible;
+                    verificarMonedero.Visibility = Visibility.Visible;
+
+                }
+
                 campoPagoMonedero.Visibility = Visibility.Visible;
 
             }
@@ -524,8 +580,8 @@ namespace SAMS.UI.Views
                                 _detalleVenta.precio = producto.precioActual;
                                 _detalleVenta.promocion = producto.promocion;
                                 _detalleVenta.porcentajeDescuento = (decimal) producto.porcentajeDescuento / 100.0m;
-                                _detalleVenta.cantidadMinima = producto.cantMinima;
-                                _detalleVenta.cantidadMaxima = producto.cantMaxima;
+                                _detalleVenta.cantidadMinima = producto.cantidadMinima;
+                                _detalleVenta.cantidadMaxima = producto.cantidadMaxima;
 
                                 campoCantidad.EnableTextBox = true;
                                 campoCantidad.Cursor = Cursors.IBeam;
@@ -619,61 +675,7 @@ namespace SAMS.UI.Views
             {
                 case 1:
 
-                    DetalleVentaDTO nuevoDetalleVenta = new DetalleVentaDTO
-                    {
-                        codigo = _detalleVenta.codigo,
-                        nombreDetalleVenta = _detalleVenta.nombreDetalleVenta,
-                        precio = _detalleVenta.precio,
-                        cantidad = _detalleVenta.cantidad,
-                        promocion = _detalleVenta.promocion,
-                        porcentajeDescuento = _detalleVenta.porcentajeDescuento,
-                        total = _detalleVenta.total,
-                        cantidadMinima = _detalleVenta.cantidadMinima,
-                        cantidadMaxima = _detalleVenta.cantidadMaxima
-                    };
-
-                    bool flag = false;
-
-                    foreach (DetalleVentaDTO detalle in _listaDetalleVentas)
-                    {
-
-                        if (detalle.codigo == nuevoDetalleVenta.codigo)
-                        {
-                            detalle.cantidad += nuevoDetalleVenta.cantidad;
-
-                            int conPromocion = detalle.cantidad / detalle.cantidadMinima;
-                            int sinPromocion = detalle.cantidad % detalle.cantidadMinima;
-
-                            decimal subtotalConPromocion = conPromocion * detalle.cantidadMinima * detalle.precio * (1 - detalle.porcentajeDescuento);
-                            decimal subtotalSinPromocion = sinPromocion * detalle.precio;
-
-                            detalle.total = Math.Round(subtotalConPromocion + subtotalSinPromocion, 2);
-
-                            flag = true;
-
-                            break;
-
-                        }
-
-                    }
-
-                    if (!flag)
-                        _listaDetalleVentas.Add(nuevoDetalleVenta);
-
-                    _detalleVentas.Clear();
-
-                    _detalleVentas = new ObservableCollection<Object>(_listaDetalleVentas);
-
-                    TablaProductos.SetItemsSource(null);
-                    TablaProductos.SetItemsSource(_detalleVentas);
-
-                    campoSubtotal.Text = _listaDetalleVentas.Sum(d => d.total).ToString("0.00");
-
-                    campoIVA.Text = (_listaDetalleVentas.Sum(d => d.total) * (decimal) 0.16).ToString("0.00");
-
-                    campoTotal.Text = decimal.Parse(campoSubtotal.Text) + decimal.Parse(campoIVA.Text) + "";
-
-                    campoSaldoRestante.Text = decimal.Parse(campoTotal.Text) - decimal.Parse(campoMontoPagado.Text) + "";
+                    AgregarUnDetalleVenta();
 
                     break;
 
@@ -689,44 +691,156 @@ namespace SAMS.UI.Views
 
         }
 
-        private void campoSaldoRestante_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
+        private void AgregarInformacionVenta(VentasDTO venta)
         {
+            VentaDTO ventaSolida = null;
 
-            if (decimal.Parse(campoMontoPagado.Text) == decimal.Parse(campoTotal.Text))
+
+            try
             {
-                botonAccion.IsButtonEnabled = true;
-                campoCambio.Text = "0.00";
+                ventaSolida = VentaDAO.ObtenerVenta(venta.noVenta);
             }
-            else
+            catch (Exception ex)
             {
-                
-                botonAccion.IsButtonEnabled = false;
+                InformationControl.Show("Error", "No se pudo obtener la información de la venta", "Aceptar");
+                Debug.WriteLine(ex.Message);
+            }
 
-                decimal cambioTruncado = Math.Floor(decimal.Parse(campoMontoPagado.Text) - decimal.Parse(campoTotal.Text));
-                decimal cambioDecimal = decimal.Parse(campoMontoPagado.Text) - decimal.Parse(campoTotal.Text);
+            if (ventaSolida != null)
+            {
 
-                if ((cambioDecimal - cambioTruncado) < 0.4m)
+                campoProducto.Text = ventaSolida.nombreEmpleado;
+                campoCantidad.Text = ventaSolida.noCaja;
+                campoFechaRegistro.Text = ventaSolida.fechaRegistro.ToString("dd/MM/yyyy HH:mm:ss");
+
+                if (ventaSolida.totalEfectivo > 0)
                 {
-                    campoCambio.Text = Math.Floor(decimal.Parse(campoMontoPagado.Text) - decimal.Parse(campoTotal.Text)).ToString("0.00");
-                }
-                else if ((cambioDecimal - cambioTruncado) > 0.6m)
-                {
-                    campoCambio.Text = Math.Ceiling(decimal.Parse(campoMontoPagado.Text) - decimal.Parse(campoTotal.Text)).ToString("0.00");
-                }
-                else
-                {
-                    campoCambio.Text = cambioTruncado + 0.5m + "";
+
+                    checkEfectivo.IsChecked = true;
+                    campoPagoEfectivo.Text = ventaSolida.totalEfectivo.ToString("0.00");
+
                 }
 
-                if (decimal.Parse(campoSaldoRestante.Text) < 0 && checkEfectivo.IsChecked)
+                if (ventaSolida.totalTarjeta > 0)
                 {
-                    campoSaldoRestante.Text = "0.00";
+
+                    checkTarjeta.IsChecked = true;
+                    campoPagoTarjeta.Text = ventaSolida.totalTarjeta.ToString("0.00");
+
+                }
+
+                if (ventaSolida.codigoMonedero != null)
+                {
+
+                    checkMonedero.IsChecked = true;
+                    campoMonedero.Text = ventaSolida.codigoMonedero;
+                    campoPagoMonedero.Text = ventaSolida.totalMonedero.ToString("0.00");
+
+                    if (ventaSolida.tieneRedondeo)
+                    {
+                        checkRedondear.IsChecked = true;
+                    }
+
                 }
 
             }
 
         }
 
+        private void AgregarDetallesVenta(List<DetalleVentaDTO> detalles)
+        {
+
+            foreach (DetalleVentaDTO detalle in detalles)
+            {
+
+                DefinirDetalleVenta(detalle);
+                AgregarUnDetalleVenta();
+
+            }
+
+        }
+
+        private void DefinirDetalleVenta(DetalleVentaDTO detalle)
+        {
+            
+            _detalleVenta = new DetalleVentaDTO();
+
+            _detalleVenta.codigo = detalle.codigo;
+            _detalleVenta.nombreDetalleVenta = detalle.nombreDetalleVenta;
+            _detalleVenta.precio = detalle.precio;
+            _detalleVenta.promocion = detalle.promocion;
+            _detalleVenta.porcentajeDescuento = detalle.porcentajeDescuento;
+            _detalleVenta.cantidadMinima = detalle.cantidadMinima;
+            _detalleVenta.cantidadMaxima = detalle.cantidadMaxima;
+            _detalleVenta.cantidad = detalle.cantidad;
+            _detalleVenta.total = detalle.total;
+
+        }
+
+        private void AgregarUnDetalleVenta()
+        {
+
+            DetalleVentaDTO nuevoDetalleVenta = new DetalleVentaDTO
+            {
+                codigo = _detalleVenta.codigo,
+                nombreDetalleVenta = _detalleVenta.nombreDetalleVenta,
+                precio = _detalleVenta.precio,
+                cantidad = _detalleVenta.cantidad,
+                promocion = _detalleVenta.promocion,
+                porcentajeDescuento = _detalleVenta.porcentajeDescuento,
+                total = _detalleVenta.total,
+                cantidadMinima = _detalleVenta.cantidadMinima,
+                cantidadMaxima = _detalleVenta.cantidadMaxima
+            };
+
+            bool flag = false;
+
+            foreach (DetalleVentaDTO detalle in _listaDetalleVentas)
+            {
+
+                if (detalle.codigo == nuevoDetalleVenta.codigo)
+                {
+                    detalle.cantidad += nuevoDetalleVenta.cantidad;
+
+                    int conPromocion = detalle.cantidad / detalle.cantidadMinima;
+                    int sinPromocion = detalle.cantidad % detalle.cantidadMinima;
+
+                    decimal subtotalConPromocion = conPromocion * detalle.cantidadMinima * detalle.precio * (1 - detalle.porcentajeDescuento);
+                    decimal subtotalSinPromocion = sinPromocion * detalle.precio;
+
+                    detalle.total = Math.Round(subtotalConPromocion + subtotalSinPromocion, 2);
+
+                    flag = true;
+
+                    break;
+
+                }
+
+            }
+
+            if (!flag)
+                _listaDetalleVentas.Add(nuevoDetalleVenta);
+
+            _detalleVentas.Clear();
+
+            _detalleVentas = new ObservableCollection<Object>(_listaDetalleVentas);
+
+            TablaProductos.SetItemsSource(null);
+            TablaProductos.SetItemsSource(_detalleVentas);
+
+            campoSubtotal.Text = _listaDetalleVentas.Sum(d => d.total).ToString("0.00");
+
+            campoIVA.Text = (_listaDetalleVentas.Sum(d => d.total) * (decimal)0.16).ToString("0.00");
+
+            campoTotal.Text = decimal.Parse(campoSubtotal.Text) + decimal.Parse(campoIVA.Text) + "";
+
+            if (_opcionMenu != 3)
+            {
+                campoSaldoRestante.Text = decimal.Parse(campoTotal.Text) - decimal.Parse(campoMontoPagado.Text) + "";
+            }
+
+        }
+        
         private void campoPagoEfectivo_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
 
@@ -827,6 +941,49 @@ namespace SAMS.UI.Views
 
         }
 
+        private void campoSaldoRestante_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
+        {
+
+            if (decimal.Parse(campoMontoPagado.Text) == decimal.Parse(campoTotal.Text))
+            {
+                botonAccion.IsButtonEnabled = true;
+                campoCambio.Text = "0.00";
+            }
+            else
+            {
+
+                botonAccion.IsButtonEnabled = false;
+
+                decimal cambioTruncado = Math.Floor(decimal.Parse(campoMontoPagado.Text) - decimal.Parse(campoTotal.Text));
+                decimal cambioDecimal = decimal.Parse(campoMontoPagado.Text) - decimal.Parse(campoTotal.Text);
+
+                if ((cambioDecimal - cambioTruncado) < 0.4m)
+                {
+                    campoCambio.Text = Math.Floor(decimal.Parse(campoMontoPagado.Text) - decimal.Parse(campoTotal.Text)).ToString("0.00");
+                }
+                else if ((cambioDecimal - cambioTruncado) > 0.6m)
+                {
+                    campoCambio.Text = Math.Ceiling(decimal.Parse(campoMontoPagado.Text) - decimal.Parse(campoTotal.Text)).ToString("0.00");
+                }
+                else
+                {
+                    campoCambio.Text = cambioTruncado + 0.5m + "";
+                }
+
+            }
+
+            if (decimal.Parse(campoSaldoRestante.Text) < 0 && checkEfectivo.IsChecked)
+            {
+                campoSaldoRestante.Text = "0.00";
+            }
+
+            if (decimal.Parse(campoSaldoRestante.Text) == 0)
+            {
+                botonAccion.IsButtonEnabled = true;
+            }
+
+        }
+
         private void campoMontoPagado_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
             campoSaldoRestante.Text = decimal.Parse(campoTotal.Text) - decimal.Parse(campoMontoPagado.Text) + "";
@@ -835,9 +992,99 @@ namespace SAMS.UI.Views
         private void campoCambio_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
 
-            if (decimal.Parse(campoCambio.Text) < 0)
+            if (decimal.TryParse(campoCambio.Text, out decimal result))
+            {
+
+                if (result < 0)
+                {
+                    campoCambio.Text = "0.00";
+                }
+
+            }
+            else
             {
                 campoCambio.Text = "0.00";
+            }
+
+        }
+
+        private void botonCancelar_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+            bool confirmacion = true;
+
+            if (_listaDetalleVentas.Count > 0 && _opcionMenu != 3)
+            {
+                confirmacion = ConfirmationControl.Show("Confirmación", "¿Estás seguro de abandonar el registro?, No se guardarán los productos agregados", "Aceptar", "Cancelar");
+            }
+
+            if (confirmacion)
+            {
+
+                VerVentasView ventasView = new VerVentasView(_empleado);
+
+                ventasView.Show();
+                this.Close();
+
+            }
+
+        }
+
+        private async void botonAccion_ButtonControlClick(object sender, RoutedEventArgs e)
+        {
+
+            switch (_opcionMenu)
+            {
+                case 1:
+
+                    try
+                    {
+
+                        if (decimal.Parse(campoMontoPagado.Text) >= decimal.Parse(campoTotal.Text))
+                        {
+
+                            string? codigoMonedero = (campoMonedero.Text != "" && (decimal.Parse(campoPagoMonedero.Text) > 0 || checkRedondear.IsChecked)) ? campoMonedero.Text : null;
+
+                            await VentaDAO.RegistrarVenta(
+                                _pagoEfectivo,
+                                _pagoTarjeta,
+                                _pagoMonedero,
+                                decimal.Parse(campoIVA.Text),
+                                codigoMonedero,
+                                _empleado.numeroEmpleado,
+                                _NoCaja,
+                                checkRedondear.IsChecked,
+                                _listaDetalleVentas
+                            );
+
+                            InformationControl.Show("Éxito", "La venta se ha registrado exitosamente", "Aceptar");
+
+                            PrincipalView principalView = new PrincipalView(_empleado);
+
+                            principalView.Show();
+
+                            this.Close();
+
+                        }
+                        else
+                        {
+
+                            InformationControl.Show("Advertencia", "El monto pagado no coincide con el total de la venta", "Aceptar");
+
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        InformationControl.Show("Error", "No se pudo realizar la operación:\n" + ex.Message, "Aceptar");
+                        Debug.WriteLine(ex.Message);
+                    }
+
+                    break;
+
+                case 2:
+
+                    break;
+
             }
 
         }

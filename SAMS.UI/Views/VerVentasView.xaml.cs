@@ -97,7 +97,7 @@ namespace SAMS.UI.Views
                     { "Type", "Text" },
                     { "Name", "Total de Venta" },
                     { "Width", "*" },
-                    { "BindingName", "precioVenta" },
+                    { "BindingName", "totalVenta" },
 
                 },
                 new Dictionary<string, string> {
@@ -202,7 +202,7 @@ namespace SAMS.UI.Views
 
             VentasDTO venta = (VentasDTO) actionBar.DataContext;
 
-            VentaView ventaView = new VentaView(_empleado, 3);
+            VentaView ventaView = new VentaView(_empleado, 3, venta);
 
             ventaView.Show();
 
@@ -217,7 +217,7 @@ namespace SAMS.UI.Views
 
             VentasDTO venta = (VentasDTO)actionBar.DataContext;
 
-            VentaView ventaView = new VentaView(_empleado, 2);
+            VentaView ventaView = new VentaView(_empleado, 2, venta);
 
             ventaView.Show();
 
@@ -227,7 +227,13 @@ namespace SAMS.UI.Views
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
+
             ActionsControl actionBar = (ActionsControl)sender;
+
+            VentasDTO venta = (VentasDTO)actionBar.DataContext;
+
+            bool confirmacion = ConfirmationControl.Show("Eliminar Venta", "¿Está seguro de eliminar la venta?", "Aceptar", "Cancelar");
+
         }
 
     }
