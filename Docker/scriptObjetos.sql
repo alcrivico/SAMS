@@ -67,20 +67,20 @@ LEFT JOIN
     pi.promocionId = p.id
 GO
 
-CREATE VIEW V_Ventas AS
+CREATE VIEW V_Venta AS
 SELECT
-    dv.precioVenta,
-    dv.cantidad,
     v.noVenta,
     v.fechaRegistro,
+    v.iva,
+    v.totalEfectivo,
+    v.totalTarjeta,
+    v.totalMonedero,
+    v.tieneRedondeo,
     c.noCaja,
+    m.codigoDeBarras AS codigoMonedero,
     CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombreEmpleado
 FROM
-    DetalleVenta dv
-INNER JOIN
     Venta v
-    ON
-    dv.ventaId = v.id
 INNER JOIN
     Caja c
     ON
@@ -89,10 +89,69 @@ INNER JOIN
     Empleado e
     ON
     v.empleadoId = e.id
+LEFT JOIN
+    Monedero m
+    ON
+    v.monederoId = m.id
+GO
+
+CREATE VIEW V_Ventas AS
+SELECT
+    v.noVenta,
+    SUM(v.totalEfectivo + v.totalTarjeta + v.totalMonedero) AS totalVenta,
+    v.fechaRegistro,
+    c.noCaja,
+    CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombreEmpleado
+FROM
+    Venta v
+INNER JOIN
+    Caja c
+    ON
+    v.cajaId = c.id
+INNER JOIN
+    Empleado e
+    ON
+    v.empleadoId = e.id
+GROUP BY
+    v.noVenta,
+    v.fechaRegistro,
+    c.noCaja,
+    e.nombre,
+    e.apellidoPaterno,
+    e.apellidoMaterno;
+GO
+
+CREATE VIEW V_DetalleVenta AS
+SELECT
+    pi.codigo,
+    pi.nombre AS nombreDetalleVenta,
+    dv.precioVenta AS precio,
+    dv.cantidad AS cantidad,
+    p.nombre AS promocion,
+    CAST(p.porcentajeDescuento AS DECIMAL(18, 2)) / 100 AS porcentajeDescuento, -- Conversión y división
+    dv.ganancia AS total,
+    p.cantMinima AS cantidadMinima,
+    p.cantMaxima AS cantidadMaxima,
+    v.noVenta
+FROM
+    DetalleVenta dv
+INNER JOIN
+    ProductoInventario pi
+    ON
+    dv.productoInventarioId = pi.id
+INNER JOIN
+    Venta v
+    ON
+    dv.ventaId = v.id
+LEFT JOIN
+    Promocion p
+    ON
+    pi.promocionId = p.id
 GO
 
 CREATE VIEW V_DetalleVentas AS
 SELECT
+    pi.codigo,
     pi.nombre,
     dv.cantidad,
     dv.precioVenta,
@@ -595,6 +654,155 @@ BEGIN
         -- Mostrar el error
         THROW;
     END CATCH;
+END;
+GO
+
+CREATE TYPE DetalleVentaType AS TABLE (
+    codigo NVARCHAR(MAX),
+    cantidad INT,
+    precio DECIMAL(18, 2),
+    total DECIMAL(18, 2)
+);
+GO
+
+CREATE PROCEDURE T_RegistrarVenta
+    @pagoEfectivo DECIMAL(18, 2) = NULL, -- Acepta valores NULL
+    @pagoTarjeta DECIMAL(18, 2) = NULL,  -- Acepta valores NULL
+    @pagoMonedero DECIMAL(18, 2) = NULL, -- Acepta valores NULL
+    @iva DECIMAL(18, 2),
+    @codigoMonedero NVARCHAR(MAX) = NULL, -- Parámetro opcional
+    @noEmpleado NVARCHAR(MAX),
+    @noCaja NVARCHAR(MAX),
+    @tieneRedondeo BIT,
+    @detalles DetalleVentaType READONLY -- Tipo de tabla como parámetro
+AS
+BEGIN
+    SET XACT_ABORT ON;
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Asignar valores predeterminados si los parámetros son NULL
+        SET @pagoEfectivo = ISNULL(@pagoEfectivo, 0.00);
+        SET @pagoTarjeta = ISNULL(@pagoTarjeta, 0.00);
+        SET @pagoMonedero = ISNULL(@pagoMonedero, 0.00);
+
+        -- 1. Obtener IDs
+        DECLARE @monederoId INT = NULL, @empleadoId INT, @cajaId INT;
+
+        -- Validar y obtener el ID del monedero si se proporciona un código
+        IF @codigoMonedero IS NOT NULL AND @pagoMonedero > 0
+        BEGIN
+            SELECT @monederoId = id
+            FROM Monedero
+            WHERE codigoDeBarras = @codigoMonedero;
+
+            IF @monederoId IS NULL
+            BEGIN
+                THROW 50000, 'El código de monedero proporcionado no existe.', 1;
+            END;
+        END;
+
+        -- Obtener el ID del empleado
+        SELECT @empleadoId = id
+        FROM Empleado
+        WHERE noEmpleado = @noEmpleado;
+
+        IF @empleadoId IS NULL
+        BEGIN
+            THROW 50000, 'El empleado especificado no existe.', 1;
+        END;
+
+        -- Obtener el ID de la caja
+        SELECT @cajaId = id
+        FROM Caja
+        WHERE noCaja = @noCaja;
+
+        IF @cajaId IS NULL
+        BEGIN
+            THROW 50000, 'La caja especificada no existe.', 1;
+        END;
+
+        -- 2. Registrar la Venta
+        DECLARE @ventaId INT, @noVenta INT;
+
+        SELECT @noVenta = ISNULL(MAX(noVenta), 0) + 1
+        FROM Venta;
+
+        INSERT INTO Venta (
+            noVenta,
+            fechaRegistro,
+            iva,
+            totalEfectivo,
+            totalTarjeta,
+            totalMonedero,
+            tieneRedondeo,
+            cajaId,
+            monederoId,
+            empleadoId
+        )
+        VALUES (
+            @noVenta,
+            GETDATE(),
+            @iva,
+            @pagoEfectivo,
+            @pagoTarjeta,
+            @pagoMonedero,
+            @tieneRedondeo,
+            @cajaId,
+            @monederoId, -- Puede ser NULL
+            @empleadoId
+        );
+
+        SET @ventaId = SCOPE_IDENTITY();
+
+        -- 3. Registrar Detalles de Venta y Actualizar Inventario
+        INSERT INTO DetalleVenta (
+			codigo,
+            cantidad,
+            precioVenta,
+            ventaId,
+            productoInventarioId,
+            ganancia
+        )
+        SELECT
+			dv.codigo,
+            dv.cantidad,
+            dv.precio,
+            @ventaId,
+            pi.id,
+            dv.total -- Usamos el total proporcionado como ganancia
+        FROM @detalles dv
+        INNER JOIN ProductoInventario pi
+            ON dv.codigo = pi.codigo;
+
+        -- 4. Actualizar el Inventario
+        UPDATE pi
+        SET pi.cantidadExhibicion = pi.cantidadExhibicion - dv.cantidad
+        FROM ProductoInventario pi
+        INNER JOIN @detalles dv
+            ON dv.codigo = pi.codigo;
+
+        -- Validación de cantidades negativas
+        IF EXISTS (
+            SELECT 1
+            FROM ProductoInventario
+            WHERE cantidadExhibicion < 0
+        )
+        BEGIN
+            THROW 50001, 'La cantidad en exhibición no puede ser negativa.', 1;
+        END;
+
+        -- Confirmar la transacción
+        COMMIT TRANSACTION;
+
+        PRINT 'Venta registrada exitosamente con el ID: ' + CAST(@ventaId AS NVARCHAR);
+
+    END TRY
+    BEGIN CATCH
+        -- Revertir en caso de error
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
 END;
 GO
 

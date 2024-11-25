@@ -18,6 +18,7 @@ namespace SAMS.UI.DTO
         public decimal total { get; set; }
         public int cantidadMinima { get; set; }
         public int cantidadMaxima { get; set; }
+        public int noVenta { get; set; }
 
     }
 

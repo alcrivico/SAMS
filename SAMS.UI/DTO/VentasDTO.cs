@@ -3,11 +3,9 @@
     public class VentasDTO
     {
 
-        public decimal precioVenta { get; set; }
-
-        public int cantidad { get; set; }
-
         public required int noVenta { get; set; }
+
+        public decimal totalVenta { get; set; }
 
         public DateTime fechaRegistro { get; set; }
 

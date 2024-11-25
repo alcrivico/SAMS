@@ -17,9 +17,9 @@
 
         public int porcentajeDescuento { get; set; }
 
-        public int cantMinima { get; set; }
+        public int cantidadMinima { get; set; }
 
-        public int cantMaxima { get; set; }
+        public int cantidadMaxima { get; set; }
 
     }
 
