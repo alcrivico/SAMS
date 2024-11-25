@@ -375,11 +375,10 @@ INNER JOIN
 GO
 
 -- CU-03 Registrar producto
-CREATE VIEW V_PedidosPendientes
-AS
-SELECT 
+CREATE VIEW V_PedidosPendientes AS
+SELECT DISTINCT
     P.noPedido AS NoPedido,
-    P.fechaEntrega AS FechaEntrega,
+    P.fechaPedido AS FechaPedido,
     PR.nombre AS NombreProveedor
 FROM 
     Pedido P
@@ -400,17 +399,17 @@ GO
 CREATE VIEW V_ProductosPorPedido
 AS
 SELECT 
-    PED.noPedido AS NumeroPedido,        -- Número del pedido
-    P.codigo AS CodigoProducto,          -- Código del producto
-    P.nombre AS NombreProducto,          -- Nombre del producto
-    DP.cantidad AS Cantidad,             -- Cantidad del detalle del pedido
-    DP.precioCompra AS PrecioCompra      -- Precio de compra del producto
+    PED.noPedido AS NumeroPedido,
+    P.codigo AS CodigoProducto,
+    P.nombre AS NombreProducto,
+    DP.cantidad AS Cantidad,
+    DP.precioCompra AS PrecioCompra
 FROM 
     DetallePedido DP
 INNER JOIN 
     Producto P ON DP.productoId = P.id
 INNER JOIN 
-    Pedido PED ON DP.pedidoId = PED.id;  -- Relación con la tabla Pedido
+    Pedido PED ON DP.pedidoId = PED.id;
 GO
 
 CREATE VIEW V_ProductosRegistrados AS
