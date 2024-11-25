@@ -30,11 +30,6 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <components:TitleBarControl
-                    Grid.Row="0"
-                    MouseLeftButtonDown="TitleBarControl_MouseLeftButtonDown"
-                    WindowStateChangeRequested="TitleBarControl_WindowStateChangeRequested" />
-
                 <Border
                     Grid.Row="1"
                     Margin="40,15,40,40"
@@ -74,48 +69,101 @@
                             </Grid>
 
                             <!--  Grid para el espacio del contenido  -->
-                            <Grid Name="Contenido" Grid.Row="1">
+                            <Grid Name="Contenido" Grid.Row="2">
 
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="0.1*" />
+                                    <RowDefinition Height="0.15*" />
+                                    <RowDefinition Height="0.05*" />
+                                    <RowDefinition Height="0.15*" />
+                                    <RowDefinition Height="0.10*" />
                                     <RowDefinition Height="*" />
+                                    <RowDefinition Height="0.10*" />
+                                    <RowDefinition Height="0.20*" />
                                 </Grid.RowDefinitions>
 
                                 <!-- Grid para el boton de Registrar y Buscar-->
                                 <Grid Grid.Row="0">
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.50*" />
+                                        <ColumnDefinition Width="0.40*" />
                                         <ColumnDefinition Width="0.50*" />
                                     </Grid.ColumnDefinitions>
 
                                     <Viewbox Grid.Column="0" HorizontalAlignment="Left">
-                                        <components:ComboBoxControl
-                                            x:Name="comboProveedores"
-                                            Width="400"
-                                            Margin="0,0,0,0"
+                                        <components:TextBoxControl
+                                            x:Name="campoProveedor"
+                                            Width="500"
+                                            EnableTextBox="False"
+                                            Margin="40,0,0,0"
                                             HorizontalAlignment="Left"
-                                            FieldName="Proveedor:" />
+                                            FieldName="Proveedor:" Height="60" />
                                     </Viewbox>
 
                                     <Viewbox Grid.Column="1" HorizontalAlignment="Left">
-                                        <components:ComboBoxControl
-                                            x:Name="comboProductos"
-                                            Width="400"
-                                            Margin="0,0,0,0"
+                                        <components:TextBoxControl
+                                            x:Name="campoEstado"
+                                            Width="300"
+                                            EnableTextBox="False"
+                                            Margin="40,0,0,0"
                                             HorizontalAlignment="Left"
-                                            FieldName="Productos:" />
+                                            FieldName="Estado:" Height="60" />
                                     </Viewbox>
 
-                                    
                                 </Grid>
 
-                                <Grid Grid.Row="1">
-                                    <Viewbox>
+                                <Grid Grid.Row="2">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.33*" />
+                                        <ColumnDefinition Width="0.33*" />
+                                        <ColumnDefinition Width="0.33*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Viewbox Grid.Column="0" HorizontalAlignment="Left">
+                                        <components:DatePickerControl
+                                            x:Name="datePickerFechaPedido"
+                                            Margin="40,0,0,0"
+                                            Width="325"
+                                            HorizontalAlignment="Left"
+                                            FieldName="Fecha de registro:"
+                                            VerticalAlignment="Center"
+                                            Height="60" 
+                                            IsEnabled="False" />
+                                    </Viewbox>
+
+                                    <Viewbox Grid.Column="1" HorizontalAlignment="Left">
+                                        <components:DatePickerControl
+                                            x:Name="datePickerFechaEntrega"
+                                            Margin="0,0,0,0"
+                                            Width="325"
+                                            HorizontalAlignment="Left"
+                                            FieldName="Fecha de entrega:"
+                                            VerticalAlignment="Center"
+                                            Height="60" 
+                                            IsEnabled="False" />
+                                    </Viewbox>
+                                </Grid>
+                                    
+                                <Grid Grid.Row="4">
+                                    <Viewbox Grid.ColumnSpan="2">
                                         <components:TableControl
-                                            x:Name="TablaPedidos"
-                                            Width="900"
-                                            Height="300" />
+                                            x:Name="TablaProductosPedidos"
+                                            Width="640"
+                                            Height="220" />
+                                    </Viewbox>
+                                </Grid>
+
+                                <Grid Grid.Row="6">
+                                    <Viewbox>
+                                        <components:ButtonControl
+                                            x:Name="botonSalir"
+                                            Margin="0,10,0,10"
+                                            ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                                            ButtonControlClick="botonVolver_ButtonControlClick"
+                                            ButtonForegroundColor="{StaticResource SolidColorBrush_White}"
+                                            ButtonWidth="160"
+                                            FontSize="18"
+                                            Text="Volver"/>
                                     </Viewbox>
                                 </Grid>
 
