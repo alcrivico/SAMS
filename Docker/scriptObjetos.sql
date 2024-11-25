@@ -1332,6 +1332,66 @@ BEGIN
 END;
 GO
 
+--cu 29 Registrar Pedido a Proveedor
+CREATE TYPE TipoTablaPedidoDetalle AS TABLE
+(
+    NombreProducto NVARCHAR(60), 
+    Cantidad INT    
+);
+GO
+
+CREATE PROCEDURE T_RegistrarPedido
+    @ProductosDetalle TipoTablaPedidoDetalle READONLY 
+AS
+BEGIN
+    BEGIN TRANSACTION; 
+
+    BEGIN TRY
+        DECLARE @PedidoId INT; 
+        DECLARE @NoPedido NVARCHAR(20); 
+        DECLARE @FechaPedido DATE = GETDATE(); 
+        DECLARE @EstadoPedidoId INT = (SELECT TOP 1 id FROM EstadoPedido WHERE nombre = 'Pendiente'); -- Estado por defecto
+
+        -- Insertar en la tabla Pedido
+        INSERT INTO Pedido (fechaPedido, estadoPedidoId)
+        VALUES (@FechaPedido, @EstadoPedidoId);
+
+        -- Recuperar el ID del pedido recién insertado
+        SET @PedidoId = SCOPE_IDENTITY();
+
+        -- Generar el número de pedido concatenando el ID con "PED-"
+        SET @NoPedido = CONCAT('PED', FORMAT(@PedidoId, 'D6')); -- 'D6' asegura siempre 6 dígitos
+
+        -- Actualizar el número de pedido en la tabla
+        UPDATE Pedido
+        SET noPedido = @NoPedido
+        WHERE id = @PedidoId;
+
+        -- Insertar los detalles del pedido
+        INSERT INTO DetallePedido (pedidoId, productoId, cantidad)
+        SELECT 
+            @PedidoId, 
+            p.id AS productoId,
+            pd.Cantidad
+        FROM 
+            @ProductosDetalle pd
+        INNER JOIN 
+            Producto p ON p.nombre = pd.nombreProducto;
+
+        -- Confirmar la transacción
+        COMMIT TRANSACTION;
+
+    END TRY
+    BEGIN CATCH
+        -- Revertir la transacción en caso de error
+        ROLLBACK TRANSACTION;
+
+        -- Opcional: Lanza el error para diagnóstico
+        THROW;
+    END CATCH;
+END;
+GO
+
 -- 4. disparadores
 
 -- 5. jobs
