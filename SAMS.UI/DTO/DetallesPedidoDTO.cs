@@ -10,7 +10,7 @@ namespace SAMS.UI.DTO
     {
         public int idPedido {  get; set; }
         public string nombreProducto { get; set; }
-        public string nombreUnidadMedida { get; set; }
+        public string? nombreUnidadMedida { get; set; }
         public int cantidad {  get; set; }
 
     }

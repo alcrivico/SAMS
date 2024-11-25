@@ -394,6 +394,50 @@ INNER JOIN
     Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
 GO
 
+--CU 29 "Consultar Pedido a Proveedor"
+CREATE VIEW V_Pedidos 
+AS
+SELECT DISTINCT 
+    p.id AS idPedido, 
+    p.noPedido,
+    prov.nombre AS nombreProveedor,  
+    p.fechaPedido, 
+    p.fechaEntrega,
+    ep.nombre AS nombreEstado
+FROM 
+	Pedido p
+INNER JOIN 
+	EstadoPedido ep ON p.estadoPedidoId = ep.id
+INNER JOIN 
+	DetallePedido dp ON p.id = dp.pedidoId
+INNER JOIN 
+	Producto prod ON dp.productoId = prod.id
+INNER JOIN 
+	Proveedor prov ON prod.proveedorId = prov.id
+WHERE 
+	ep.nombre IN ('Pendiente', 'Entregado'); 
+GO
+
+CREATE VIEW V_DetallesPedido 
+AS
+SELECT 
+	p.id As idPedido,
+	pro.nombre AS nombreProducto,
+	um.nombre AS nombreUnidadMedida,
+	dp.cantidad 
+FROM 
+	DetallePedido dp
+INNER JOIN 
+	Pedido p ON dp.pedidoId = p.id
+INNER JOIN 
+	Producto pro ON dp.productoId = pro.id
+INNER JOIN 
+	EstadoPedido ep ON p.estadoPedidoId = ep.id
+INNER JOIN 
+	UnidadDeMedida um ON pro.unidadDeMedidaId = um.id;
+GO
+
+
 -- 3. procedimientos almacenados
 -- funciones listas
 

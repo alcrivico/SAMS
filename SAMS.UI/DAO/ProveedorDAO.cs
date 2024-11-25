@@ -21,6 +21,8 @@ namespace SAMS.UI.DAO
 
         public static IEnumerable<V_Proveedores> ObtenerProveedores() => _sams.V_Proveedores.ToList();
 
+        public static List<V_Proveedores> CargarProveedores() => _sams.V_Proveedores.ToList();
+
         public static V_Proveedores ObtenerProveedorPorRfc(string rfc) => _sams.V_Proveedores.FirstOrDefault(p => p.rfc == rfc);
 
         public static void EditarProveedor(V_Proveedores proveedor)
