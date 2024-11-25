@@ -117,10 +117,12 @@ namespace SAMS.UI.Views
             if (productoSeleccionado != null)
             {
                 campoCantidad.IsEnabled = true; 
+                campoPrecioCompra.IsEnabled = true;
             }
             else
             {
                 campoCantidad.IsEnabled = false;
+                campoPrecioCompra.IsEnabled = false;
             }
         }
 
