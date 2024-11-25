@@ -903,15 +903,21 @@ namespace SAMS.UI.VisualComponents
                 switch (Employee)
                 {
                     case "Administrador":
-                        VerProductosView productosView = new VerProductosView(empleado);
-                        productosView.Show();
-                        break;
+                        {
+                            VerProductosView productosView = new VerProductosView(empleado);
+                            productosView.Show();
+                            break;
+                        }
                     case "Cajero":
                         VentaView ventaView = new(empleado, 1);
                         ventaView.Show();
                         break;
                     case "Paqueteria":
-                        break;
+                        {
+                            VerProductosView productosView = new VerProductosView(empleado);
+                            productosView.Show();
+                            break;
+                        }
                     case "Contador":
                         break;
                     default:
@@ -936,15 +942,21 @@ namespace SAMS.UI.VisualComponents
                 switch (Employee)
                 {
                     case "Administrador":
-                        VerProveedoresView proveedoresView = new VerProveedoresView(empleado);
-                        proveedoresView.Show();
-                        break;
+                        {
+                            VerProveedoresView proveedoresView = new VerProveedoresView(empleado);
+                            proveedoresView.Show();
+                            break;
+                        }
                     case "Cajero":
                         VerVentasView verVentasView = new VerVentasView(empleado);
                         verVentasView.Show();
                         break;
                     case "Paqueteria":
-                        break;
+                        {
+                            VerProveedoresView proveedoresView = new VerProveedoresView(empleado);
+                            proveedoresView.Show();
+                            break;
+                        }
                     case "Contador":
                         break;
                     default:
@@ -980,6 +992,7 @@ namespace SAMS.UI.VisualComponents
 
                         break;
                     case "Paqueteria":
+                        VerProductosView productosView = new VerProductosView(empleado);
                         break;
                     default:
                         break;

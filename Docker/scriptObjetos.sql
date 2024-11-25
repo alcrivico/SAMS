@@ -462,6 +462,50 @@ INNER JOIN
     Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
 GO
 
+--CU 29 "Consultar Pedido a Proveedor"
+CREATE VIEW V_Pedidos 
+AS
+SELECT DISTINCT 
+    p.id AS idPedido, 
+    p.noPedido,
+    prov.nombre AS nombreProveedor,  
+    p.fechaPedido, 
+    p.fechaEntrega,
+    ep.nombre AS nombreEstado
+FROM 
+	Pedido p
+INNER JOIN 
+	EstadoPedido ep ON p.estadoPedidoId = ep.id
+INNER JOIN 
+	DetallePedido dp ON p.id = dp.pedidoId
+INNER JOIN 
+	Producto prod ON dp.productoId = prod.id
+INNER JOIN 
+	Proveedor prov ON prod.proveedorId = prov.id
+WHERE 
+	ep.nombre IN ('Pendiente', 'Entregado'); 
+GO
+
+CREATE VIEW V_DetallesPedido 
+AS
+SELECT 
+	p.id As idPedido,
+	pro.nombre AS nombreProducto,
+	um.nombre AS nombreUnidadMedida,
+	dp.cantidad 
+FROM 
+	DetallePedido dp
+INNER JOIN 
+	Pedido p ON dp.pedidoId = p.id
+INNER JOIN 
+	Producto pro ON dp.productoId = pro.id
+INNER JOIN 
+	EstadoPedido ep ON p.estadoPedidoId = ep.id
+INNER JOIN 
+	UnidadDeMedida um ON pro.unidadDeMedidaId = um.id;
+GO
+
+
 -- 3. procedimientos almacenados
 -- funciones listas
 
@@ -812,6 +856,273 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE T_ActualizarVenta
+    @noVenta INT, -- Número de venta para identificar la venta a actualizar
+    @pagoEfectivo DECIMAL(18, 2) = NULL,
+    @pagoTarjeta DECIMAL(18, 2) = NULL,
+    @pagoMonedero DECIMAL(18, 2) = NULL,
+    @iva DECIMAL(18, 2),
+    @codigoMonedero NVARCHAR(MAX) = NULL, -- Parámetro opcional
+    @tieneRedondeo BIT,
+    @detalles DetalleVentaType READONLY -- Tipo de tabla como parámetro
+AS
+BEGIN
+    SET XACT_ABORT ON; -- Garantiza la atomicidad
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Asignar valores predeterminados si los parámetros son NULL
+        SET @pagoEfectivo = ISNULL(@pagoEfectivo, 0.00);
+        SET @pagoTarjeta = ISNULL(@pagoTarjeta, 0.00);
+        SET @pagoMonedero = ISNULL(@pagoMonedero, 0.00);
+
+        -- 1. Verificar si la venta existe
+        DECLARE @ventaId INT;
+
+        SELECT @ventaId = id
+        FROM Venta
+        WHERE noVenta = @noVenta;
+
+        IF @ventaId IS NULL
+        BEGIN
+            THROW 50000, 'La venta especificada no existe.', 1;
+        END;
+
+        -- 2. Actualizar los totales y demás datos de la venta
+        DECLARE @monederoId INT = NULL;
+
+        -- Obtener el ID del monedero si es necesario
+        IF @codigoMonedero IS NOT NULL
+        BEGIN
+            SELECT @monederoId = id
+            FROM Monedero
+            WHERE codigoDeBarras = @codigoMonedero;
+
+            IF @monederoId IS NULL
+            BEGIN
+                THROW 50000, 'El código de monedero proporcionado no existe.', 1;
+            END;
+        END;
+
+        -- Actualizar la venta sin modificar cajaId ni empleadoId
+        UPDATE Venta
+        SET
+            fechaRegistro = GETDATE(),
+            iva = @iva,
+            totalEfectivo = @pagoEfectivo,
+            totalTarjeta = @pagoTarjeta,
+            totalMonedero = @pagoMonedero,
+            tieneRedondeo = @tieneRedondeo,
+            monederoId = @monederoId
+        WHERE id = @ventaId;
+
+        -- 3. Gestionar los detalles de la venta y ajustar el inventario
+        -- Obtener los detalles actuales de la venta
+        DECLARE @detalleActual TABLE (
+            codigo NVARCHAR(MAX),
+            cantidad INT
+        );
+
+        INSERT INTO @detalleActual (codigo, cantidad)
+        SELECT pi.codigo, dv.cantidad
+        FROM DetalleVenta dv
+        INNER JOIN ProductoInventario pi
+            ON dv.productoInventarioId = pi.id
+        WHERE dv.ventaId = @ventaId;
+
+        -- Actualizar o eliminar los detalles existentes
+        DECLARE @codigo NVARCHAR(MAX), @cantidad INT;
+
+        -- Iterar sobre los detalles actuales
+        DECLARE cur CURSOR FOR
+        SELECT codigo, cantidad
+        FROM @detalleActual;
+
+        OPEN cur;
+        FETCH NEXT FROM cur INTO @codigo, @cantidad;
+
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            -- Verificar si el código todavía está en los nuevos detalles
+            IF NOT EXISTS (SELECT 1 FROM @detalles WHERE codigo = @codigo)
+            BEGIN
+                -- Eliminar detalle y devolver cantidad al inventario
+                UPDATE ProductoInventario
+                SET cantidadExhibicion = cantidadExhibicion + @cantidad
+                WHERE codigo = @codigo;
+
+                DELETE FROM DetalleVenta
+                WHERE ventaId = @ventaId
+                AND productoInventarioId = (SELECT id FROM ProductoInventario WHERE codigo = @codigo);
+            END
+            ELSE
+            BEGIN
+                -- Comparar cantidades y ajustar el inventario
+                DECLARE @nuevaCantidad INT;
+
+                SELECT @nuevaCantidad = cantidad
+                FROM @detalles
+                WHERE codigo = @codigo;
+
+                IF @nuevaCantidad <> @cantidad
+                BEGIN
+                    -- Ajustar inventario
+                    UPDATE ProductoInventario
+                    SET cantidadExhibicion = cantidadExhibicion + (@cantidad - @nuevaCantidad)
+                    WHERE codigo = @codigo;
+
+                    -- Actualizar detalle de venta, incluyendo la ganancia directamente desde el total
+                    UPDATE DetalleVenta
+                    SET cantidad = @nuevaCantidad,
+                        ganancia = (SELECT total FROM @detalles WHERE codigo = @codigo) -- Usamos el total proporcionado como ganancia
+                    WHERE ventaId = @ventaId
+                      AND productoInventarioId = (SELECT id FROM ProductoInventario WHERE codigo = @codigo);
+                END;
+            END;
+
+            FETCH NEXT FROM cur INTO @codigo, @cantidad;
+        END;
+
+        CLOSE cur;
+        DEALLOCATE cur;
+
+        -- Insertar nuevos detalles
+        INSERT INTO DetalleVenta (cantidad, precioVenta, ventaId, productoInventarioId, ganancia, codigo)
+        SELECT
+            dv.cantidad,
+            dv.precio,
+            @ventaId,
+            pi.id,
+            dv.total, -- Usamos el total proporcionado como ganancia
+            dv.codigo
+        FROM @detalles dv
+        LEFT JOIN ProductoInventario pi
+            ON dv.codigo = pi.codigo
+        WHERE NOT EXISTS (
+            SELECT 1 FROM @detalleActual WHERE codigo = dv.codigo
+        );
+
+        -- Ajustar inventario por los nuevos detalles
+        UPDATE ProductoInventario
+        SET cantidadExhibicion = cantidadExhibicion - dv.cantidad
+        FROM @detalles dv
+        INNER JOIN ProductoInventario pi
+            ON dv.codigo = pi.codigo
+        WHERE NOT EXISTS (
+            SELECT 1 FROM @detalleActual WHERE codigo = dv.codigo
+        );
+
+        -- Confirmar la transacción
+        COMMIT TRANSACTION;
+
+        PRINT 'Venta actualizada exitosamente con el ID: ' + CAST(@ventaId AS NVARCHAR);
+
+    END TRY
+    BEGIN CATCH
+        -- Revertir en caso de error
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+CREATE PROCEDURE T_EliminarVenta
+    @noVenta INT -- Número de venta a eliminar
+AS
+BEGIN
+    SET XACT_ABORT ON; -- Garantiza la atomicidad
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- 1. Verificar si la venta existe
+        DECLARE @ventaId INT;
+
+        SELECT @ventaId = id
+        FROM Venta
+        WHERE noVenta = @noVenta;
+
+        IF @ventaId IS NULL
+        BEGIN
+            THROW 50000, 'La venta especificada no existe.', 1;
+        END;
+
+        -- 2. Obtener los detalles de la venta
+        DECLARE @detalles TABLE (
+            productoInventarioId INT,
+            cantidad INT,
+            fechaCaducidad DATETIME2(7),
+            esPerecedero BIT
+        );
+
+        INSERT INTO @detalles (productoInventarioId, cantidad, fechaCaducidad, esPerecedero)
+        SELECT 
+            pi.id,
+            dv.cantidad,
+            pi.fechaCaducidad,
+            pi.esPerecedero
+        FROM DetalleVenta dv
+        INNER JOIN ProductoInventario pi
+            ON dv.productoInventarioId = pi.id
+        WHERE dv.ventaId = @ventaId;
+
+        -- 3. Procesar los detalles
+        DECLARE @productoInventarioId INT, @cantidad INT, @fechaCaducidad DATETIME2(7), @esPerecedero BIT;
+
+        DECLARE cur CURSOR FOR
+        SELECT productoInventarioId, cantidad, fechaCaducidad, esPerecedero
+        FROM @detalles;
+
+        OPEN cur;
+        FETCH NEXT FROM cur INTO @productoInventarioId, @cantidad, @fechaCaducidad, @esPerecedero;
+
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            IF @esPerecedero = 1 AND @fechaCaducidad < GETDATE()
+            BEGIN
+                -- Registrar una merma
+                INSERT INTO Merma (cantidad, descripcion, fechaRegistro, productoInventarioId)
+                VALUES (
+                    @cantidad,
+                    'Producto caducado tras devolución',
+                    GETDATE(),
+                    @productoInventarioId
+                );
+            END
+            ELSE
+            BEGIN
+                -- Devolver la cantidad al inventario
+                UPDATE ProductoInventario
+                SET cantidadExhibicion = cantidadExhibicion + @cantidad
+                WHERE id = @productoInventarioId;
+            END;
+
+            FETCH NEXT FROM cur INTO @productoInventarioId, @cantidad, @fechaCaducidad, @esPerecedero;
+        END;
+
+        CLOSE cur;
+        DEALLOCATE cur;
+
+        -- 4. Eliminar los detalles de la venta
+        DELETE FROM DetalleVenta
+        WHERE ventaId = @ventaId;
+
+        -- 5. Eliminar la venta
+        DELETE FROM Venta
+        WHERE id = @ventaId;
+
+        -- Confirmar la transacción
+        COMMIT TRANSACTION;
+
+        PRINT 'Venta eliminada exitosamente con el ID: ' + CAST(@ventaId AS NVARCHAR);
+
+    END TRY
+    BEGIN CATCH
+        -- Revertir en caso de error
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
 
 CREATE PROCEDURE [dbo].T_FinalizarPromocion
 (
@@ -1285,6 +1596,66 @@ BEGIN
         ROLLBACK TRANSACTION;
         THROW;
     END CATCH
+END;
+GO
+
+--cu 29 Registrar Pedido a Proveedor
+CREATE TYPE TipoTablaPedidoDetalle AS TABLE
+(
+    NombreProducto NVARCHAR(60), 
+    Cantidad INT    
+);
+GO
+
+CREATE PROCEDURE T_RegistrarPedido
+    @ProductosDetalle TipoTablaPedidoDetalle READONLY 
+AS
+BEGIN
+    BEGIN TRANSACTION; 
+
+    BEGIN TRY
+        DECLARE @PedidoId INT; 
+        DECLARE @NoPedido NVARCHAR(20); 
+        DECLARE @FechaPedido DATE = GETDATE(); 
+        DECLARE @EstadoPedidoId INT = (SELECT TOP 1 id FROM EstadoPedido WHERE nombre = 'Pendiente'); -- Estado por defecto
+
+        -- Insertar en la tabla Pedido
+        INSERT INTO Pedido (fechaPedido, estadoPedidoId)
+        VALUES (@FechaPedido, @EstadoPedidoId);
+
+        -- Recuperar el ID del pedido recién insertado
+        SET @PedidoId = SCOPE_IDENTITY();
+
+        -- Generar el número de pedido concatenando el ID con "PED-"
+        SET @NoPedido = CONCAT('PED', FORMAT(@PedidoId, 'D6')); -- 'D6' asegura siempre 6 dígitos
+
+        -- Actualizar el número de pedido en la tabla
+        UPDATE Pedido
+        SET noPedido = @NoPedido
+        WHERE id = @PedidoId;
+
+        -- Insertar los detalles del pedido
+        INSERT INTO DetallePedido (pedidoId, productoId, cantidad)
+        SELECT 
+            @PedidoId, 
+            p.id AS productoId,
+            pd.Cantidad
+        FROM 
+            @ProductosDetalle pd
+        INNER JOIN 
+            Producto p ON p.nombre = pd.nombreProducto;
+
+        -- Confirmar la transacción
+        COMMIT TRANSACTION;
+
+    END TRY
+    BEGIN CATCH
+        -- Revertir la transacción en caso de error
+        ROLLBACK TRANSACTION;
+
+        -- Opcional: Lanza el error para diagnóstico
+        THROW;
+    END CATCH;
 END;
 GO
 

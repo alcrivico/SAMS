@@ -100,7 +100,8 @@
                                         <components:TableControl
                                             x:Name="TablaProductos"
                                             Width="700"
-                                            Height="220" />
+                                            Height="220"
+                                            SelectedItemChanged="TablaProductos_SelectedItemChanged" />
                                     </Viewbox>
 
                                     <Grid Grid.Column="1">
@@ -159,6 +160,7 @@
                                                 x:Name="botonBorrar"
                                                 Margin="4,0"
                                                 ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                                                ButtonControlClick="botonBorrar_ButtonControlClick"
                                                 ButtonHeight="50"
                                                 ButtonWidth="90"
                                                 Text="Borrar" />
