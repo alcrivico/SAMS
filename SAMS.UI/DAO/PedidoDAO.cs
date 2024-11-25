@@ -5,6 +5,7 @@ using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,13 @@ namespace SAMS.UI.DAO
     {
         private static SAMSContext _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
 
-        public static IEnumerable<PedidosDTO> ObtenerPedidos() => _sams.V_Pedidos.ToList();
+        public static IEnumerable<PedidosDTO> ObtenerPedidos()
+        {
+            using (var context = new SAMSContext(App.ServiceProvider.GetRequiredService<DbContextOptions<SAMSContext>>()))
+            {
+                return context.V_Pedidos.ToList();
+            }
+        }
 
         public static PedidosDTO ObtenerPedidoPorProveedor(string nombreProveedor) => _sams.V_Pedidos.FirstOrDefault(p => p.nombreProveedor == nombreProveedor);
 
@@ -41,6 +48,28 @@ namespace SAMS.UI.DAO
                 return true;
             }
             catch
+            {
+                return false;
+            }
+        }
+
+        public static async Task<bool> CambiarEstadoPedidoACancelado(string noPedido)
+        {
+            var parameters = new[]
+            {
+                new SqlParameter("@noPedido", noPedido)
+            };
+
+            try
+            {
+                await _sams.Database.ExecuteSqlRawAsync(
+                    @"EXEC [dbo].[SP_CambiarEstadoPedidoCancelado] 
+                    @noPedido",
+                    parameters);
+
+                return true;
+            }
+            catch (Exception ex)
             {
                 return false;
             }

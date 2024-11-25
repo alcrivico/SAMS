@@ -131,7 +131,7 @@ public class ProductoInventarioDAO
                           select new
                           {
                               p.noPedido,
-                              p.fechaEntrega,
+                              p.fechaPedido,
                               p.nombreProveedor
                           };
 
@@ -145,7 +145,7 @@ public class ProductoInventarioDAO
             PedidosPendientesDTO pedido = new PedidosPendientesDTO
             {
                 noPedido = pedidoData.noPedido,
-                fechaEntrega = pedidoData.fechaEntrega,
+                fechaPedido = pedidoData.fechaPedido,
                 nombreProveedor = pedidoData.nombreProveedor
             };
 

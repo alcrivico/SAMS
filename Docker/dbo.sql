@@ -87,6 +87,7 @@ GO
 
 CREATE TABLE [dbo].[DetalleVenta] (
   [id] int  IDENTITY(1,1) NOT NULL,
+  [codigo] nvarchar(max) COLLATE Modern_Spanish_CI_AS NOT NULL,
   [cantidad] int  NOT NULL,
   [precioVenta] decimal(18,2)  NOT NULL,
   [ventaId] int  NOT NULL,

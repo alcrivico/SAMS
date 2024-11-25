@@ -475,6 +475,7 @@
                                             x:Name="botonAccion"
                                             Margin="10"
                                             ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                            ButtonControlClick="botonAccion_ButtonControlClick"
                                             ButtonWidth="120"
                                             Text="Registrar" />
                                     </Viewbox>
@@ -484,6 +485,7 @@
                                             x:Name="botonCancelar"
                                             Margin="10"
                                             ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                                            ButtonControlClick="botonCancelar_ButtonControlClick"
                                             ButtonWidth="120"
                                             Text="Volver" />
                                     </Viewbox>

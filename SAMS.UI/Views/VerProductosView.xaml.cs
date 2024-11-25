@@ -213,18 +213,5 @@ namespace SAMS.UI.Views
             }
 
         }
-
-        private async void CambiarEstadoProducto(string codigoProducto)
-        {
-            try
-            {
-                bool resultado = await ProductoInventarioDAO.CambiarEstadoProductoAgotado(codigoProducto);
-            }
-            catch (Exception ex)
-            {
-                InformationControl.Show("Error", "No se pudo conectar a la red del supermercado," +
-                    " inténtelo de nuevo más tarde", "Aceptar");
-            }
-        }
     }
 }
