@@ -1,5 +1,10 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using SAMS.UI.DTO;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -122,7 +127,7 @@ namespace SAMS.Test.DBTest.DAO
             // Assert
             Assert.Empty(detalles);
 
-        }       
+        }
 
     }
 
