@@ -182,11 +182,11 @@ SELECT
     p.correo,
     p.telefono,
     CASE 
-        WHEN p.estadoProveedor = 1 THEN 'Activo'  -- Si es TRUE
-        ELSE 'Inactivo'                          -- Si es FALSE
+        WHEN p.estadoProveedor = 1 THEN 'Activo'  -- Si es TRUE                        -- Si es FALSE
     END AS estado
 FROM
-    Proveedor p;
+    Proveedor p
+    WHERE p.estadoProveedor = 1;
 GO
 
 CREATE VIEW V_Producto AS
