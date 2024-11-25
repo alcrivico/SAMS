@@ -195,12 +195,21 @@ namespace SAMS.UI.Views
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
-            
+            if (ConfirmationControl.Show("Eliminar", "¿Está seguro que desea cancelar el pedido? " +
+                "Esta acción no se puede deshacer", "Aceptar", "Cancelar"))
+            {
+                ActionsControl actionBar = (ActionsControl)sender;
+                PedidosDTO pedidoSeleccionado = (PedidosDTO)actionBar.DataContext;
+                PedidoDAO.CambiarEstadoPedidoACancelado(pedidoSeleccionado.noPedido);
+                ObtenerPedidos();
+            }
         }
 
         private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            
+            RegistrarPedidoProveedorView registrarPedidoProveedorView = new RegistrarPedidoProveedorView();
+            registrarPedidoProveedorView.ShowDialog();
+            ObtenerPedidos();
         }
     }
 }

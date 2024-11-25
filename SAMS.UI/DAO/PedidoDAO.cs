@@ -3,8 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SAMS.UI.DTO;
 using SAMS.UI.Models.DataContext;
+using SAMS.UI.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +18,15 @@ namespace SAMS.UI.DAO
     {
         private static SAMSContext _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
 
-        public static IEnumerable<PedidosDTO> ObtenerPedidos() => _sams.V_Pedidos.ToList();
+        public static IEnumerable<PedidosDTO> ObtenerPedidos()
+        {
+            using (var context = new SAMSContext(App.ServiceProvider.GetRequiredService<DbContextOptions<SAMSContext>>()))
+            {
+                return context.V_Pedidos
+                      .OrderByDescending(p => p.fechaPedido)
+                      .ToList();
+            }
+        }
 
         public static PedidosDTO ObtenerPedidoPorProveedor(string nombreProveedor) => _sams.V_Pedidos.FirstOrDefault(p => p.nombreProveedor == nombreProveedor);
 
@@ -44,6 +55,51 @@ namespace SAMS.UI.DAO
             {
                 return false;
             }
+        }
+
+        public static async Task<bool> CambiarEstadoPedidoACancelado(string noPedido)
+        {
+            var parameters = new[]
+            {
+                new SqlParameter("@noPedido", noPedido)
+            };
+
+            try
+            {
+                await _sams.Database.ExecuteSqlRawAsync(
+                    @"EXEC [dbo].[SP_CambiarEstadoPedidoCancelado] 
+                    @noPedido",
+                    parameters);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public static void RegistrarProductosAlPedido(List<DetallesPedidoDTO> productosPedidos)
+        {
+            DataTable productosDetalles = new DataTable();
+            productosDetalles.Columns.Add("ProductoNombre", typeof(string)); 
+            productosDetalles.Columns.Add("Cantidad", typeof(int));
+ 
+            foreach (var producto in productosPedidos)
+            {
+                productosDetalles.Rows.Add(producto.nombreProducto, producto.cantidad);
+            }
+
+            var parametros = new List<Microsoft.Data.SqlClient.SqlParameter>
+    {
+        new Microsoft.Data.SqlClient.SqlParameter("@ProductosDetalle", SqlDbType.Structured)
+        {
+            TypeName = "TipoTablaPedidoDetalle", 
+            Value = productosDetalles
+        }
+    };
+
+            _sams.Database.ExecuteSqlRaw("EXEC T_RegistrarPedido @ProductosDetalle", parametros);
         }
     }
 }

@@ -67,20 +67,20 @@ LEFT JOIN
     pi.promocionId = p.id
 GO
 
-CREATE VIEW V_Ventas AS
+CREATE VIEW V_Venta AS
 SELECT
-    dv.precioVenta,
-    dv.cantidad,
     v.noVenta,
     v.fechaRegistro,
+    v.iva,
+    v.totalEfectivo,
+    v.totalTarjeta,
+    v.totalMonedero,
+    v.tieneRedondeo,
     c.noCaja,
+    m.codigoDeBarras AS codigoMonedero,
     CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombreEmpleado
 FROM
-    DetalleVenta dv
-INNER JOIN
     Venta v
-    ON
-    dv.ventaId = v.id
 INNER JOIN
     Caja c
     ON
@@ -89,10 +89,69 @@ INNER JOIN
     Empleado e
     ON
     v.empleadoId = e.id
+LEFT JOIN
+    Monedero m
+    ON
+    v.monederoId = m.id
+GO
+
+CREATE VIEW V_Ventas AS
+SELECT
+    v.noVenta,
+    SUM(v.totalEfectivo + v.totalTarjeta + v.totalMonedero) AS totalVenta,
+    v.fechaRegistro,
+    c.noCaja,
+    CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombreEmpleado
+FROM
+    Venta v
+INNER JOIN
+    Caja c
+    ON
+    v.cajaId = c.id
+INNER JOIN
+    Empleado e
+    ON
+    v.empleadoId = e.id
+GROUP BY
+    v.noVenta,
+    v.fechaRegistro,
+    c.noCaja,
+    e.nombre,
+    e.apellidoPaterno,
+    e.apellidoMaterno;
+GO
+
+CREATE VIEW V_DetalleVenta AS
+SELECT
+    pi.codigo,
+    pi.nombre AS nombreDetalleVenta,
+    dv.precioVenta AS precio,
+    dv.cantidad AS cantidad,
+    p.nombre AS promocion,
+    CAST(p.porcentajeDescuento AS DECIMAL(18, 2)) / 100 AS porcentajeDescuento, -- Conversión y división
+    dv.ganancia AS total,
+    p.cantMinima AS cantidadMinima,
+    p.cantMaxima AS cantidadMaxima,
+    v.noVenta
+FROM
+    DetalleVenta dv
+INNER JOIN
+    ProductoInventario pi
+    ON
+    dv.productoInventarioId = pi.id
+INNER JOIN
+    Venta v
+    ON
+    dv.ventaId = v.id
+LEFT JOIN
+    Promocion p
+    ON
+    pi.promocionId = p.id
 GO
 
 CREATE VIEW V_DetalleVentas AS
 SELECT
+    pi.codigo,
     pi.nombre,
     dv.cantidad,
     dv.precioVenta,
@@ -182,11 +241,11 @@ SELECT
     p.correo,
     p.telefono,
     CASE 
-        WHEN p.estadoProveedor = 1 THEN 'Activo'  -- Si es TRUE
-        ELSE 'Inactivo'                          -- Si es FALSE
+        WHEN p.estadoProveedor = 1 THEN 'Activo'  -- Si es TRUE                        -- Si es FALSE
     END AS estado
 FROM
-    Proveedor p;
+    Proveedor p
+    WHERE p.estadoProveedor = 1;
 GO
 
 CREATE VIEW V_Producto AS
@@ -316,11 +375,10 @@ INNER JOIN
 GO
 
 -- CU-03 Registrar producto
-CREATE VIEW V_PedidosPendientes
-AS
-SELECT 
+CREATE VIEW V_PedidosPendientes AS
+SELECT DISTINCT
     P.noPedido AS NoPedido,
-    P.fechaEntrega AS FechaEntrega,
+    P.fechaPedido AS FechaPedido,
     PR.nombre AS NombreProveedor
 FROM 
     Pedido P
@@ -341,35 +399,42 @@ GO
 CREATE VIEW V_ProductosPorPedido
 AS
 SELECT 
-    PED.noPedido AS NumeroPedido,        -- Número del pedido
-    P.codigo AS CodigoProducto,          -- Código del producto
-    P.nombre AS NombreProducto,          -- Nombre del producto
-    DP.cantidad AS Cantidad,             -- Cantidad del detalle del pedido
-    DP.precioCompra AS PrecioCompra      -- Precio de compra del producto
+    PED.noPedido AS NumeroPedido,
+    P.codigo AS CodigoProducto,
+    P.nombre AS NombreProducto,
+    DP.cantidad AS Cantidad,
+    DP.precioCompra AS PrecioCompra
 FROM 
     DetallePedido DP
 INNER JOIN 
     Producto P ON DP.productoId = P.id
 INNER JOIN 
-    Pedido PED ON DP.pedidoId = PED.id;  -- Relación con la tabla Pedido
+    Pedido PED ON DP.pedidoId = PED.id;
 GO
 
--- CU-04 Ver productos
 CREATE VIEW V_ProductosRegistrados AS
 SELECT 
     PI.codigo AS CodigoProducto,                            -- Código del producto
-    PI.nombre AS NombreProducto,                           -- Nombre del producto
-    CONCAT(PI.cantidadBodega + PI.cantidadExhibicion, ' ', UM.nombre) AS Cantidad, -- Total cantidad con unidad
-    PI.precioActual AS PrecioActual,                       -- Precio actual del producto
+    PI.nombre AS NombreProducto,                            -- Nombre del producto
+    CONCAT(
+        PI.cantidadBodega + PI.cantidadExhibicion,          -- Total cantidad con unidad
+        ' ',
+        UM.nombre,                                          -- Unidad de medida
+        CASE 
+            WHEN PI.cantidadBodega + PI.cantidadExhibicion > 1 THEN 's'  -- Agregar 's' si la cantidad es mayor a 1
+            ELSE ''                                           -- No agregar 's' si la cantidad es 1 o menor
+        END
+    ) AS Cantidad,                                          -- Resultado final con 's' si aplica
+    PI.precioActual AS PrecioActual,                        -- Precio actual del producto
     CAT.nombre AS NombreCategoria                          -- Nombre de la categoría
 FROM 
     ProductoInventario PI
 INNER JOIN 
-    UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id        -- Relación con unidad de medida
+    UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id      -- Relación con unidad de medida
 INNER JOIN 
-    Categoria CAT ON PI.categoriaId = CAT.id               -- Relación con categoría
+    Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
 INNER JOIN 
-    EstadoProducto EP ON PI.estadoProductoId = EP.id       -- Relación con estado de producto
+    EstadoProducto EP ON PI.estadoProductoId = EP.id      -- Relación con estado de producto
 WHERE 
     EP.nombre = 'Disponible';                              -- Solo productos con estado "Disponible"
 GO
@@ -396,6 +461,50 @@ INNER JOIN
 INNER JOIN 
     Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
 GO
+
+--CU 29 "Consultar Pedido a Proveedor"
+CREATE VIEW V_Pedidos 
+AS
+SELECT DISTINCT 
+    p.id AS idPedido, 
+    p.noPedido,
+    prov.nombre AS nombreProveedor,  
+    p.fechaPedido, 
+    p.fechaEntrega,
+    ep.nombre AS nombreEstado
+FROM 
+	Pedido p
+INNER JOIN 
+	EstadoPedido ep ON p.estadoPedidoId = ep.id
+INNER JOIN 
+	DetallePedido dp ON p.id = dp.pedidoId
+INNER JOIN 
+	Producto prod ON dp.productoId = prod.id
+INNER JOIN 
+	Proveedor prov ON prod.proveedorId = prov.id
+WHERE 
+	ep.nombre IN ('Pendiente', 'Entregado'); 
+GO
+
+CREATE VIEW V_DetallesPedido 
+AS
+SELECT 
+	p.id As idPedido,
+	pro.nombre AS nombreProducto,
+	um.nombre AS nombreUnidadMedida,
+	dp.cantidad 
+FROM 
+	DetallePedido dp
+INNER JOIN 
+	Pedido p ON dp.pedidoId = p.id
+INNER JOIN 
+	Producto pro ON dp.productoId = pro.id
+INNER JOIN 
+	EstadoPedido ep ON p.estadoPedidoId = ep.id
+INNER JOIN 
+	UnidadDeMedida um ON pro.unidadDeMedidaId = um.id;
+GO
+
 
 -- 3. procedimientos almacenados
 -- funciones listas
@@ -598,6 +707,155 @@ BEGIN
 END;
 GO
 
+CREATE TYPE DetalleVentaType AS TABLE (
+    codigo NVARCHAR(MAX),
+    cantidad INT,
+    precio DECIMAL(18, 2),
+    total DECIMAL(18, 2)
+);
+GO
+
+CREATE PROCEDURE T_RegistrarVenta
+    @pagoEfectivo DECIMAL(18, 2) = NULL, -- Acepta valores NULL
+    @pagoTarjeta DECIMAL(18, 2) = NULL,  -- Acepta valores NULL
+    @pagoMonedero DECIMAL(18, 2) = NULL, -- Acepta valores NULL
+    @iva DECIMAL(18, 2),
+    @codigoMonedero NVARCHAR(MAX) = NULL, -- Parámetro opcional
+    @noEmpleado NVARCHAR(MAX),
+    @noCaja NVARCHAR(MAX),
+    @tieneRedondeo BIT,
+    @detalles DetalleVentaType READONLY -- Tipo de tabla como parámetro
+AS
+BEGIN
+    SET XACT_ABORT ON;
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Asignar valores predeterminados si los parámetros son NULL
+        SET @pagoEfectivo = ISNULL(@pagoEfectivo, 0.00);
+        SET @pagoTarjeta = ISNULL(@pagoTarjeta, 0.00);
+        SET @pagoMonedero = ISNULL(@pagoMonedero, 0.00);
+
+        -- 1. Obtener IDs
+        DECLARE @monederoId INT = NULL, @empleadoId INT, @cajaId INT;
+
+        -- Validar y obtener el ID del monedero si se proporciona un código
+        IF @codigoMonedero IS NOT NULL AND @pagoMonedero > 0
+        BEGIN
+            SELECT @monederoId = id
+            FROM Monedero
+            WHERE codigoDeBarras = @codigoMonedero;
+
+            IF @monederoId IS NULL
+            BEGIN
+                THROW 50000, 'El código de monedero proporcionado no existe.', 1;
+            END;
+        END;
+
+        -- Obtener el ID del empleado
+        SELECT @empleadoId = id
+        FROM Empleado
+        WHERE noEmpleado = @noEmpleado;
+
+        IF @empleadoId IS NULL
+        BEGIN
+            THROW 50000, 'El empleado especificado no existe.', 1;
+        END;
+
+        -- Obtener el ID de la caja
+        SELECT @cajaId = id
+        FROM Caja
+        WHERE noCaja = @noCaja;
+
+        IF @cajaId IS NULL
+        BEGIN
+            THROW 50000, 'La caja especificada no existe.', 1;
+        END;
+
+        -- 2. Registrar la Venta
+        DECLARE @ventaId INT, @noVenta INT;
+
+        SELECT @noVenta = ISNULL(MAX(noVenta), 0) + 1
+        FROM Venta;
+
+        INSERT INTO Venta (
+            noVenta,
+            fechaRegistro,
+            iva,
+            totalEfectivo,
+            totalTarjeta,
+            totalMonedero,
+            tieneRedondeo,
+            cajaId,
+            monederoId,
+            empleadoId
+        )
+        VALUES (
+            @noVenta,
+            GETDATE(),
+            @iva,
+            @pagoEfectivo,
+            @pagoTarjeta,
+            @pagoMonedero,
+            @tieneRedondeo,
+            @cajaId,
+            @monederoId, -- Puede ser NULL
+            @empleadoId
+        );
+
+        SET @ventaId = SCOPE_IDENTITY();
+
+        -- 3. Registrar Detalles de Venta y Actualizar Inventario
+        INSERT INTO DetalleVenta (
+			codigo,
+            cantidad,
+            precioVenta,
+            ventaId,
+            productoInventarioId,
+            ganancia
+        )
+        SELECT
+			dv.codigo,
+            dv.cantidad,
+            dv.precio,
+            @ventaId,
+            pi.id,
+            dv.total -- Usamos el total proporcionado como ganancia
+        FROM @detalles dv
+        INNER JOIN ProductoInventario pi
+            ON dv.codigo = pi.codigo;
+
+        -- 4. Actualizar el Inventario
+        UPDATE pi
+        SET pi.cantidadExhibicion = pi.cantidadExhibicion - dv.cantidad
+        FROM ProductoInventario pi
+        INNER JOIN @detalles dv
+            ON dv.codigo = pi.codigo;
+
+        -- Validación de cantidades negativas
+        IF EXISTS (
+            SELECT 1
+            FROM ProductoInventario
+            WHERE cantidadExhibicion < 0
+        )
+        BEGIN
+            THROW 50001, 'La cantidad en exhibición no puede ser negativa.', 1;
+        END;
+
+        -- Confirmar la transacción
+        COMMIT TRANSACTION;
+
+        PRINT 'Venta registrada exitosamente con el ID: ' + CAST(@ventaId AS NVARCHAR);
+
+    END TRY
+    BEGIN CATCH
+        -- Revertir en caso de error
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
 
 CREATE PROCEDURE [dbo].T_FinalizarPromocion
 (
@@ -679,6 +937,19 @@ BEGIN
         DECLARE @idCategoria INT;
         DECLARE @idPedido INT;
         DECLARE @cantidadBodega INT;
+        DECLARE @idEstadoDisponible INT;
+
+        -- Obtener el ID del estado "Disponible"
+        SELECT @idEstadoDisponible = id
+        FROM EstadoProducto
+        WHERE nombre = 'Disponible';
+
+        IF @idEstadoDisponible IS NULL
+        BEGIN
+            RAISERROR('El estado "Disponible" no existe en la tabla EstadoProducto.', 16, 1);
+            ROLLBACK TRAN;
+            RETURN;
+        END
 
         -- Obtener el ID del producto desde el código
         SELECT @idProducto = id
@@ -738,7 +1009,8 @@ BEGIN
                 cantidadBodega = cantidadBodega + @cantidadBodega, -- Sumar a la cantidad existente
                 precioActual = @precioActual,                      -- Actualizar el precio
                 categoriaId = @idCategoria,                        -- Actualizar la categoría
-                fechaCaducidad = @fechaCaducidad                   -- Actualizar la fecha de caducidad
+                fechaCaducidad = @fechaCaducidad,                  -- Actualizar la fecha de caducidad
+                estadoProductoId = @idEstadoDisponible             -- Actualizar el estado a "Disponible"
             WHERE 
                 codigo = @codigoProducto;
         END
@@ -771,7 +1043,7 @@ BEGIN
                 P.esDevolvible,
                 P.unidadDeMedidaId,
                 @idCategoria,            -- ID de la categoría obtenida dinámicamente
-                1                        -- Estado inicial por defecto
+                @idEstadoDisponible      -- Estado inicial como "Disponible"
             FROM Producto P
             WHERE P.id = @idProducto;
         END
