@@ -209,6 +209,7 @@ namespace SAMS.UI.Views
         {
             RegistrarPedidoProveedorView registrarPedidoProveedorView = new RegistrarPedidoProveedorView();
             registrarPedidoProveedorView.ShowDialog();
+            ObtenerPedidos();
         }
     }
 }

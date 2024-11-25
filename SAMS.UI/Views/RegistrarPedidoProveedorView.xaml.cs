@@ -138,7 +138,9 @@ namespace SAMS.UI.Views
             {
                 PedidoDAO.RegistrarProductosAlPedido(productosPedidos);
 
-                InformationControl.Show("Información", "Productos registrados correctamente en el pedido.", "Aceptar");
+                InformationControl.Show("Información", "El pedido se ha registrado de forma exitosa.", "Aceptar");
+                this.Close();
+
             }
             else
             {
@@ -203,7 +205,6 @@ namespace SAMS.UI.Views
             else
             {
                 InformationControl.Show("Informacion", "Debe seleccionar un producto para eliminar", "Aceptar");
-                this.Close();
             }
         }
     }

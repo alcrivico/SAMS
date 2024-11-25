@@ -22,7 +22,9 @@ namespace SAMS.UI.DAO
         {
             using (var context = new SAMSContext(App.ServiceProvider.GetRequiredService<DbContextOptions<SAMSContext>>()))
             {
-                return context.V_Pedidos.ToList();
+                return context.V_Pedidos
+                      .OrderByDescending(p => p.fechaPedido)
+                      .ToList();
             }
         }
 
