@@ -67,6 +67,13 @@ namespace SAMS.UI.Views
                     {"Name", "Cantidad"},
                     {"Width", "*"},
                     {"BindingName", "cantidad" }
+                },
+                new Dictionary<string, string>
+                {
+                    {"Type", "Text"},
+                    {"Name", "Precio de compra"},
+                    {"Width", "*"},
+                    {"BindingName", "precioCompra" }
                 }
             };
 

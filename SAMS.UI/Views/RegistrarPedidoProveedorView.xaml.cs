@@ -41,8 +41,8 @@ namespace SAMS.UI.Views
             DefinirColumnas();
 
             comboProveedor.SetSelectedItem(proveedores);
-            comboProveedor.SelectedItem = null;  // No seleccionar proveedor por defecto
-            comboProducto.SelectedItem = null; //No
+            comboProveedor.SelectedItem = null;  
+            comboProducto.SelectedItem = null; 
         }
 
         private void botonCancelar_ButtonControlClick(object sender, RoutedEventArgs e)
@@ -74,6 +74,13 @@ namespace SAMS.UI.Views
                     {"Name", "Cantidad"},
                     {"Width", "*"},
                     {"BindingName", "cantidad" }
+                },
+                new Dictionary<string, string>
+                {
+                    {"Type", "Text"},
+                    {"Name", "Precio de compra"},
+                    {"Width", "*"},
+                    {"BindingName", "precioCompra" }
                 }
             };
 
@@ -101,7 +108,7 @@ namespace SAMS.UI.Views
             var proveedorSeleccionado = (V_Proveedores)comboProveedor.SelectedItem;
             if (proveedorSeleccionado != null)
             {
-                var productos = new ObservableCollection<object>(ProductoProveedorDAO.ObtenerListaProductosPorRfc(proveedorSeleccionado.rfc));
+                var productos = new ObservableCollection<object>(PedidoDAO.ObtenerListaProductosPorRfc(proveedorSeleccionado.rfc));
                 comboProducto.SetItemsSource(productos, "nombre");
                 comboProducto.IsEnabled = true;
             }
@@ -113,7 +120,7 @@ namespace SAMS.UI.Views
 
         private void comboProducto_SelectedItemChanged(object sender, RoutedEventArgs e)
         {
-            var productoSeleccionado = (V_Producto)comboProducto.SelectedItem;
+            var productoSeleccionado = (ProductoPorDetalleDTO)comboProducto.SelectedItem;
             if (productoSeleccionado != null)
             {
                 campoCantidad.IsEnabled = true; 
@@ -154,10 +161,11 @@ namespace SAMS.UI.Views
         private void botonAgregarProducto_ButtonControlClick(object sender, RoutedEventArgs e)
         {
             var proveedorSeleccionado = (V_Proveedores)comboProveedor.SelectedItem;
-            var productoSeleccionado = (V_Producto)comboProducto.SelectedItem;
+            var productoSeleccionado = (ProductoPorDetalleDTO)comboProducto.SelectedItem;
             var cantidad = campoCantidad.Text;
+            var precioCompra = campoPrecioCompra.Text;
 
-            if (proveedorSeleccionado != null && productoSeleccionado != null && !string.IsNullOrEmpty(cantidad) && int.TryParse(cantidad, out int cantidadInt))
+            if (proveedorSeleccionado != null && productoSeleccionado != null && !string.IsNullOrEmpty(cantidad) && int.TryParse(cantidad, out int cantidadInt) && decimal.TryParse(precioCompra, out decimal precioCompraDecimal))
             {
 
                 bool productoExiste = productosPedidos.Any(p => p.nombreProducto == productoSeleccionado.nombre);
@@ -174,7 +182,8 @@ namespace SAMS.UI.Views
                 {
                     nombreProducto = productoSeleccionado.nombre,
                     nombreUnidadMedida = unidadMedida,
-                    cantidad = cantidadInt
+                    cantidad = cantidadInt,
+                    precioCompra = precioCompraDecimal
                 };
 
                 productosPedidos.Add(productoPedido);

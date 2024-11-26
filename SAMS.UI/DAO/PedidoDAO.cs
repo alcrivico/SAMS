@@ -84,22 +84,26 @@ namespace SAMS.UI.DAO
             DataTable productosDetalles = new DataTable();
             productosDetalles.Columns.Add("ProductoNombre", typeof(string)); 
             productosDetalles.Columns.Add("Cantidad", typeof(int));
+            productosDetalles.Columns.Add("PrecioCompra", typeof(decimal));
  
             foreach (var producto in productosPedidos)
             {
-                productosDetalles.Rows.Add(producto.nombreProducto, producto.cantidad);
+                productosDetalles.Rows.Add(producto.nombreProducto, producto.cantidad, producto.precioCompra);
             }
 
             var parametros = new List<Microsoft.Data.SqlClient.SqlParameter>
-    {
-        new Microsoft.Data.SqlClient.SqlParameter("@ProductosDetalle", SqlDbType.Structured)
-        {
-            TypeName = "TipoTablaPedidoDetalle", 
-            Value = productosDetalles
-        }
-    };
+            {
+                new Microsoft.Data.SqlClient.SqlParameter("@ProductosDetalle", SqlDbType.Structured)
+                {
+                    TypeName = "TipoTablaPedidoDetalle", 
+                    Value = productosDetalles
+                }
+            };
 
             _sams.Database.ExecuteSqlRaw("EXEC T_RegistrarPedido @ProductosDetalle", parametros);
         }
+
+        public static IEnumerable<ProductoPorDetalleDTO> ObtenerListaProductosPorRfc(string rfc) => _sams.V_ProductoPorDetalle.Where(p => p.rfc == rfc).ToList();
+
     }
 }

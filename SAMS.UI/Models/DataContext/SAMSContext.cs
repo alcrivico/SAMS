@@ -53,6 +53,8 @@ public class SAMSContext : DbContext
     public DbSet<DetalleVentaDTO> V_DetalleVenta { get; set; }
     public DbSet<VentaDTO> V_Venta { get; set; }
     public DbSet<DetallesPedidoDTO> V_DetallesPedido { get; set; }
+    public DbSet<CategoriaDTO> V_Categorias {  get; set; }
+    public DbSet<ProductoPorDetalleDTO> V_ProductoPorDetalle { get; set; }
 
     // Configurar las vistas como una entidad sin clave
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -135,6 +137,12 @@ public class SAMSContext : DbContext
         modelBuilder.Entity<DetallesPedidoDTO>()
             .HasNoKey()
             .ToView("V_DetallesPedido");
+        modelBuilder.Entity<CategoriaDTO>()
+            .HasNoKey()
+            .ToView("V_Categorias");
+        modelBuilder.Entity<ProductoPorDetalleDTO>()
+            .HasNoKey()
+            .ToView("V_ProductoPorDetalle");
 
         base.OnModelCreating(modelBuilder);
     }

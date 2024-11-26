@@ -1025,6 +1025,9 @@ namespace SAMS.UI.VisualComponents
                     case "Cajero":
                         break;
                     case "Paqueteria":
+                        VerCategoriasView verCategoriasView = new VerCategoriasView(empleado);
+                        verCategoriasView.Show();
+                        Window.GetWindow(this).Close();
                         break;
                     default:
                         break;
@@ -1053,6 +1056,7 @@ namespace SAMS.UI.VisualComponents
                     case "Paqueteria":
                         VerPedidosView verPedidosView = new VerPedidosView(empleado);
                         verPedidosView.Show();
+                        Window.GetWindow(this).Close();
                         break;
                     default:
                         break;

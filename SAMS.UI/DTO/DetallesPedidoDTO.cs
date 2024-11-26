@@ -12,6 +12,7 @@ namespace SAMS.UI.DTO
         public string nombreProducto { get; set; }
         public string? nombreUnidadMedida { get; set; }
         public int cantidad {  get; set; }
+        public decimal? precioCompra {  get; set; }
 
     }
 }
