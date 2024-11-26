@@ -462,6 +462,28 @@ INNER JOIN
     Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
 GO
 
+--CU 26 "Editar Categoria"
+CREATE VIEW V_Categorias AS
+SELECT 
+    nombre
+FROM 
+    Categoria;
+GO
+
+--CU 28 "Registrar Pedido a Proveedor"
+CREATE VIEW V_ProductoPorDetalle AS
+SELECT 
+    p.nombre,        
+    pro.rfc,               
+    u.nombre AS nombreUnidadMedida     
+FROM 
+    Producto p
+INNER JOIN 
+    UnidadDeMedida u ON p.unidadDeMedidaId = u.id
+INNER JOIN 
+    Proveedor pro ON p.proveedorId = pro.id;
+GO
+
 --CU 29 "Consultar Pedido a Proveedor"
 CREATE VIEW V_Pedidos 
 AS
@@ -486,23 +508,18 @@ WHERE
 	ep.nombre IN ('Pendiente', 'Entregado'); 
 GO
 
-CREATE VIEW V_DetallesPedido 
-AS
+CREATE VIEW V_DetallesPedido AS
 SELECT 
 	p.id As idPedido,
 	pro.nombre AS nombreProducto,
 	um.nombre AS nombreUnidadMedida,
-	dp.cantidad 
-FROM 
-	DetallePedido dp
-INNER JOIN 
-	Pedido p ON dp.pedidoId = p.id
-INNER JOIN 
-	Producto pro ON dp.productoId = pro.id
-INNER JOIN 
-	EstadoPedido ep ON p.estadoPedidoId = ep.id
-INNER JOIN 
-	UnidadDeMedida um ON pro.unidadDeMedidaId = um.id;
+	dp.cantidad,
+	dp.precioCompra
+FROM DetallePedido dp
+JOIN Pedido p ON dp.pedidoId = p.id
+JOIN Producto pro ON dp.productoId = pro.id
+JOIN EstadoPedido ep ON p.estadoPedidoId = ep.id
+JOIN UnidadDeMedida um ON pro.unidadDeMedidaId = um.id;
 GO
 
 
@@ -1599,11 +1616,12 @@ BEGIN
 END;
 GO
 
---cu 29 Registrar Pedido a Proveedor
+--CU 28 "Registrar Pedido a Proveedor"
 CREATE TYPE TipoTablaPedidoDetalle AS TABLE
 (
     NombreProducto NVARCHAR(60), 
-    Cantidad INT    
+    Cantidad INT,
+	PrecioCompra DECIMAL
 );
 GO
 
@@ -1617,43 +1635,40 @@ BEGIN
         DECLARE @PedidoId INT; 
         DECLARE @NoPedido NVARCHAR(20); 
         DECLARE @FechaPedido DATE = GETDATE(); 
-        DECLARE @EstadoPedidoId INT = (SELECT TOP 1 id FROM EstadoPedido WHERE nombre = 'Pendiente'); -- Estado por defecto
+        DECLARE @EstadoPedidoId INT = (SELECT TOP 1 id FROM EstadoPedido WHERE nombre = 'Pendiente'); 
 
-        -- Insertar en la tabla Pedido
         INSERT INTO Pedido (fechaPedido, estadoPedidoId)
         VALUES (@FechaPedido, @EstadoPedidoId);
 
         -- Recuperar el ID del pedido recién insertado
         SET @PedidoId = SCOPE_IDENTITY();
 
-        -- Generar el número de pedido concatenando el ID con "PED-"
-        SET @NoPedido = CONCAT('PED', FORMAT(@PedidoId, 'D6')); -- 'D6' asegura siempre 6 dígitos
+        SET @NoPedido = CONCAT('PED', FORMAT(@PedidoId, 'D6')); 
 
         -- Actualizar el número de pedido en la tabla
         UPDATE Pedido
         SET noPedido = @NoPedido
         WHERE id = @PedidoId;
 
-        -- Insertar los detalles del pedido
-        INSERT INTO DetallePedido (pedidoId, productoId, cantidad)
+        INSERT INTO DetallePedido (pedidoId, productoId, cantidad, precioCompra)
         SELECT 
             @PedidoId, 
             p.id AS productoId,
-            pd.Cantidad
+            pd.Cantidad,
+            pd.PrecioCompra
         FROM 
             @ProductosDetalle pd
         INNER JOIN 
-            Producto p ON p.nombre = pd.nombreProducto;
+            Producto p ON p.nombre = pd.NombreProducto;
 
-        -- Confirmar la transacción
         COMMIT TRANSACTION;
 
     END TRY
     BEGIN CATCH
-        -- Revertir la transacción en caso de error
+
         ROLLBACK TRANSACTION;
 
-        -- Opcional: Lanza el error para diagnóstico
+        --Lanzar el error por si acaso
         THROW;
     END CATCH;
 END;
