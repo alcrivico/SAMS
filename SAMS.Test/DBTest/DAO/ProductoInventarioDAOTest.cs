@@ -1,4 +1,8 @@
-﻿namespace SAMS.Test.DBTest.DAO
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using SAMS.UI.DAO;
+
+namespace SAMS.Test.DBTest.DAO
 {
     public class ProductoInventarioDAOTest : SAMSContextTest
     {
