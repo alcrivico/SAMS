@@ -1,0 +1,238 @@
+﻿<Window
+    x:Class="SAMS.UI.Views.MenuReportes"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="SAMS - Ventas"
+    Width="1280"
+    Height="720"
+    MinWidth="800"
+    MinHeight="600"
+    MaxWidth="1920"
+    MaxHeight="1080"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="../Resources/Images/SAMSIsotype.ico"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+
+    <Grid>
+
+        <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20, 20, 5, 20">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <components:TitleBarControl
+                    Grid.Row="0"
+                    MouseLeftButtonDown="TitleBarControl_MouseLeftButtonDown"
+                    WindowStateChangeRequested="TitleBarControl_WindowStateChangeRequested" />
+
+                <Border
+                    Grid.Row="1"
+                    Margin="40,15,40,40"
+                    Background="{StaticResource SolidColorBrush_AntiFlashWhite}"
+                    CornerRadius="40">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.20*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid x:Name="MenuLateral" />
+
+                        <Grid Grid.Column="1" Margin="30,0,30,0">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.1*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="0.1*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Viewbox Grid.Column="0" HorizontalAlignment="Left">
+                                    <Grid>
+                                        <TextBlock
+                                            x:Name="UseCaseTitle"
+                                            Margin="0,12,12,12"
+                                            HorizontalAlignment="Left"
+                                            FontFamily="{StaticResource Font_Nunito}"
+                                            FontSize="24"
+                                            FontWeight="Bold"
+                                            Text="Reportes" />
+                                    </Grid>
+                                </Viewbox>
+
+                            </Grid>
+
+                            <Grid Name="Contenido" Grid.Row="1">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                    Grid.Column="0"
+                                    Margin="20,60"
+                                    Padding="20"
+                                    Background="{StaticResource SolidColorBrush_DodgerBlue}"
+                                    CornerRadius="20"
+                                    Cursor="Hand"
+                                    MouseLeftButtonUp="ReporteInventario_MouseLeftButtonUp">
+
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Effect" Value="{StaticResource ButtonDropShadow}" />
+                                        </Style>
+                                    </Border.Style>
+
+                                    <Grid>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="0.4*" />
+                                        </Grid.RowDefinitions>
+
+                                        <Border x:Name="botonReporteInventario" Grid.Row="0">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{StaticResource Icon_ProductosActivo}" Stretch="Uniform" />
+                                            </Border.Background>
+                                        </Border>
+
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontFamily="{StaticResource Font_Nunito}"
+                                            FontSize="30"
+                                            FontWeight="Bold"
+                                            Foreground="{StaticResource SolidColorBrush_White}"
+                                            Text="Reporte de Inventario"
+                                            TextAlignment="Center"
+                                            TextWrapping="Wrap" />
+
+                                    </Grid>
+
+                                </Border>
+
+                                <Border
+                                    Grid.Column="1"
+                                    Margin="20,60"
+                                    Padding="20"
+                                    Background="{StaticResource SolidColorBrush_MediumSlateBlue}"
+                                    CornerRadius="20"
+                                    Cursor="Hand"
+                                    MouseLeftButtonUp="ReportePedidos_MouseLeftButtonUp">
+
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Effect" Value="{StaticResource ButtonDropShadow}" />
+                                        </Style>
+                                    </Border.Style>
+
+                                    <Grid>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="0.4*" />
+                                        </Grid.RowDefinitions>
+
+                                        <Border x:Name="botonReportePedidos" Grid.Row="0">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{StaticResource Icon_PedidosActivo}" Stretch="Uniform" />
+                                            </Border.Background>
+                                        </Border>
+
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontFamily="{StaticResource Font_Nunito}"
+                                            FontSize="30"
+                                            FontWeight="Bold"
+                                            Foreground="{StaticResource SolidColorBrush_White}"
+                                            Text="Reporte de Pedidos"
+                                            TextAlignment="Center"
+                                            TextWrapping="Wrap" />
+
+                                    </Grid>
+
+                                </Border>
+
+                                <Border
+                                    Grid.Column="2"
+                                    Margin="20,60"
+                                    Padding="20"
+                                    Background="{StaticResource SolidColorBrush_PurplePizza}"
+                                    CornerRadius="20"
+                                    Cursor="Hand"
+                                    MouseLeftButtonUp="ReporteVentas_MouseLeftButtonUp">
+
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Effect" Value="{StaticResource ButtonDropShadow}" />
+                                        </Style>
+                                    </Border.Style>
+
+                                    <Grid>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="0.4*" />
+                                        </Grid.RowDefinitions>
+
+                                        <Border x:Name="botonReporteVentas" Grid.Row="0">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{StaticResource Icon_RegistrarVentaActivo}" Stretch="Uniform" />
+                                            </Border.Background>
+                                        </Border>
+
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontFamily="{StaticResource Font_Nunito}"
+                                            FontSize="30"
+                                            FontWeight="Bold"
+                                            Foreground="{StaticResource SolidColorBrush_White}"
+                                            Text="Reporte de Ventas"
+                                            TextAlignment="Center"
+                                            TextWrapping="Wrap" />
+
+                                    </Grid>
+
+                                </Border>
+
+                            </Grid>
+
+                        </Grid>
+
+                    </Grid>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</Window>
