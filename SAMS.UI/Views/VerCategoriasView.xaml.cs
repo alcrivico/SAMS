@@ -43,7 +43,7 @@ namespace SAMS.UI.Views
             ObtenerCategorias();
 
             SideBarControl_MenuLateral = new SideBarControl(_empleado);
-            SideBarControl_MenuLateral.SideElementSelected = 5;
+            SideBarControl_MenuLateral.SideElementSelected = 4;
             MenuLateral.Children.Add(SideBarControl_MenuLateral);
             SideBarControl_MenuLateral.Employee = _empleado.tipoEmpleado;
         }
@@ -158,17 +158,18 @@ namespace SAMS.UI.Views
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
         {
-            
+            InformationControl.Show("Informacion", "No es posible acceder a esta funcionalida aun", "Aceptar");
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
-            
+            InformationControl.Show("Informacion", "No es posible acceder a esta funcionalida aun", "Aceptar");
         }
 
         private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            
+            RegistrarCategoriaView registrarCategoriaView = new RegistrarCategoriaView();
+            registrarCategoriaView.ShowDialog();
         }
 
 

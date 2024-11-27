@@ -219,6 +219,7 @@ namespace SAMS.UI.Views
             {
                 productosPedidos.Remove(productoSeleccionado);
                 ActualizarTablaProductosPedidos();
+                VerificarProductosPedidos();
             }
             else
             {
@@ -230,6 +231,11 @@ namespace SAMS.UI.Views
         {
             var regex = new System.Text.RegularExpressions.Regex("[^0-9.]");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void VerificarProductosPedidos()
+        {
+            comboProveedor.IsEnabled = productosPedidos.Count == 0;
         }
 
     }
