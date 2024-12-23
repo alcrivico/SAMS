@@ -8,11 +8,13 @@
 
         public DateTime fechaRegistro { get; set; }
 
-        public int cantidad { get; set; }
+        public decimal totalEfectivo { get; set; }
 
-        public decimal precioVenta { get; set; }
+        public decimal totalTarjeta { get; set; }
 
-        public decimal ganancia { get; set; }
+        public decimal totalMonedero { get; set; }
+
+        public decimal totalVenta { get; set; }
 
         public required String noCaja { get; set; }
 

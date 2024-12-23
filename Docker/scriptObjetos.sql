@@ -184,25 +184,20 @@ CREATE VIEW V_VentasCierreCaja AS
 SELECT
     v.noVenta,
     v.fechaRegistro,
-    dv.cantidad,
-    dv.precioVenta,
-    dv.ganancia,
+    v.totalEfectivo,
+    v.totalTarjeta,
+    v.totalMonedero,
+    (v.totalEfectivo + v.totalTarjeta + v.totalMonedero) AS totalVenta,
     c.noCaja,
     CONCAT(e.nombre, ' ', e.apellidoPaterno, ' ', e.apellidoMaterno) AS nombreEmpleado
 FROM
     Venta v
 INNER JOIN
-    DetalleVenta dv
-    ON
-    v.id = dv.ventaId
-INNER JOIN
     Caja c
-    ON
-    v.cajaId = c.id
+    ON v.cajaId = c.id
 INNER JOIN
     Empleado e
-    ON
-    v.empleadoId = e.id
+    ON v.empleadoId = e.id
 GO
 
 CREATE OR ALTER VIEW V_Promocion AS

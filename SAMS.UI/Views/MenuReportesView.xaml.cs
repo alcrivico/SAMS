@@ -19,17 +19,17 @@ namespace SAMS.UI.Views
     /// <summary>
     /// Interaction logic for MenuReportes.xaml
     /// </summary>
-    public partial class MenuReportes : Window
+    public partial class MenuReportesView : Window
     {
         
         EmpleadoLoginDTO _empleado;
 
-        public MenuReportes()
+        public MenuReportesView()
         {
             InitializeComponent();
         }
 
-        public MenuReportes(EmpleadoLoginDTO empleado)
+        public MenuReportesView(EmpleadoLoginDTO empleado)
         {
             
             _empleado = empleado;

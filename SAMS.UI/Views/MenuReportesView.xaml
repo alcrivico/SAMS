@@ -1,5 +1,5 @@
 ﻿<Window
-    x:Class="SAMS.UI.Views.MenuReportes"
+    x:Class="SAMS.UI.Views.MenuReportesView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
