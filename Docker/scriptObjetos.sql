@@ -159,7 +159,7 @@ SELECT
     v.noVenta,
     v.fechaRegistro,
     c.noCaja,
-    p.nombre AS nombrePromocion
+    COALESCE(p.nombre, 'S/P') AS nombrePromocion
 FROM
     DetalleVenta dv
 INNER JOIN
