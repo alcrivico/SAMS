@@ -173,6 +173,20 @@ namespace SAMS.UI.Views
 
                 listaVentas = VentaDAO.ObtenerVentas();
 
+                if (_empleado.tipoEmpleado == "Cajero")
+                {
+                    listaVentas = listaVentas.Where(v => 
+                    v.nombreEmpleado == string.Concat(_empleado.nombreEmpleado, " ", _empleado.apellidoPaterno, " ", _empleado.apellidoMaterno) && 
+                    v.fechaRegistro.Day == DateTime.Now.Day && 
+                    v.fechaRegistro.Month == DateTime.Now.Month && 
+                    v.fechaRegistro.Year == DateTime.Now.Year).ToList();
+                }
+
+                if (_empleado.tipoEmpleado == "Administrador")
+                {
+                    listaVentas = listaVentas.Where(v => v.fechaRegistro.Month == DateTime.Now.Month && v.fechaRegistro.Year == DateTime.Now.Year).ToList();
+                }
+
                 _ventas.Clear();
 
                 _ventas = new ObservableCollection<Object>(listaVentas);
@@ -192,6 +206,39 @@ namespace SAMS.UI.Views
 
         private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
+
+            if (listaVentas != null)
+            {
+
+                if (campoBuscar.Text.Length > 0)
+                {
+
+                    var ventasFiltradas = listaVentas.Where(
+                        v =>
+                        v.noVenta.ToString().Contains(campoBuscar.Text) ||
+                        v.totalVenta.ToString().Contains(campoBuscar.Text) ||
+                        v.fechaRegistro.ToString().Contains(campoBuscar.Text) ||
+                        v.nombreEmpleado.ToString().ToUpper().Contains(campoBuscar.Text.ToUpper())).ToList();
+
+                    _ventas.Clear();
+
+                    _ventas = new ObservableCollection<Object>(ventasFiltradas);
+
+                    TablaVentas.SetItemsSource(_ventas);
+
+                }
+                else
+                {
+
+                    _ventas.Clear();
+
+                    _ventas = new ObservableCollection<Object>(listaVentas);
+
+                    TablaVentas.SetItemsSource(_ventas);
+
+                }
+
+            }
 
         }
 

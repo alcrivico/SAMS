@@ -181,6 +181,30 @@ namespace SAMS.UI.Views
 
             if (decision)
             {
+
+                if (_conteoEfectivo < _totalEfectivo)
+                {
+                    bool continuar = ConfirmationControl.Show("Confirmar", $"El sistema muestra un déficit de ${decimal.Abs(_conteoEfectivo - _totalEfectivo)} ¿Desea registrar la diferencia como merma?", "Aceptar", "Cancelar");
+
+                    if (!continuar)
+                    {
+                        return;
+                    }
+
+                }
+
+                if (_conteoEfectivo > _totalEfectivo)
+                {
+
+                    bool continuar = ConfirmationControl.Show("Confirmar", $"El sistema muestra un superávit de ${decimal.Abs(_conteoEfectivo - _totalEfectivo)} ¿Desea registrar la diferencia como ganancia?", "Aceptar", "Cancelar");
+                    
+                    if (!continuar)
+                    {
+                        return;
+                    }
+
+                }
+
                 try
                 {
                     var envPath = System.IO.Path.Combine(AppContext.BaseDirectory, "../../../.env");
@@ -204,13 +228,11 @@ namespace SAMS.UI.Views
 
                     InformationControl.Show("Cierre Realizado", "El cierre de caja ha sido exitoso", "Aceptar");
 
+                    ReporteCajaView reporteCajaView = new ReporteCajaView(noCaja, noVentas, _totalEfectivo, _totalTarjeta, _totalMonedero, totalVentas, diferencia, responsableCaja);
 
-                    InformationControl.Show("Información de Cierre", $"Numero de Ventas: {noVentas}\nDiferencia: {diferencia}", "Aceptar");
+                    reporteCajaView.SalirClicked += ReporteCajaView_SalirClicked;
 
-                    PrincipalView principalView = new PrincipalView(_empleado);
-
-                    principalView.Show();
-                    this.Close();
+                    reporteCajaView.Show();
 
                 }
                 catch (Exception ex)
@@ -219,6 +241,17 @@ namespace SAMS.UI.Views
                 }           
 
             }
+
+        }
+
+        private void ReporteCajaView_SalirClicked(object? sender, EventArgs e)
+        {
+
+            IniciarSesionView iniciarSesionView = new IniciarSesionView();
+
+            iniciarSesionView.Show();
+
+            this.Close();
 
         }
 

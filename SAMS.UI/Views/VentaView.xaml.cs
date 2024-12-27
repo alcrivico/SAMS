@@ -868,10 +868,26 @@ namespace SAMS.UI.Views
             _detalleVenta.codigo = detalle.codigo;
             _detalleVenta.nombreDetalleVenta = detalle.nombreDetalleVenta;
             _detalleVenta.precio = detalle.precio;
-            _detalleVenta.promocion = detalle.promocion;
-            _detalleVenta.porcentajeDescuento = detalle.porcentajeDescuento;
-            _detalleVenta.cantidadMinima = detalle.cantidadMinima;
-            _detalleVenta.cantidadMaxima = detalle.cantidadMaxima;
+
+            if (detalle.promocion != null)
+            {
+
+                _detalleVenta.promocion = detalle.promocion;
+                _detalleVenta.porcentajeDescuento = detalle.porcentajeDescuento;
+                _detalleVenta.cantidadMinima = detalle.cantidadMinima;
+                _detalleVenta.cantidadMaxima = detalle.cantidadMaxima;
+
+            }
+            else
+            {
+
+                _detalleVenta.promocion = "S/P";
+                _detalleVenta.porcentajeDescuento = 0;
+                _detalleVenta.cantidadMinima = 1;
+                _detalleVenta.cantidadMaxima = 1;
+
+            }
+
             _detalleVenta.cantidad = detalle.cantidad;
             _detalleVenta.total = detalle.total;
 

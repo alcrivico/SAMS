@@ -127,11 +127,11 @@ SELECT
     pi.nombre AS nombreDetalleVenta,
     dv.precioVenta AS precio,
     dv.cantidad AS cantidad,
-    p.nombre AS promocion,
-    CAST(p.porcentajeDescuento AS DECIMAL(18, 2)) / 100 AS porcentajeDescuento, -- Conversión y división
+    COALESCE(p.nombre, 'S/P') AS promocion,
+    COALESCE(CAST(p.porcentajeDescuento AS DECIMAL(18, 2)) / 100, 0) AS porcentajeDescuento, -- Conversión y división
     dv.ganancia AS total,
-    p.cantMinima AS cantidadMinima,
-    p.cantMaxima AS cantidadMaxima,
+    COALESCE(p.cantMinima, 1) AS cantidadMinima,
+    COALESCE(p.cantMaxima, 1) AS cantidadMaxima,
     v.noVenta
 FROM
     DetalleVenta dv
