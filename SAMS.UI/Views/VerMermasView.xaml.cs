@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SAMS.UI.DAO;
 using SAMS.UI.DTO;
+using SAMS.UI.Models.Entities;
 using SAMS.UI.VisualComponents;
 
 namespace SAMS.UI.Views

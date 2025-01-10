@@ -61,5 +61,25 @@ namespace SAMS.UI.DAO
             }
         }
 
+        public static bool EliminarMerma(int mermaId)
+        {
+            try
+            {
+                using (var context = new SAMSContext(App.ServiceProvider.GetRequiredService<DbContextOptions<SAMSContext>>()))
+                {
+                    var parametro = new SqlParameter("@MermaId", mermaId);
+
+                    context.Database.ExecuteSqlRaw("EXEC T_EliminarMerma @MermaId", parametro);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error al eliminar la merma: {ex.Message}");
+                return false;
+            }
+        }
+
     }
 }
