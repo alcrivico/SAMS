@@ -15,7 +15,7 @@ namespace SAMS.UI.DAO
         private static SAMSContext _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
         public static IEnumerable<CategoriaDTO> ObtenerCategorias() => _sams.V_Categorias.ToList();
 
-        public static IEnumerable<CategoriaDTO> ObtenerCategoriasActivas() => _sams.V_CategoriasActivas.ToList();
+        public static IEnumerable<CategoriasDTO> ObtenerCategoriasActivas() => _sams.V_CategoriasActivas.ToList();
 
         public static bool RegistrarCategoria(string nombreCategoria)
         {
@@ -82,7 +82,7 @@ namespace SAMS.UI.DAO
             }
         }
 
-        public static void EliminarCategoria(CategoriaDTO categoria)
+        public static void EliminarCategoria(CategoriasDTO categoria)
         {
             var categoriaExistente = _sams.Categoria
                                            .FirstOrDefault(c => c.nombre.ToLower() == categoria.nombre.ToLower());

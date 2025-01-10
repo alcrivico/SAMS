@@ -26,7 +26,7 @@ namespace SAMS.UI.Views
     public partial class VerCategoriasView : Window
     {
 
-        List<CategoriaDTO> listaCategorias;
+        List<CategoriasDTO> listaCategorias;
         ObservableCollection<Object> _categoria;
         EmpleadoLoginDTO _empleado;
         SideBarControl SideBarControl_MenuLateral;
@@ -34,7 +34,7 @@ namespace SAMS.UI.Views
         public VerCategoriasView(EmpleadoLoginDTO empleado)
         {
             _empleado = empleado;
-            listaCategorias = new List<CategoriaDTO>();
+            listaCategorias = new List<CategoriasDTO>();
             _categoria = new ObservableCollection<Object>();
 
             InitializeComponent();
@@ -163,7 +163,7 @@ namespace SAMS.UI.Views
         private void botonEditarClick(object sender, RoutedEventArgs e)
         {
             ActionsControl actionBar = (ActionsControl)sender;
-            CategoriaDTO categoria = (CategoriaDTO)actionBar.DataContext;
+            CategoriasDTO categoria = (CategoriasDTO)actionBar.DataContext;
 
             EditarCategoriasView editarCategoriaView = new EditarCategoriasView(categoria.nombre);
             editarCategoriaView.ShowDialog();
@@ -174,7 +174,7 @@ namespace SAMS.UI.Views
         {
             if (ConfirmationControl.Show("Confirmar", "¿Está seguro de que desea eliminar a este proveedor?\n Esta acción no se puede deshacer", "Aceptar", "Cancelar"))
             {
-                CategoriaDAO.EliminarCategoria((CategoriaDTO)((ActionsControl)sender).DataContext);
+                CategoriaDAO.EliminarCategoria((CategoriasDTO)((ActionsControl)sender).DataContext);
             }
 
             ObtenerCategoriasActivas();

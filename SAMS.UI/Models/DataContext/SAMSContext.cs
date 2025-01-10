@@ -55,7 +55,7 @@ public class SAMSContext : DbContext
     public DbSet<DetallesPedidoDTO> V_DetallesPedido { get; set; }
     public DbSet<CategoriaDTO> V_Categorias {  get; set; }
     public DbSet<ProductoPorDetalleDTO> V_ProductoPorDetalle { get; set; }
-    public DbSet<CategoriaDTO> V_CategoriasActivas { get; set; }
+    public DbSet<CategoriasDTO> V_CategoriasActivas { get; set; }
     public DbSet<MermaDTO> V_Mermas { get; set; }
 
     // Configurar las vistas como una entidad sin clave
@@ -148,6 +148,9 @@ public class SAMSContext : DbContext
         modelBuilder.Entity<MermaDTO>()
             .HasNoKey()
             .ToView("V_Mermas");
+        modelBuilder.Entity<CategoriasDTO>()
+            .HasNoKey()
+            .ToView("V_CategoriasActivas");
 
         base.OnModelCreating(modelBuilder);
     }
