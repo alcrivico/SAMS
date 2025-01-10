@@ -99,7 +99,7 @@ namespace SAMS.UI.VisualComponents
 
         private void Confirmation_Button_MouseEnter(object sender, MouseEventArgs e)
         {
-            Confirmation_Button.Background = FindResource("SolidColorBrush_DodgerBlue") as SolidColorBrush;
+            Confirmation_Button.Background = FindResource("SolidColorBrush_PurplePizza") as SolidColorBrush;
             Confirmation_Button_Text.Foreground = FindResource("SolidColorBrush_White") as SolidColorBrush;
         }
 

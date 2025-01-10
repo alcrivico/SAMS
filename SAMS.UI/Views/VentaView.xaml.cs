@@ -579,26 +579,39 @@ namespace SAMS.UI.Views
                             if (producto != null)
                             {
 
-                                _detalleVenta = new DetalleVentaDTO();
-
-                                _detalleVenta.codigo = producto.codigo;
-                                _detalleVenta.nombreDetalleVenta = producto.nombre;
-                                _detalleVenta.precio = producto.precioActual;
-                                _detalleVenta.promocion = producto.promocion;
-
-                                if (_detalleVenta.promocion != null)
+                                if (producto.estadoProductoId == 1)
                                 {
 
-                                    _detalleVenta.porcentajeDescuento = (decimal)producto.porcentajeDescuento / 100.0m;
-                                    _detalleVenta.cantidadMinima = producto.cantidadMinima;
-                                    _detalleVenta.cantidadMaxima = producto.cantidadMaxima;
+                                    _detalleVenta = new DetalleVentaDTO();
+
+                                    _detalleVenta.codigo = producto.codigo;
+                                    _detalleVenta.nombreDetalleVenta = producto.nombre;
+                                    _detalleVenta.precio = producto.precioActual;
+                                    _detalleVenta.promocion = producto.promocion;
+
+                                    if (_detalleVenta.promocion != null)
+                                    {
+
+                                        _detalleVenta.porcentajeDescuento = (decimal)producto.porcentajeDescuento / 100.0m;
+                                        _detalleVenta.cantidadMinima = producto.cantMinima;
+                                        _detalleVenta.cantidadMaxima = producto.cantMaxima;
+
+                                    }
+
+                                    campoCantidad.EnableTextBox = true;
+                                    campoCantidad.Cursor = Cursors.IBeam;
+                                    campoCantidad.Text = "1";
+                                    _detalleVenta.cantidad = 1;
 
                                 }
-
-                                campoCantidad.EnableTextBox = true;
-                                campoCantidad.Cursor = Cursors.IBeam;
-                                campoCantidad.Text = "1";
-                                _detalleVenta.cantidad = 1;
+                                else if (producto.cantidadExhibicion < 1)
+                                {
+                                    InformationControl.Show("Error", "No hay suficientes existencias en exhibición del producto ingresado, comunícate con paquetería para agregar más", "Aceptar");
+                                }
+                                else if (producto.estadoProductoId == 2)
+                                {
+                                    InformationControl.Show("Error", "El producto no está disponible para la venta", "Aceptar");
+                                }
 
                             }
                             else
@@ -690,7 +703,7 @@ namespace SAMS.UI.Views
 
                     AgregarUnDetalleVenta();
 
-                    break;
+                break;
 
                 case 2:
 
@@ -868,10 +881,26 @@ namespace SAMS.UI.Views
             _detalleVenta.codigo = detalle.codigo;
             _detalleVenta.nombreDetalleVenta = detalle.nombreDetalleVenta;
             _detalleVenta.precio = detalle.precio;
-            _detalleVenta.promocion = detalle.promocion;
-            _detalleVenta.porcentajeDescuento = detalle.porcentajeDescuento;
-            _detalleVenta.cantidadMinima = detalle.cantidadMinima;
-            _detalleVenta.cantidadMaxima = detalle.cantidadMaxima;
+
+            if (detalle.promocion != null)
+            {
+
+                _detalleVenta.promocion = detalle.promocion;
+                _detalleVenta.porcentajeDescuento = detalle.porcentajeDescuento;
+                _detalleVenta.cantidadMinima = detalle.cantidadMinima;
+                _detalleVenta.cantidadMaxima = detalle.cantidadMaxima;
+
+            }
+            else
+            {
+
+                _detalleVenta.promocion = "S/P";
+                _detalleVenta.porcentajeDescuento = 0;
+                _detalleVenta.cantidadMinima = 1;
+                _detalleVenta.cantidadMaxima = 1;
+
+            }
+
             _detalleVenta.cantidad = detalle.cantidad;
             _detalleVenta.total = detalle.total;
 

@@ -158,6 +158,32 @@ namespace SAMS.UI.DAO
 
         }
 
+        public static List<VentasCierreCajaDTO> ObtenerVentasCierreCaja(string noCaja)
+        {
+
+            DateTime fechaActual = DateTime.Now;
+
+            DateTime fechaInicio = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 7, 0, 0);
+
+            DateTime fechaFin = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 23, 59, 59);
+
+            if (fechaActual.Hour < 12)
+            {
+                fechaInicio = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 7, 0, 0);
+                fechaFin = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 11, 59, 59);
+            }
+            else
+            {
+                fechaInicio = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 12, 0, 0);
+                fechaFin = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 23, 59, 59);
+            }
+
+            List<VentasCierreCajaDTO> ventas = _sams.V_VentasCierreCaja.Where(v => v.noCaja == noCaja && v.fechaRegistro >= fechaInicio && v.fechaRegistro <= fechaFin).ToList();
+
+            return ventas;
+
+        }
+
     }
 
 }

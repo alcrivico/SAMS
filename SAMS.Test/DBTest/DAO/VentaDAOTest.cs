@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SAMS.UI.DTO;
+using SAMS.UI.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -126,6 +127,76 @@ namespace SAMS.Test.DBTest.DAO
 
             // Assert
             Assert.Empty(detalles);
+
+        }
+
+        [Fact]
+        public void ObtenerVentasCierreCajaPorNoCaja_DeberiaRetornarVentasMatutinas()
+        {
+
+            // Arrange
+            using var context = GetContext();
+            DateTime fechaActual = new DateTime(2024, 10, 15, 10, 30, 0);
+            DateTime fechaInicio = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 7, 0, 0);
+            DateTime fechaFin = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 11, 59, 59);
+            string noCajaCorrecto = "01";
+
+            // Act
+            var ventas = context.V_VentasCierreCaja.Where(v => 
+            v.noCaja == noCajaCorrecto && 
+            v.fechaRegistro >= fechaInicio && 
+            v.fechaRegistro <= fechaFin).ToList();
+
+            // Assert
+            Assert.NotNull(ventas);
+            Assert.NotEmpty(ventas);
+
+        }
+
+        [Fact]
+        public void ObtenerVentasCierreCajaPorNoCaja_DeberiaRetornarVentasVespertinas()
+        {
+
+            // Arrange
+            using var context = GetContext();
+            DateTime fechaActual = new DateTime(2024, 10, 15, 15, 0, 0);
+            DateTime fechaInicio = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 12, 0, 0);
+            DateTime fechaFin = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 23, 59, 59);
+            string noCajaCorrecto = "03";
+
+            // Act
+            var ventas = context.V_VentasCierreCaja.Where(v =>
+            v.noCaja == noCajaCorrecto &&
+            v.fechaRegistro >= fechaInicio &&
+            v.fechaRegistro <= fechaFin).ToList();
+
+            // Assert
+            Assert.NotNull(ventas);
+            Assert.NotEmpty(ventas);
+
+        }
+
+        [Fact]
+        public void ObtenerVentasCierreCajaPorNoCaja_NoDeberiaRetornarVentas()
+        {
+
+            // Arrange
+            using var context = GetContext();
+            DateTime fechaActual = new DateTime(2024, 10, 15, 15, 0, 0);
+            fechaActual = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 15, 0, 0);
+            DateTime fechaInicio = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 12, 0, 0);
+            DateTime fechaFin = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 23, 59, 59);
+            string noCajaIncorrecto = "00";
+
+            // Act
+            var ventas = context.V_VentasCierreCaja.Where(v =>
+            v.noCaja == noCajaIncorrecto &&
+            v.fechaRegistro >= fechaInicio &&
+            v.fechaRegistro <= fechaFin).ToList();
+
+            // Assert
+            Assert.NotNull(ventas);
+            Assert.Empty(ventas);
 
         }
 

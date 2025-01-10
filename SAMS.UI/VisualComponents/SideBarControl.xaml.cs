@@ -1024,6 +1024,10 @@ namespace SAMS.UI.VisualComponents
 
                         break;
                     case "Cajero":
+                        CierreCajaView cierreCajaView = new CierreCajaView(empleado);
+
+                        cierreCajaView.Show();
+
                         break;
                     case "Paqueteria":
                         VerCategoriasView verCategoriasView = new VerCategoriasView(empleado);
@@ -1078,7 +1082,7 @@ namespace SAMS.UI.VisualComponents
                 switch (Employee)
                 {
                     case "Administrador":
-                        MenuReportes menuReportes = new MenuReportes(empleado);
+                        MenuReportesView menuReportes = new MenuReportesView(empleado);
                         menuReportes.Show();
                         break;
                     case "Paqueteria":

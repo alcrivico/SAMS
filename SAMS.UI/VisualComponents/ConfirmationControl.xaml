@@ -12,7 +12,7 @@
 
     <Border
         Background="{StaticResource SolidColorBrush_LavenderWeb}"
-        BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+        BorderBrush="{StaticResource SolidColorBrush_PurplePizza}"
         BorderThickness="4"
         CornerRadius="20">
         <Grid>
@@ -59,7 +59,7 @@
 
             <Border
                 Grid.Row="1"
-                BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                BorderBrush="{StaticResource SolidColorBrush_PurplePizza}"
                 BorderThickness="0,4,0,0">
                 <Grid>
 
@@ -74,7 +74,7 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         Background="{StaticResource SolidColorBrush_LavenderWeb}"
-                        BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                        BorderBrush="{StaticResource SolidColorBrush_PurplePizza}"
                         BorderThickness="0,0,2,0"
                         CornerRadius="0,0,0,20"
                         Cursor="Hand"
@@ -98,7 +98,7 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         Background="{StaticResource SolidColorBrush_LavenderWeb}"
-                        BorderBrush="{StaticResource SolidColorBrush_DodgerBlue}"
+                        BorderBrush="{StaticResource SolidColorBrush_PurplePizza}"
                         BorderThickness="2,0,0,0"
                         CornerRadius="0,0,20,0"
                         Cursor="Hand"

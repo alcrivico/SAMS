@@ -24,8 +24,15 @@ namespace SAMS.UI.Views
             this.empleado = empleado;
             _productos = new ObservableCollection<Object>();
             InitializeComponent();
-            
-            DefinirColumnas();
+
+            if (empleado.tipoEmpleado != "Administrador")
+            {
+                DefinirColumnasPorDefecto();
+            }
+            else
+            {
+                DefinirColumnasAdministrador();
+            }
             ObtenerProductos();
 
             SideBarControl_MenuLateral = new SideBarControl(empleado);
@@ -61,7 +68,7 @@ namespace SAMS.UI.Views
             this.WindowState = e;
         }
 
-        private void DefinirColumnas()
+        private void DefinirColumnasAdministrador()
         {
 
             Dictionary<string, string>[] columnas =
@@ -106,6 +113,60 @@ namespace SAMS.UI.Views
                     { "Detalles", "True" },
                     { "Editar", "True" },
                     { "Eliminar", "True" }
+
+                }
+
+            };
+
+            TableControl_TablaProductos.DefineColumns(columnas);
+
+        }
+
+        private void  DefinirColumnasPorDefecto()
+        {
+
+            Dictionary<string, string>[] columnas =
+            {
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Nombre" },
+                    { "Width", "*" },
+                    { "BindingName", "nombreProducto" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Cantidad" },
+                    { "Width", "*" },
+                    { "BindingName", "cantidad" },
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Precio" },
+                    { "Width", "*" },
+                    { "BindingName", "precioActual" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "categoría" },
+                    { "Width", "*" },
+                    { "BindingName", "nombreCategoria" }
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Actions" },
+                    { "Name", "Acciones" },
+                    { "Width", "*" },
+                    { "Detalles", "True" },
+                    { "Editar", "False" },
+                    { "Eliminar", "False" }
 
                 }
 

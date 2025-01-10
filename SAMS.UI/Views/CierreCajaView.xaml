@@ -1,0 +1,215 @@
+﻿<Window
+    x:Class="SAMS.UI.Views.CierreCajaView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:SAMS.UI.VisualComponents"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SAMS.UI.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="SAMS - Ventas"
+    Width="1280"
+    Height="720"
+    MinWidth="800"
+    MinHeight="600"
+    MaxWidth="1920"
+    MaxHeight="1080"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="../Resources/Images/SAMSIsotype.ico"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+
+    <Grid>
+
+        <Border Background="{StaticResource SolidColorBrush_LavenderWeb}" CornerRadius="20, 20, 5, 20">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <components:TitleBarControl
+                    Grid.Row="0"
+                    MouseLeftButtonDown="TitleBarControl_MouseLeftButtonDown"
+                    WindowStateChangeRequested="TitleBarControl_WindowStateChangeRequested" />
+
+                <Border
+                    Grid.Row="1"
+                    Margin="40,15,40,40"
+                    Background="{StaticResource SolidColorBrush_AntiFlashWhite}"
+                    CornerRadius="40">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.20*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid x:Name="MenuLateral" />
+
+                        <Grid Grid.Column="1" Margin="30,0,30,0">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.1*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="0.1*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Viewbox Grid.Column="0" HorizontalAlignment="Left">
+                                    <Grid>
+                                        <TextBlock
+                                            x:Name="UseCaseTitle"
+                                            Margin="0,12,12,12"
+                                            HorizontalAlignment="Left"
+                                            FontFamily="{StaticResource Font_Nunito}"
+                                            FontSize="24"
+                                            FontWeight="Bold"
+                                            Text="Cierre de Caja Chica" />
+                                    </Grid>
+                                </Viewbox>
+
+                            </Grid>
+
+                            <Grid Name="Contenido" Grid.Row="1">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="0.175*" />
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0" Margin="200,0">
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.2*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="0.2*" />
+                                        <RowDefinition Height="0.2*" />
+                                    </Grid.RowDefinitions>
+
+                                    <components:TextBoxControl
+                                        x:Name="campoBuscar"
+                                        Grid.Row="0"
+                                        Width="450"
+                                        HorizontalAlignment="Left"
+                                        FieldName="Buscar Venta"
+                                        TextBoxControlTextChanged="campoBuscar_TextBoxControlTextChanged" />
+
+                                    <components:TableControl
+                                        x:Name="tablaVentas"
+                                        Grid.Row="1"
+                                        Margin="0,20" />
+
+                                    <Grid Grid.Row="2">
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <components:TextBoxControl
+                                            x:Name="campoTotalEfectivo"
+                                            Grid.Column="0"
+                                            Width="150"
+                                            Margin="5,0"
+                                            Cursor="Arrow"
+                                            FieldName="Total en Efectivo $"
+                                            IsReadOnly="True" />
+
+                                        <components:TextBoxControl
+                                            x:Name="campoTotalTarjeta"
+                                            Grid.Column="1"
+                                            Width="150"
+                                            Margin="5,0"
+                                            Cursor="Arrow"
+                                            FieldName="Total con Tarjeta $"
+                                            IsReadOnly="True" />
+
+                                        <components:TextBoxControl
+                                            x:Name="campoTotalMonedero"
+                                            Grid.Column="2"
+                                            Width="160"
+                                            Margin="5,0"
+                                            Cursor="Arrow"
+                                            FieldName="Total con Monedero $"
+                                            IsReadOnly="True" />
+
+
+                                    </Grid>
+
+                                    <Grid Grid.Row="3">
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <components:TextBoxControl
+                                            x:Name="campoConteoEfectivo"
+                                            Grid.Column="1"
+                                            Width="150"
+                                            Margin="5,0"
+                                            FieldName="Conteo de Efectivo $:"
+                                            TextBoxControlTextChanged="campoConteoEfectivo_TextBoxControlTextChanged" />
+
+                                    </Grid>
+
+                                </Grid>
+
+                                <Grid Grid.Row="1">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Viewbox Grid.Column="0">
+                                        <components:ButtonControl
+                                            x:Name="botonAccion"
+                                            Margin="10"
+                                            ButtonBackgroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
+                                            ButtonControlClick="botonAccion_ButtonControlClick"
+                                            ButtonWidth="120"
+                                            IsButtonEnabled="False"
+                                            Text="Cerrar Caja" />
+                                    </Viewbox>
+
+                                    <Viewbox Grid.Column="1">
+                                        <components:ButtonControl
+                                            x:Name="botonCancelar"
+                                            Margin="10"
+                                            ButtonBackgroundColor="{StaticResource SolidColorBrush_PantoneOrange}"
+                                            ButtonControlClick="botonCancelar_ButtonControlClick"
+                                            ButtonWidth="120"
+                                            Text="Cancelar" />
+                                    </Viewbox>
+
+                                </Grid>
+
+                            </Grid>
+
+                        </Grid>
+
+                    </Grid>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</Window>
