@@ -14,5 +14,20 @@ namespace SAMS.UI.DAO
         private static SAMSContext _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
         public static IEnumerable<MermaDTO> ObtenerMermas() => _sams.V_Mermas.ToList();
 
+        public static MermaDTO ObtenerMermaPorId(int idMerma)
+        {
+            return _sams.V_Mermas
+                .Where(m => m.MermaId == idMerma) 
+                .Select(m => new MermaDTO
+                {
+                    MermaId = m.MermaId,
+                    cantidad = m.cantidad,
+                    descripcion = m.descripcion,
+                    fechaRegistro = m.fechaRegistro,
+                    productoInventario = m.productoInventario
+                })
+                .FirstOrDefault();
+        }
+
     }
 }

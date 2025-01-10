@@ -165,7 +165,11 @@ namespace SAMS.UI.Views
 
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
-            
+            ActionsControl actionBar = (ActionsControl)sender;
+            MermaDTO merma = (MermaDTO)actionBar.DataContext;
+
+            DetallesMermaView detallesMermasView = new DetallesMermaView(merma);
+            detallesMermasView.ShowDialog();
         }
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
