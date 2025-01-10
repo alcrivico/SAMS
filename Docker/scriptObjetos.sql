@@ -328,24 +328,23 @@ INNER JOIN
     Pedido PED ON DP.pedidoId = PED.id;  -- Relación con la tabla Pedido
 GO
 
--- CU-04 Ver productos
 CREATE VIEW V_ProductosRegistrados
 AS
-SELECT 
+SELECT
     PI.codigo AS CodigoProducto,                            -- Código del producto
     PI.nombre AS NombreProducto,                              -- Nombre del producto
     CONCAT(PI.cantidadBodega + PI.cantidadExhibicion, ' ', UM.nombre) AS Cantidad, -- Total cantidad con unidad
     PI.precioActual AS PrecioActual,                         -- Precio actual del producto
     CAT.nombre AS NombreCategoria                            -- Nombre de la categoría
-FROM 
+FROM
     ProductoInventario PI
-INNER JOIN 
+INNER JOIN
     UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id         -- Relación con unidad de medida
-INNER JOIN 
+INNER JOIN
     Categoria CAT ON PI.categoriaId = CAT.id                -- Relación con categoría
 INNER JOIN
     EstadoProducto EP ON PI.estadoProductoId = EP.id        -- Relación con estado del producto
-WHERE 
+WHERE
     EP.nombre = 'Disponible';                               -- Filtrar productos disponibles
 GO
 
@@ -364,15 +363,76 @@ SELECT
     UM.nombre AS NombreUnidadMedida,                      -- Nombre de la unidad de medida
     PI.esPerecedero AS EsPerecedero,                      -- Perecedero (BIT)
     PI.esDevolvible AS EsDevolvible                       -- Devolvible (BIT)
-FROM 
+FROM
     ProductoInventario PI
-INNER JOIN 
+INNER JOIN
     UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id       -- Relación con unidad de medida
-INNER JOIN 
+INNER JOIN
     Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
-LEFT JOIN 
+LEFT JOIN
     DetallePedido DP ON DP.productoId = PI.id;            -- Relación con DetallePedido (puede no existir)
 GO
+
+--CU 26 "Editar Categoria"
+CREATE VIEW V_Categorias AS
+SELECT 
+    nombre
+FROM 
+    Categoria;
+GO
+
+--CU 28 "Registrar Pedido a Proveedor"
+CREATE VIEW V_ProductoPorDetalle AS
+SELECT 
+    p.nombre,        
+    pro.rfc,               
+    u.nombre AS nombreUnidadMedida     
+FROM 
+    Producto p
+INNER JOIN 
+    UnidadDeMedida u ON p.unidadDeMedidaId = u.id
+INNER JOIN 
+    Proveedor pro ON p.proveedorId = pro.id;
+GO
+
+--CU 29 "Consultar Pedido a Proveedor"
+CREATE VIEW V_Pedidos 
+AS
+SELECT DISTINCT 
+    p.id AS idPedido, 
+    p.noPedido,
+    prov.nombre AS nombreProveedor,  
+    p.fechaPedido, 
+    p.fechaEntrega,
+    ep.nombre AS nombreEstado
+FROM 
+	Pedido p
+INNER JOIN 
+	EstadoPedido ep ON p.estadoPedidoId = ep.id
+INNER JOIN 
+	DetallePedido dp ON p.id = dp.pedidoId
+INNER JOIN 
+	Producto prod ON dp.productoId = prod.id
+INNER JOIN 
+	Proveedor prov ON prod.proveedorId = prov.id
+WHERE 
+	ep.nombre IN ('Pendiente', 'Entregado'); 
+GO
+
+CREATE VIEW V_DetallesPedido AS
+SELECT 
+	p.id As idPedido,
+	pro.nombre AS nombreProducto,
+	um.nombre AS nombreUnidadMedida,
+	dp.cantidad,
+	dp.precioCompra
+FROM DetallePedido dp
+JOIN Pedido p ON dp.pedidoId = p.id
+JOIN Producto pro ON dp.productoId = pro.id
+JOIN EstadoPedido ep ON p.estadoPedidoId = ep.id
+JOIN UnidadDeMedida um ON pro.unidadDeMedidaId = um.id;
+GO
+
 
 -- 3. procedimientos almacenados
 -- funciones listas
