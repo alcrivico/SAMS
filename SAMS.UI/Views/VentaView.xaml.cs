@@ -579,26 +579,39 @@ namespace SAMS.UI.Views
                             if (producto != null)
                             {
 
-                                _detalleVenta = new DetalleVentaDTO();
-
-                                _detalleVenta.codigo = producto.codigo;
-                                _detalleVenta.nombreDetalleVenta = producto.nombre;
-                                _detalleVenta.precio = producto.precioActual;
-                                _detalleVenta.promocion = producto.promocion;
-
-                                if (_detalleVenta.promocion != null)
+                                if (producto.estadoProductoId == 1)
                                 {
 
-                                    _detalleVenta.porcentajeDescuento = (decimal)producto.porcentajeDescuento / 100.0m;
-                                    _detalleVenta.cantidadMinima = producto.cantidadMinima;
-                                    _detalleVenta.cantidadMaxima = producto.cantidadMaxima;
+                                    _detalleVenta = new DetalleVentaDTO();
+
+                                    _detalleVenta.codigo = producto.codigo;
+                                    _detalleVenta.nombreDetalleVenta = producto.nombre;
+                                    _detalleVenta.precio = producto.precioActual;
+                                    _detalleVenta.promocion = producto.promocion;
+
+                                    if (_detalleVenta.promocion != null)
+                                    {
+
+                                        _detalleVenta.porcentajeDescuento = (decimal)producto.porcentajeDescuento / 100.0m;
+                                        _detalleVenta.cantidadMinima = producto.cantMinima;
+                                        _detalleVenta.cantidadMaxima = producto.cantMaxima;
+
+                                    }
+
+                                    campoCantidad.EnableTextBox = true;
+                                    campoCantidad.Cursor = Cursors.IBeam;
+                                    campoCantidad.Text = "1";
+                                    _detalleVenta.cantidad = 1;
 
                                 }
-
-                                campoCantidad.EnableTextBox = true;
-                                campoCantidad.Cursor = Cursors.IBeam;
-                                campoCantidad.Text = "1";
-                                _detalleVenta.cantidad = 1;
+                                else if (producto.cantidadExhibicion < 1)
+                                {
+                                    InformationControl.Show("Error", "No hay suficientes existencias en exhibición del producto ingresado, comunícate con paquetería para agregar más", "Aceptar");
+                                }
+                                else if (producto.estadoProductoId == 2)
+                                {
+                                    InformationControl.Show("Error", "El producto no está disponible para la venta", "Aceptar");
+                                }
 
                             }
                             else

@@ -50,6 +50,7 @@ SELECT
     pi.nombre,
     pi.precioActual,
     pi.cantidadExhibicion,
+    pi.estadoProductoId,
     um.nombre AS unidadDeMedida,
     p.nombre AS promocion,
     p.porcentajeDescuento,
