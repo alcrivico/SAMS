@@ -20,7 +20,7 @@ namespace SAMS.UI.DAO
             try
             {
                 var categoriaExistente = _sams.Categoria
-                                             .FirstOrDefault(c => c.nombre.Equals(nombreCategoria, StringComparison.OrdinalIgnoreCase));
+                                             .FirstOrDefault(c => c.nombre.ToLower() == nombreCategoria.ToLower());
 
                 if (categoriaExistente != null)
                 {
@@ -30,7 +30,7 @@ namespace SAMS.UI.DAO
                 var nuevaCategoria = new Categoria
                 {
                     nombre = nombreCategoria,
-                    estado = true  
+                    estado = true
                 };
 
                 _sams.Categoria.Add(nuevaCategoria);
@@ -42,6 +42,57 @@ namespace SAMS.UI.DAO
             {
                 Console.WriteLine($"Error al registrar la categoría: {ex.Message}");
                 return false;
+            }
+        }
+
+        public static bool EditarCategoria(string nombre, string nuevoNombre)
+        {
+            try
+            {
+                var categoriaExistente = _sams.Categoria
+                                               .FirstOrDefault(c => c.nombre.ToLower() == nombre.ToLower());
+
+                if (categoriaExistente == null)
+                {
+                    Console.WriteLine($"No se encontró la categoría con el nombre '{nombre}'.");
+                    return false;
+                }
+
+                var conflictoCategoria = _sams.Categoria
+                                               .Any(c => c.nombre.ToLower() == nuevoNombre.ToLower() && c.id != categoriaExistente.id);
+
+                if (conflictoCategoria)
+                {
+                    Console.WriteLine($"El nombre '{nuevoNombre}' ya está en uso.");
+                    return false;
+                }
+
+                categoriaExistente.nombre = nuevoNombre;
+
+                _sams.SaveChanges();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al editar la categoría: {ex.Message}");
+                return false;
+            }
+        }
+
+        public static void EliminarCategoria(CategoriaDTO categoria)
+        {
+            var categoriaExistente = _sams.Categoria
+                                           .FirstOrDefault(c => c.nombre.ToLower() == categoria.nombre.ToLower());
+
+            if (categoriaExistente != null)
+            {
+                categoriaExistente.estado = false;
+                _sams.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException("La categoría no existe.");
             }
         }
 

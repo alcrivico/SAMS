@@ -46,6 +46,10 @@ namespace SAMS.UI.Views
             SideBarControl_MenuLateral.SideElementSelected = 4;
             MenuLateral.Children.Add(SideBarControl_MenuLateral);
             SideBarControl_MenuLateral.Employee = _empleado.tipoEmpleado;
+
+            TablaCategorias.OnDetallesClickedHandler += botonDetallesClick;
+            TablaCategorias.OnEditarClickedHandler += botonEditarClick;
+            TablaCategorias.OnEliminarClickedHandler += botonEliminarClick;
         }
 
 
@@ -158,12 +162,22 @@ namespace SAMS.UI.Views
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
         {
-            InformationControl.Show("Informacion", "No es posible acceder a esta funcionalida aun", "Aceptar");
+            ActionsControl actionBar = (ActionsControl)sender;
+            CategoriaDTO categoria = (CategoriaDTO)actionBar.DataContext;
+
+            EditarCategoriasView editarCategoriaView = new EditarCategoriasView(categoria.nombre);
+            editarCategoriaView.ShowDialog();
+            ObtenerCategorias();
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
-            InformationControl.Show("Informacion", "No es posible acceder a esta funcionalida aun", "Aceptar");
+            if (ConfirmationControl.Show("Confirmar", "¿Está seguro de que desea eliminar a este proveedor?\n Esta acción no se puede deshacer", "Aceptar", "Cancelar"))
+            {
+                CategoriaDAO.EliminarCategoria((CategoriaDTO)((ActionsControl)sender).DataContext);
+            }
+
+            ObtenerCategorias();
         }
 
         private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
