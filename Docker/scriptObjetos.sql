@@ -342,7 +342,11 @@ FROM
 INNER JOIN 
     UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id         -- Relación con unidad de medida
 INNER JOIN 
-    Categoria CAT ON PI.categoriaId = CAT.id;               -- Relación con categoría
+    Categoria CAT ON PI.categoriaId = CAT.id                -- Relación con categoría
+INNER JOIN
+    EstadoProducto EP ON PI.estadoProductoId = EP.id        -- Relación con estado del producto
+WHERE 
+    EP.nombre = 'Disponible';                               -- Filtrar productos disponibles
 GO
 
 -- CU-04 Ver producto
