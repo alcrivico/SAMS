@@ -1056,6 +1056,8 @@ namespace SAMS.UI.VisualComponents
                 switch (Employee)
                 {
                     case "Administrador":
+                        VerMermasView verMermasView = new VerMermasView(empleado);
+                        verMermasView.Show();
                         break;
                     case "Paqueteria":
                         VerPedidosView verPedidosView = new VerPedidosView(empleado);
@@ -1064,6 +1066,7 @@ namespace SAMS.UI.VisualComponents
                     default:
                         break;
                 }
+                Window.GetWindow(this).Close();
             }
             catch (Exception ex)
             {
