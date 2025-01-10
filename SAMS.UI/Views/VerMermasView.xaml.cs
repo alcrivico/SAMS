@@ -1,8 +1,4 @@
-﻿using SAMS.UI.DAO;
-using SAMS.UI.DTO;
-using SAMS.UI.Models.Entities;
-using SAMS.UI.VisualComponents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -17,41 +13,40 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SAMS.UI.DAO;
+using SAMS.UI.DTO;
+using SAMS.UI.VisualComponents;
 
 namespace SAMS.UI.Views
 {
     /// <summary>
-    /// Lógica de interacción para VerCategoriasView.xaml
+    /// Lógica de interacción para VerMermasView.xaml
     /// </summary>
-    public partial class VerCategoriasView : Window
+    public partial class VerMermasView : Window
     {
-
-        List<CategoriaDTO> listaCategorias;
-        ObservableCollection<Object> _categoria;
+        List<MermaDTO> listaMermas;
+        ObservableCollection<Object> _mermas;
         EmpleadoLoginDTO _empleado;
         SideBarControl SideBarControl_MenuLateral;
-
-        public VerCategoriasView(EmpleadoLoginDTO empleado)
+        public VerMermasView(EmpleadoLoginDTO empleado)
         {
             _empleado = empleado;
-            listaCategorias = new List<CategoriaDTO>();
-            _categoria = new ObservableCollection<Object>();
+            listaMermas = new List<MermaDTO>();
+            _mermas = new ObservableCollection<Object>();
 
             InitializeComponent();
-
             DefinirColumnas();
-            ObtenerCategoriasActivas();
+            ObtenerMermas();
 
             SideBarControl_MenuLateral = new SideBarControl(_empleado);
-            SideBarControl_MenuLateral.SideElementSelected = 4;
+            SideBarControl_MenuLateral.SideElementSelected = 2;
             MenuLateral.Children.Add(SideBarControl_MenuLateral);
             SideBarControl_MenuLateral.Employee = _empleado.tipoEmpleado;
 
-            TablaCategorias.OnDetallesClickedHandler += botonDetallesClick;
-            TablaCategorias.OnEditarClickedHandler += botonEditarClick;
-            TablaCategorias.OnEliminarClickedHandler += botonEliminarClick;
+            TablaMermas.OnDetallesClickedHandler += botonDetallesClick;
+            TablaMermas.OnEditarClickedHandler += botonEditarClick;
+            TablaMermas.OnEliminarClickedHandler += botonEliminarClick;
         }
-
 
         private void TitleBarControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -84,10 +79,25 @@ namespace SAMS.UI.Views
                 new Dictionary<string, string> {
 
                     { "Type", "Text" },
-                    { "Name", "Nombre de la categoria" },
+                    { "Name", "Nombre del producto" },
                     { "Width", "*" },
-                    { "BindingName", "nombre" }
+                    { "BindingName", "productoInventario" }
 
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Cantidad" },
+                    { "Width", "*" },
+                    { "BindingName", "cantidad" },
+
+                },
+                new Dictionary<string, string> {
+
+                    { "Type", "Text" },
+                    { "Name", "Fecha del registro" },
+                    { "Width", "*" },
+                    { "BindingName", "fechaRegistro" }
                 },
                 new Dictionary<string, string> {
 
@@ -102,58 +112,56 @@ namespace SAMS.UI.Views
 
             };
 
-            TablaCategorias.DefineColumns(columnas);
+            TablaMermas.DefineColumns(columnas);
 
         }
 
-        private void ObtenerCategoriasActivas()
+        private void ObtenerMermas()
         {
             try
             {
-                listaCategorias = CategoriaDAO.ObtenerCategoriasActivas().ToList();
-                _categoria.Clear();
-                _categoria = new ObservableCollection<Object>(listaCategorias);
-                TablaCategorias.SetItemsSource(_categoria);
+                listaMermas = MermaDAO.ObtenerMermas().ToList();
+                _mermas.Clear();
+                _mermas = new ObservableCollection<Object>(listaMermas);
+                TablaMermas.SetItemsSource(_mermas);
             }
             catch (Exception ex)
             {
                 Debug.Print(ex.Message);
-                InformationControl.Show("Error", "Ocurrió un error al obtener las categorias", "Aceptar");
+                InformationControl.Show("Error", "Ocurrió un error al obtener los mermas", "Aceptar");
                 this.Close();
             }
         }
 
         private void campoBuscar_TextBoxControlTextChanged(object sender, RoutedEventArgs e)
         {
-            if (listaCategorias != null)
+            if (listaMermas != null)
             {
-
-                if (campoBuscar.Text.Length > 0)
+                if (!string.IsNullOrWhiteSpace(campoBuscar.Text))
                 {
-                    var categoriaFiltradas = listaCategorias.Where(
-                        p => p.nombre.ToUpper().Contains(campoBuscar.Text.ToUpper()));
-
-                    _categoria.Clear();
-
-                    _categoria = new ObservableCollection<Object>(categoriaFiltradas);
-
-                    TablaCategorias.SetItemsSource(_categoria);
-
+                    var textoBusqueda = campoBuscar.Text.ToUpper();
+                    var mermasFiltradas = listaMermas.Where(
+                        m => m.productoInventario.ToUpper().Contains(textoBusqueda)
+                    ).ToList();
+                    _mermas.Clear();
+                    foreach (var merma in mermasFiltradas)
+                    {
+                        _mermas.Add(merma);
+                    }
                 }
                 else
                 {
-
-                    _categoria.Clear();
-
-                    _categoria = new ObservableCollection<Object>(listaCategorias);
-
-                    TablaCategorias.SetItemsSource(_categoria);
-
+                    _mermas.Clear();
+                    foreach (var merma in listaMermas)
+                    {
+                        _mermas.Add(merma);
+                    }
                 }
 
+                TablaMermas.SetItemsSource(_mermas);
             }
-
         }
+
 
         private void botonDetallesClick(object sender, RoutedEventArgs e)
         {
@@ -162,31 +170,17 @@ namespace SAMS.UI.Views
 
         private void botonEditarClick(object sender, RoutedEventArgs e)
         {
-            ActionsControl actionBar = (ActionsControl)sender;
-            CategoriaDTO categoria = (CategoriaDTO)actionBar.DataContext;
-
-            EditarCategoriasView editarCategoriaView = new EditarCategoriasView(categoria.nombre);
-            editarCategoriaView.ShowDialog();
-            ObtenerCategoriasActivas();
+            
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
-            if (ConfirmationControl.Show("Confirmar", "¿Está seguro de que desea eliminar a este proveedor?\n Esta acción no se puede deshacer", "Aceptar", "Cancelar"))
-            {
-                CategoriaDAO.EliminarCategoria((CategoriaDTO)((ActionsControl)sender).DataContext);
-            }
-
-            ObtenerCategoriasActivas();
+            
         }
 
         private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            RegistrarCategoriaView registrarCategoriaView = new RegistrarCategoriaView();
-            registrarCategoriaView.ShowDialog();
-            ObtenerCategoriasActivas();
+            
         }
-
-
     }
 }

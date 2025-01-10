@@ -117,7 +117,7 @@
                                         ButtonControlClick="botonAgregar_ButtonControlClick"
                                         ButtonForegroundColor="{StaticResource SolidColorBrush_DodgerBlue}"
                                         IsDropShadowEnabled="False"
-                                        Text="Agregar pedido +" />
+                                        Text="Registrar pedido +" />
                                 </Grid>
 
                                 <Grid Grid.Row="1">

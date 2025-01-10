@@ -11,15 +11,17 @@
 
         public int cantidadExhibicion { get; set; }
 
+        public int estadoProductoId { get; set; }
+
         public string unidadDeMedida { get; set; }
 
         public string? promocion { get; set; }
 
         public int? porcentajeDescuento { get; set; }
 
-        public int? cantidadMinima { get; set; }
+        public int? cantMinima { get; set; }
 
-        public int? cantidadMaxima { get; set; }
+        public int? cantMaxima { get; set; }
 
     }
 
