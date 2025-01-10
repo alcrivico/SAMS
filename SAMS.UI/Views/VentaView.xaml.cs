@@ -703,7 +703,7 @@ namespace SAMS.UI.Views
 
                     AgregarUnDetalleVenta();
 
-                    break;
+                break;
 
                 case 2:
 
