@@ -119,7 +119,7 @@ namespace SAMS.UI.Views
                     { "Name", "Acciones" },
                     { "Width", "*" },
                     { "Detalles", "True" },
-                    { "Editar", "True" },
+                    { "Editar", "False" },
                     { "Eliminar", "True" }
 
                 }

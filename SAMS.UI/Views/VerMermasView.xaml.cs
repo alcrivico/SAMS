@@ -106,7 +106,7 @@ namespace SAMS.UI.Views
                     { "Name", "Acciones" },
                     { "Width", "*" },
                     { "Detalles", "True" },
-                    { "Editar", "True" },
+                    { "Editar", "False" },
                     { "Eliminar", "True" }
 
                 }
@@ -180,7 +180,29 @@ namespace SAMS.UI.Views
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
-            
+            if (ConfirmationControl.Show(
+        "Eliminar Merma",
+        $"¿Está seguro que desea eliminar la merma? Esta acción no se puede deshacer.",
+        "Aceptar",
+        "Cancelar"))
+            {
+                try
+                {
+                    // Obtener el objeto merma asociado al botón
+                    ActionsControl actionBar = (ActionsControl)sender;
+                    MermaDTO merma = (MermaDTO)actionBar.DataContext;
+
+                    // Llamar al método DAO para eliminar la merma
+                    bool eliminado = MermaDAO.EliminarMerma(merma.MermaId);
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.Print($"Error al eliminar la merma: {ex.Message}");
+                    InformationControl.Show("Error", "Ocurrió un error inesperado. Por favor, intenta de nuevo.", "Aceptar");
+                }
+            }
+            ObtenerMermas();
         }
 
         private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
