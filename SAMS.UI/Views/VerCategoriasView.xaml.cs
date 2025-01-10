@@ -40,7 +40,7 @@ namespace SAMS.UI.Views
             InitializeComponent();
 
             DefinirColumnas();
-            ObtenerCategorias();
+            ObtenerCategoriasActivas();
 
             SideBarControl_MenuLateral = new SideBarControl(_empleado);
             SideBarControl_MenuLateral.SideElementSelected = 4;
@@ -106,11 +106,11 @@ namespace SAMS.UI.Views
 
         }
 
-        private void ObtenerCategorias()
+        private void ObtenerCategoriasActivas()
         {
             try
             {
-                listaCategorias = CategoriaDAO.ObtenerCategorias().ToList();
+                listaCategorias = CategoriaDAO.ObtenerCategoriasActivas().ToList();
                 _categoria.Clear();
                 _categoria = new ObservableCollection<Object>(listaCategorias);
                 TablaCategorias.SetItemsSource(_categoria);
@@ -131,7 +131,7 @@ namespace SAMS.UI.Views
                 if (campoBuscar.Text.Length > 0)
                 {
                     var categoriaFiltradas = listaCategorias.Where(
-            p => p.nombre.ToUpper().Contains(campoBuscar.Text.ToUpper()));
+                        p => p.nombre.ToUpper().Contains(campoBuscar.Text.ToUpper()));
 
                     _categoria.Clear();
 
@@ -167,7 +167,7 @@ namespace SAMS.UI.Views
 
             EditarCategoriasView editarCategoriaView = new EditarCategoriasView(categoria.nombre);
             editarCategoriaView.ShowDialog();
-            ObtenerCategorias();
+            ObtenerCategoriasActivas();
         }
 
         private void botonEliminarClick(object sender, RoutedEventArgs e)
@@ -177,13 +177,14 @@ namespace SAMS.UI.Views
                 CategoriaDAO.EliminarCategoria((CategoriaDTO)((ActionsControl)sender).DataContext);
             }
 
-            ObtenerCategorias();
+            ObtenerCategoriasActivas();
         }
 
         private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
             RegistrarCategoriaView registrarCategoriaView = new RegistrarCategoriaView();
             registrarCategoriaView.ShowDialog();
+            ObtenerCategoriasActivas();
         }
 
 

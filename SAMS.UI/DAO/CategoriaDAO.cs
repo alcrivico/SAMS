@@ -15,6 +15,8 @@ namespace SAMS.UI.DAO
         private static SAMSContext _sams = App.ServiceProvider.GetRequiredService<SAMSContext>();
         public static IEnumerable<CategoriaDTO> ObtenerCategorias() => _sams.V_Categorias.ToList();
 
+        public static IEnumerable<CategoriaDTO> ObtenerCategoriasActivas() => _sams.V_CategoriasActivas.ToList();
+
         public static bool RegistrarCategoria(string nombreCategoria)
         {
             try
