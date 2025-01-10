@@ -1,5 +1,6 @@
 
-CREATE DATABASE [SAMS.Data];
+CREATE DATABASE [SAMS.Data]
+COLLATE Modern_Spanish_CI_AS;
 GO
 USE [SAMS.Data];
 GO

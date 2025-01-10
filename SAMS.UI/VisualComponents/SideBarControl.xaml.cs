@@ -919,7 +919,11 @@ namespace SAMS.UI.VisualComponents
                             break;
                         }
                     case "Contador":
-                        break;
+                        {
+                            ReporteVentasView reporteVentasView = new ReporteVentasView(empleado);
+                            reporteVentasView.Show();
+                            break;
+                        }
                     default:
                         break;
                 }
@@ -958,7 +962,11 @@ namespace SAMS.UI.VisualComponents
                             break;
                         }
                     case "Contador":
-                        break;
+                        {
+                            ReportePedidosView reportePedidosView = new ReportePedidosView(empleado);
+                            reportePedidosView.Show();
+                            break;
+                        }
                     default:
                         break;
                 }

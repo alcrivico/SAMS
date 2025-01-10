@@ -79,7 +79,6 @@ namespace SAMS.UI.Views
         {
             ReportePedidosView reportePedidosView = new ReportePedidosView(_empleado);
             reportePedidosView.Show();
-
             this.Close();
         }
 
