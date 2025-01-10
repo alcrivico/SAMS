@@ -992,7 +992,8 @@ namespace SAMS.UI.VisualComponents
 
                         break;
                     case "Paqueteria":
-                        VerProductosView productosView = new VerProductosView(empleado);
+                        VerMermasView verMermasView = new VerMermasView(empleado);
+                        verMermasView.Show();
                         break;
                     default:
                         break;
