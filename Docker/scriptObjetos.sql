@@ -407,31 +407,24 @@ INNER JOIN
     Pedido PED ON DP.pedidoId = PED.id;
 GO
 
-CREATE VIEW V_ProductosRegistrados AS
-SELECT 
+CREATE VIEW V_ProductosRegistrados
+AS
+SELECT
     PI.codigo AS CodigoProducto,                            -- Código del producto
-    PI.nombre AS NombreProducto,                            -- Nombre del producto
-    CONCAT(
-        PI.cantidadBodega + PI.cantidadExhibicion,          -- Total cantidad con unidad
-        ' ',
-        UM.nombre,                                          -- Unidad de medida
-        CASE 
-            WHEN PI.cantidadBodega + PI.cantidadExhibicion > 1 THEN 's'  -- Agregar 's' si la cantidad es mayor a 1
-            ELSE ''                                           -- No agregar 's' si la cantidad es 1 o menor
-        END
-    ) AS Cantidad,                                          -- Resultado final con 's' si aplica
-    PI.precioActual AS PrecioActual,                        -- Precio actual del producto
-    CAT.nombre AS NombreCategoria                          -- Nombre de la categoría
-FROM 
+    PI.nombre AS NombreProducto,                              -- Nombre del producto
+    CONCAT(PI.cantidadBodega + PI.cantidadExhibicion, ' ', UM.nombre) AS Cantidad, -- Total cantidad con unidad
+    PI.precioActual AS PrecioActual,                         -- Precio actual del producto
+    CAT.nombre AS NombreCategoria                            -- Nombre de la categoría
+FROM
     ProductoInventario PI
-INNER JOIN 
-    UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id      -- Relación con unidad de medida
-INNER JOIN 
-    Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
-INNER JOIN 
-    EstadoProducto EP ON PI.estadoProductoId = EP.id      -- Relación con estado de producto
-WHERE 
-    EP.nombre = 'Disponible';                              -- Solo productos con estado "Disponible"
+INNER JOIN
+    UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id         -- Relación con unidad de medida
+INNER JOIN
+    Categoria CAT ON PI.categoriaId = CAT.id                -- Relación con categoría
+INNER JOIN
+    EstadoProducto EP ON PI.estadoProductoId = EP.id        -- Relación con estado del producto
+WHERE
+    EP.nombre = 'Disponible';                               -- Filtrar productos disponibles
 GO
 
 -- CU-04 Ver producto
@@ -444,17 +437,19 @@ SELECT
     PI.cantidadBodega AS CantidadBodega,                  -- Cantidad en bodega
     PI.cantidadExhibicion AS CantidadExhibicion,          -- Cantidad en exhibición
     PI.precioActual AS PrecioActual,                      -- Precio actual
-    PI.fechaCaducidad AS FechaCaducidad,                  -- Fecha de caducidad (de ProductoInventario)
+    DP.fechaCaducidad AS FechaCaducidad,                  -- Fecha de caducidad (de DetallePedido)
     CAT.nombre AS NombreCategoria,                        -- Nombre de la categoría
     UM.nombre AS NombreUnidadMedida,                      -- Nombre de la unidad de medida
     PI.esPerecedero AS EsPerecedero,                      -- Perecedero (BIT)
     PI.esDevolvible AS EsDevolvible                       -- Devolvible (BIT)
-FROM 
+FROM
     ProductoInventario PI
-INNER JOIN 
+INNER JOIN
     UnidadDeMedida UM ON PI.unidadDeMedidaId = UM.id       -- Relación con unidad de medida
-INNER JOIN 
+INNER JOIN
     Categoria CAT ON PI.categoriaId = CAT.id              -- Relación con categoría
+LEFT JOIN
+    DetallePedido DP ON DP.productoId = PI.id;            -- Relación con DetallePedido (puede no existir)
 GO
 
 --CU 26 "Editar Categoria"
