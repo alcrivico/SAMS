@@ -184,7 +184,9 @@ namespace SAMS.UI.Views
 
         private void botonAgregar_ButtonControlClick(object sender, RoutedEventArgs e)
         {
-            
+            RegistrarMermaView registrarMermaView = new RegistrarMermaView();
+            registrarMermaView.ShowDialog();
+            ObtenerMermas();
         }
     }
 }

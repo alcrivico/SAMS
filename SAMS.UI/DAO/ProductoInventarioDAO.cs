@@ -245,5 +245,9 @@ public class ProductoInventarioDAO
             Debug.WriteLine(ex.ToString());
             return false;
         }
+
     }
+
+    public static List<ProductoInventarioMermaDTO> CargarProductosInventario() => _sams.V_ProductosDisponiblesEnInventario.ToList();
+
 }
