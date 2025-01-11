@@ -513,6 +513,103 @@ JOIN EstadoPedido ep ON p.estadoPedidoId = ep.id
 JOIN UnidadDeMedida um ON pro.unidadDeMedidaId = um.id;
 GO
 
+-- Vista para el las categorias
+CREATE VIEW V_CategoriasActivas AS
+SELECT 
+    id, 
+    nombre, 
+    estado
+FROM 
+    Categoria
+WHERE 
+    estado = 1; -- Solo selecciona las categorías con estado TRUE
+GO
+
+
+--Vista para las mermas 
+CREATE VIEW V_Mermas AS
+SELECT 
+    m.id AS MermaId,
+    m.cantidad,
+    m.descripcion,
+    m.fechaRegistro,
+    m.productoInventarioId,
+    p.nombre AS productoInventario
+FROM 
+    Merma m
+INNER JOIN 
+    ProductoInventario p
+ON 
+    m.productoInventarioId = p.id;
+GO
+
+--Vistas para las mermas
+CREATE VIEW V_ProductosDisponiblesEnInventario AS
+SELECT 
+	proi.id,
+    proi.nombre,
+    proi.cantidadBodega,
+    proi.cantidadExhibicion,
+    ep.nombre AS EstadoProducto
+FROM 
+    ProductoInventario proi
+JOIN 
+    EstadoProducto ep ON proi.estadoProductoId = ep.id
+WHERE 
+    ep.nombre = 'Disponible';
+GO
+
+
+CREATE PROCEDURE T_RegistrarMerma
+    @ProductoId INT,
+    @LugarDescuento NVARCHAR(50),
+    @Cantidad INT,
+    @Descripcion NVARCHAR(500)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Insertar la merma en la tabla Merma
+        INSERT INTO Merma (productoInventarioId, Cantidad, Descripcion, FechaRegistro)
+        VALUES (@ProductoId, @Cantidad, @Descripcion, GETDATE());
+
+        -- Actualizar inventario según el lugar de descuento
+        IF @LugarDescuento = 'Bodega'
+        BEGIN
+            UPDATE ProductoInventario
+            SET CantidadBodega = CantidadBodega - @Cantidad
+            WHERE id = @ProductoId;
+        END
+        ELSE IF @LugarDescuento = 'Exhibición'
+        BEGIN
+            UPDATE ProductoInventario
+            SET CantidadExhibicion = CantidadExhibicion - @Cantidad
+            WHERE id = @ProductoId;
+        END;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;
+GO
+
+
+CREATE PROCEDURE T_EliminarMerma
+    @Mermaid INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM Merma
+    WHERE id = @MermaId;
+END;
+GO
 
 -- 3. procedimientos almacenados
 -- funciones listas
