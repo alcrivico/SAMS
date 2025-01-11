@@ -220,17 +220,17 @@ namespace SAMS.UI.Views
             this.Close();
         }
 
-        private void botonEliminarClick(object sender, RoutedEventArgs e)
+            private void botonEliminarClick(object sender, RoutedEventArgs e)
         {
             if (ConfirmationControl.Show("Eliminar", "¿Está seguro que desea eliminar este empleado?", "Aceptar", "Cancelar"))
             {
                 ActionsControl actionBar = (ActionsControl)sender;
                 ProductosRegistradosDTO productoSeleccionado = (ProductosRegistradosDTO)actionBar.DataContext;
                 ProductoInventarioDAO.CambiarEstadoProductoAgotado(productoSeleccionado.codigoProducto);
-                ObtenerProductos();
+                
             }
+            ObtenerProductos();
 
-            
         }
 
         private void Button_AgregarProductos_ButtonControlClick(object sender, RoutedEventArgs e)
